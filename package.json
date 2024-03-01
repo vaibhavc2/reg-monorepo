@@ -23,7 +23,7 @@
     "react",
     "express",
     "nodejs",
-    "postgresql",
+    "mysql",
     "drizzle",
     "javascript"
   ],
