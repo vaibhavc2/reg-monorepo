@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { wLogger } from './logger.util';
+import { lg } from './logger.util';
 import { printErrorMessage } from './print-error-message.util';
 
 export const deleteLocalFile = (filePath: string) => {
@@ -27,7 +27,7 @@ export const deleteLocalFile = (filePath: string) => {
         );
         reject(err);
       } else {
-        wLogger.info(
+        lg.info(
           `✅   File removed from the local server. File Path: ${filePath}`,
         );
         resolve(true);
