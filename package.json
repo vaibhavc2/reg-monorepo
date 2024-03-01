@@ -11,6 +11,7 @@
     "lint": "pnpm exec nx run-many --target=lint",
     "tsc": "pnpm exec nx run-many --target=tsc",
     "validate": "pnpm format:write && pnpm tsc && pnpm lint",
+    "dev": "pnpm exec nx run-many --target=dev",
     "prepare": "husky install",
     "cm": "cz"
   },
