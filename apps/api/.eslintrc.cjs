@@ -14,12 +14,14 @@ module.exports = {
   rules: {
     indent: ['error', 2],
     'linebreak-style': 1,
-    quotes: ['error', 'single'],
     '@typescript-eslint/no-empty-interface': 'off',
     'no-multiple-empty-lines': [2, { max: 3, maxEOF: 1 }],
+    'import/no-unresolved': 'off',
+    'import/named': 'off',
   },
   env: {
     browser: true,
     node: true,
   },
+  ignorePatterns: ['**/*.config.ts', '*.cjs', '*.json'],
 };
