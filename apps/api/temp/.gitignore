@@ -1,0 +1,8 @@
+# ignore all files
+*
+
+# don't ignore the following files
+!.gitignore
+
+# don't ignore the above files even if they are in subdirectories
+!*/
