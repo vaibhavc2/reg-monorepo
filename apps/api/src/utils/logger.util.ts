@@ -1,7 +1,7 @@
 import env from '@/config';
 import * as winston from 'winston';
 
-export const wLogger = winston.createLogger({
+export const lg = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
   // defaultMeta: { service: "user-service" },
@@ -20,7 +20,7 @@ export const wLogger = winston.createLogger({
 // `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
 //
 if (env.isDev) {
-  wLogger.add(
+  lg.add(
     new winston.transports.Console({
       format: winston.format.simple(),
     }),
