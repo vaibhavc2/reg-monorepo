@@ -1,11 +1,11 @@
 import env from '@/config';
 import ct from '@/constants';
+import * as schema from '@/db/schema';
 import { lg } from '@/utils/logger.util';
 import { printErrorMessage } from '@/utils/print-error-message.util';
 import { MySql2Database, drizzle } from 'drizzle-orm/mysql2';
 import { migrate } from 'drizzle-orm/mysql2/migrator';
 import mysql from 'mysql2/promise';
-import * as schema from './schema/schema';
 
 class Database {
   public connection: mysql.Connection | undefined;
