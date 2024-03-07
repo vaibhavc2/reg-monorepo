@@ -13,7 +13,8 @@
     "validate": "pnpm format:write && pnpm tsc && pnpm lint",
     "dev": "pnpm exec nx run-many --target=dev",
     "prepare": "husky install",
-    "cm": "cz"
+    "cm": "cz",
+    "cm:all": "git add . && pnpm cm"
   },
   "keywords": [
     "nx",
