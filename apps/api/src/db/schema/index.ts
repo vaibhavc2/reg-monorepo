@@ -1,5 +1,7 @@
+export { activities } from './common/activities.schema';
 export { duties } from './persons/duties.schema';
 export { personsDuties } from './persons/persons-duties.schema';
+export { personsHistory } from './persons/persons-history.schema';
 export { personsRelations } from './persons/persons-relations.schema';
 export { persons } from './persons/persons.schema';
 export { relations } from './persons/relations.schema';
@@ -14,5 +16,6 @@ export { userCredentials } from './users/user-credentials.schema';
 export { userSessions } from './users/user-sessions.schema';
 export { userSettings } from './users/user-settings.schema';
 export { usernames } from './users/usernames.schema';
+export { usersHistory } from './users/users-history.schema';
 export { users } from './users/users.schema';
 export { verifications } from './users/verifications.schema';
