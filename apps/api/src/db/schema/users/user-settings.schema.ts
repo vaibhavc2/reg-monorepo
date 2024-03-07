@@ -17,10 +17,10 @@ export const userSettings = mysqlTable('user_settings', {
   darkMode: boolean('dark_mode').default(false).notNull(),
   language: varchar('language', { length: 10 }).default('en').notNull(),
   notifications: boolean('notifications').default(true).notNull(),
-  createdAt: timestamp('created_at')
-    .default(sql`CURRENT_TIMESTAMP(3)`)
+  createdAt: timestamp('created_at', { mode: 'date', fsp: 6 })
+    .default(sql`CURRENT_TIMESTAMP(6)`)
     .notNull(),
-  updatedAt: timestamp('updated_at')
-    .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
+  updatedAt: timestamp('updated_at', { mode: 'date', fsp: 6 })
+    .default(sql`CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6)`)
     .notNull(),
 });

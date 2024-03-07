@@ -22,11 +22,11 @@ export const users = mysqlTable(
     verified: boolean('verified').default(false).notNull(),
     //TODO: this should be true ONLY if emailVerified and phoneVerified are true, and admin or moderator has verified the user
     disabled: boolean('disabled').default(false).notNull(),
-    createdAt: timestamp('created_at')
-      .default(sql`CURRENT_TIMESTAMP(3)`)
+    createdAt: timestamp('created_at', { mode: 'date', fsp: 6 })
+      .default(sql`CURRENT_TIMESTAMP(6)`)
       .notNull(),
-    updatedAt: timestamp('updated_at')
-      .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
+    updatedAt: timestamp('updated_at', { mode: 'date', fsp: 6 })
+      .default(sql`CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6)`)
       .notNull(),
   },
   (users) => ({

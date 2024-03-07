@@ -4,8 +4,8 @@ CREATE TABLE `display_names` (
 	`value` varchar(20) NOT NULL,
 	`set_by` int NOT NULL,
 	`updated_by` int,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3),
+	`created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	`updated_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6),
 	CONSTRAINT `display_names_id` PRIMARY KEY(`id`),
 	CONSTRAINT `display_names_user_unique` UNIQUE(`user`),
 	CONSTRAINT `display_names_value_unique` UNIQUE(`value`)
@@ -18,8 +18,8 @@ CREATE TABLE `duties` (
 	`disabled` boolean NOT NULL DEFAULT false,
 	`added_by` int NOT NULL,
 	`updated_by` int,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3),
+	`created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	`updated_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6),
 	CONSTRAINT `duties_id` PRIMARY KEY(`id`),
 	CONSTRAINT `duties_title_unique` UNIQUE(`title`),
 	CONSTRAINT `duties_value_unique` UNIQUE(`value`)
@@ -30,7 +30,7 @@ CREATE TABLE `old_passwords` (
 	`user` int NOT NULL,
 	`password` varchar(256) NOT NULL,
 	`salt` varchar(256) NOT NULL,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+	`created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
 	CONSTRAINT `old_passwords_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -40,10 +40,10 @@ CREATE TABLE `otps` (
 	`type` enum('login','register','reset','deletion','verification') NOT NULL,
 	`credential` enum('email','phone') NOT NULL,
 	`code` varchar(6) NOT NULL,
-	`expired_at` timestamp NOT NULL,
+	`expired_at` timestamp(6) NOT NULL,
 	`verified` boolean NOT NULL DEFAULT false,
 	`attempts` int NOT NULL DEFAULT 0,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+	`created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
 	CONSTRAINT `otps_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -60,8 +60,8 @@ CREATE TABLE `persons` (
 	`state` varchar(256),
 	`added_by` int NOT NULL,
 	`updated_by` int,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3),
+	`created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	`updated_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6),
 	CONSTRAINT `persons_id` PRIMARY KEY(`id`),
 	CONSTRAINT `persons_phone_unique` UNIQUE(`phone`),
 	CONSTRAINT `persons_email_unique` UNIQUE(`email`)
@@ -73,8 +73,8 @@ CREATE TABLE `persons_duties` (
 	`duty` int NOT NULL,
 	`added_by` int NOT NULL,
 	`updated_by` int,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3),
+	`created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	`updated_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6),
 	CONSTRAINT `persons_duties_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -85,8 +85,8 @@ CREATE TABLE `persons_relations` (
 	`relation` int NOT NULL,
 	`added_by` int NOT NULL,
 	`updated_by` int,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3),
+	`created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	`updated_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6),
 	CONSTRAINT `persons_relations_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -97,8 +97,8 @@ CREATE TABLE `relations` (
 	`disabled` boolean NOT NULL DEFAULT false,
 	`added_by` int NOT NULL,
 	`updated_by` int,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3),
+	`created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	`updated_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6),
 	CONSTRAINT `relations_id` PRIMARY KEY(`id`),
 	CONSTRAINT `relations_title_unique` UNIQUE(`title`),
 	CONSTRAINT `relations_value_unique` UNIQUE(`value`)
@@ -111,9 +111,9 @@ CREATE TABLE `requests` (
 	`description` varchar(256),
 	`accepted` boolean NOT NULL DEFAULT false,
 	`added_by` int,
-	`accepted_at` timestamp,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3),
+	`accepted_at` timestamp(6),
+	`created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	`updated_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6),
 	CONSTRAINT `requests_id` PRIMARY KEY(`id`),
 	CONSTRAINT `requests_sender_unique` UNIQUE(`sender`)
 );
@@ -126,8 +126,8 @@ CREATE TABLE `user_credentials` (
 	`phone` varchar(20) NOT NULL,
 	`salt` varchar(256) NOT NULL,
 	`password` varchar(256),
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3),
+	`created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	`updated_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6),
 	CONSTRAINT `user_credentials_id` PRIMARY KEY(`id`),
 	CONSTRAINT `user_credentials_user_unique` UNIQUE(`user`),
 	CONSTRAINT `user_credentials_email_unique` UNIQUE(`email`),
@@ -141,11 +141,11 @@ CREATE TABLE `user_sessions` (
 	`device_id` varchar(256) NOT NULL,
 	`device_name` varchar(256) NOT NULL,
 	`token` varchar(256) NOT NULL,
-	`expired_at` timestamp NOT NULL,
+	`expired_at` timestamp(6) NOT NULL,
 	`revoked` boolean NOT NULL DEFAULT false,
-	`revoked_at` timestamp,
+	`revoked_at` timestamp(6),
 	`revoked_by` int,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+	`created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
 	CONSTRAINT `user_sessions_id` PRIMARY KEY(`id`),
 	CONSTRAINT `user_sessions_user_unique` UNIQUE(`user`),
 	CONSTRAINT `user_sessions_token_unique` UNIQUE(`token`)
@@ -157,8 +157,8 @@ CREATE TABLE `user_settings` (
 	`dark_mode` boolean NOT NULL DEFAULT false,
 	`language` varchar(10) NOT NULL DEFAULT 'en',
 	`notifications` boolean NOT NULL DEFAULT true,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3),
+	`created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	`updated_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6),
 	CONSTRAINT `user_settings_id` PRIMARY KEY(`id`),
 	CONSTRAINT `user_settings_user_unique` UNIQUE(`user`)
 );
@@ -167,8 +167,8 @@ CREATE TABLE `usernames` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`user` int NOT NULL,
 	`value` varchar(20) NOT NULL,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3),
+	`created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	`updated_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6),
 	CONSTRAINT `usernames_id` PRIMARY KEY(`id`),
 	CONSTRAINT `usernames_user_unique` UNIQUE(`user`),
 	CONSTRAINT `usernames_value_unique` UNIQUE(`value`)
@@ -182,8 +182,8 @@ CREATE TABLE `users` (
 	`role` enum('user','moderator','admin') NOT NULL DEFAULT 'user',
 	`verified` boolean NOT NULL DEFAULT false,
 	`disabled` boolean NOT NULL DEFAULT false,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3),
+	`created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	`updated_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6),
 	CONSTRAINT `users_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -194,8 +194,8 @@ CREATE TABLE `vehicles` (
 	`disabled` boolean NOT NULL DEFAULT false,
 	`added_by` int NOT NULL,
 	`updated_by` int,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3),
+	`created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	`updated_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6),
 	CONSTRAINT `vehicles_id` PRIMARY KEY(`id`),
 	CONSTRAINT `vehicles_reg_number_unique` UNIQUE(`reg_number`)
 );
@@ -206,8 +206,8 @@ CREATE TABLE `vehicles_owners` (
 	`person` int NOT NULL,
 	`added_by` int NOT NULL,
 	`updated_by` int,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3),
+	`created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	`updated_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6),
 	CONSTRAINT `vehicles_owners_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -218,8 +218,8 @@ CREATE TABLE `vehicles_types` (
 	`disabled` boolean NOT NULL DEFAULT false,
 	`added_by` int NOT NULL,
 	`updated_by` int,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3),
+	`created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	`updated_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6),
 	CONSTRAINT `vehicles_types_id` PRIMARY KEY(`id`),
 	CONSTRAINT `vehicles_types_title_unique` UNIQUE(`title`)
 );
@@ -231,9 +231,9 @@ CREATE TABLE `verifications` (
 	`email_verified` boolean NOT NULL DEFAULT false,
 	`phone_verified` boolean NOT NULL DEFAULT false,
 	`verified_by` int,
-	`verified_at` timestamp,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3),
+	`verified_at` timestamp(6),
+	`created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	`updated_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6),
 	CONSTRAINT `verifications_id` PRIMARY KEY(`id`),
 	CONSTRAINT `verifications_user_unique` UNIQUE(`user`)
 );

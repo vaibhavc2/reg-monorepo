@@ -22,11 +22,11 @@ export const displayNames = mysqlTable(
       .notNull(),
     updatedBy: int('updated_by').references(() => users.id),
     // TODO: make sure that the setBy and updatedBy is a moderator or admin!! (moderator can update only their own displayNames, admin can update any nickname)
-    createdAt: timestamp('created_at')
-      .default(sql`CURRENT_TIMESTAMP(3)`)
+    createdAt: timestamp('created_at', { mode: 'date', fsp: 6 })
+      .default(sql`CURRENT_TIMESTAMP(6)`)
       .notNull(),
-    updatedAt: timestamp('updated_at')
-      .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
+    updatedAt: timestamp('updated_at', { mode: 'date', fsp: 6 })
+      .default(sql`CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6)`)
       .notNull(),
   },
   (displayNames) => ({

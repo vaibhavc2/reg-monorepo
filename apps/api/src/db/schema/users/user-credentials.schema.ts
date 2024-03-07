@@ -25,11 +25,11 @@ export const userCredentials = mysqlTable(
     salt: varchar('salt', { length: 256 }).notNull(),
     password: varchar('password', { length: 256 }).unique(),
     // TODO: make sure that the password is hashed and salted automatically using triggers and event scheduler, similar to 'pre' and 'post' hooks in mongoose
-    createdAt: timestamp('created_at')
-      .default(sql`CURRENT_TIMESTAMP(3)`)
+    createdAt: timestamp('created_at', { mode: 'date', fsp: 6 })
+      .default(sql`CURRENT_TIMESTAMP(6)`)
       .notNull(),
-    updatedAt: timestamp('updated_at')
-      .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
+    updatedAt: timestamp('updated_at', { mode: 'date', fsp: 6 })
+      .default(sql`CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6)`)
       .notNull(),
   },
   (userCredentials) => ({

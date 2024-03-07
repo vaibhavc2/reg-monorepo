@@ -21,12 +21,12 @@ export const verifications = mysqlTable(
     emailVerified: boolean('email_verified').default(false).notNull(),
     phoneVerified: boolean('phone_verified').default(false).notNull(),
     verifiedBy: int('verified_by').references(() => users.id),
-    verifiedAt: timestamp('verified_at'),
-    createdAt: timestamp('created_at')
-      .default(sql`CURRENT_TIMESTAMP(3)`)
+    verifiedAt: timestamp('verified_at', { mode: 'date', fsp: 6 }),
+    createdAt: timestamp('created_at', { mode: 'date', fsp: 6 })
+      .default(sql`CURRENT_TIMESTAMP(6)`)
       .notNull(),
-    updatedAt: timestamp('updated_at')
-      .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
+    updatedAt: timestamp('updated_at', { mode: 'date', fsp: 6 })
+      .default(sql`CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6)`)
       .notNull(),
   },
   (verifications) => ({

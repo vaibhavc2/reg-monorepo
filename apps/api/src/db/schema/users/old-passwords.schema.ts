@@ -11,8 +11,8 @@ export const oldPasswords = mysqlTable(
       .notNull(),
     password: varchar('password', { length: 256 }).notNull(),
     salt: varchar('salt', { length: 256 }).notNull(),
-    createdAt: timestamp('created_at')
-      .default(sql`CURRENT_TIMESTAMP(3)`)
+    createdAt: timestamp('created_at', { mode: 'date', fsp: 6 })
+      .default(sql`CURRENT_TIMESTAMP(6)`)
       .notNull(),
   },
   // TODO: automatically delete oldPasswords after 6 months!!

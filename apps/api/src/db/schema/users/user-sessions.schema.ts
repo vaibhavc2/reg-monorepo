@@ -20,13 +20,13 @@ export const userSessions = mysqlTable(
     deviceId: varchar('device_id', { length: 256 }).notNull(),
     deviceName: varchar('device_name', { length: 256 }).notNull(),
     token: varchar('token', { length: 256 }).notNull().unique(),
-    expiredAt: timestamp('expired_at').notNull(),
+    expiredAt: timestamp('expired_at', { mode: 'date', fsp: 6 }).notNull(),
     revoked: boolean('revoked').default(false).notNull(),
-    revokedAt: timestamp('revoked_at'),
+    revokedAt: timestamp('revoked_at', { mode: 'date', fsp: 6 }),
     revokedBy: int('revoked_by').references(() => users.id),
     // TODO: only admin can revoke the session of any other user
-    createdAt: timestamp('created_at')
-      .default(sql`CURRENT_TIMESTAMP(3)`)
+    createdAt: timestamp('created_at', { mode: 'date', fsp: 6 })
+      .default(sql`CURRENT_TIMESTAMP(6)`)
       .notNull(),
   },
   (userSessions) => ({

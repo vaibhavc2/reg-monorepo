@@ -21,12 +21,12 @@ export const requests = mysqlTable(
     description: varchar('description', { length: 256 }),
     accepted: boolean('accepted').default(false).notNull(),
     acceptedBy: int('added_by').references(() => users.id),
-    acceptedAt: timestamp('accepted_at'),
-    createdAt: timestamp('created_at')
-      .default(sql`CURRENT_TIMESTAMP(3)`)
+    acceptedAt: timestamp('accepted_at', { mode: 'date', fsp: 6 }),
+    createdAt: timestamp('created_at', { mode: 'date', fsp: 6 })
+      .default(sql`CURRENT_TIMESTAMP(6)`)
       .notNull(),
-    updatedAt: timestamp('updated_at')
-      .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
+    updatedAt: timestamp('updated_at', { mode: 'date', fsp: 6 })
+      .default(sql`CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6)`)
       .notNull(),
   },
   (requests) => ({
