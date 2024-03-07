@@ -15,6 +15,13 @@
       "when": 1709827560431,
       "tag": "0001_empty_silver_centurion",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1709835327869,
+      "tag": "0002_free_echo",
+      "breakpoints": true
     }
   ]
 }

@@ -21,6 +21,7 @@ export const userCredentials = mysqlTable(
     authProvider: mysqlEnum('auth_provider', ['google', 'apple', 'email'])
       .default('email')
       .notNull(),
+    // TODO: default to email, but if the user logs in using google or apple, then also allow the user to login using email-password, or google/apple
     phone: varchar('phone', { length: 20 }).notNull().unique(), // use e164 format
     salt: varchar('salt', { length: 256 }).notNull(),
     password: varchar('password', { length: 256 }).unique(),

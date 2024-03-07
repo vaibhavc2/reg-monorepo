@@ -8,6 +8,7 @@ import {
   timestamp,
   varchar,
 } from 'drizzle-orm/mysql-core';
+import { otpTypes } from './otp-types.schema';
 import { users } from './users.schema';
 
 export const otps = mysqlTable(
@@ -17,13 +18,9 @@ export const otps = mysqlTable(
     user: int('user')
       .references(() => users.id)
       .notNull(),
-    type: mysqlEnum('type', [
-      'login',
-      'register',
-      'reset',
-      'deletion',
-      'verification',
-    ]).notNull(),
+    otpType: int('otp_type')
+      .references(() => otpTypes.id)
+      .notNull(),
     credential: mysqlEnum('credential', ['email', 'phone']).notNull(),
     code: varchar('code', { length: 6 }).notNull(),
     // TODO: add a check constraint to make sure that the code is 6 digits
@@ -37,6 +34,6 @@ export const otps = mysqlTable(
       .notNull(),
   },
   (otps) => ({
-    codeIdx: index('code_idx').on(otps.code),
+    userIdx: index('user_idx').on(otps.user),
   }),
 );
