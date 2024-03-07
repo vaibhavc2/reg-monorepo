@@ -1,4 +1,4 @@
-// custom class for error-handling in APIs
+// Custom class for error-handling in APIs
 
 // ApiError inherits everything from Error class, but with additional properties
 class ApiError extends Error {
@@ -51,6 +51,4 @@ class UserNotFoundError extends ApiError {
   }
 }
 
-export { RequiredBodyError, UnauthorizedError, UserNotFoundError };
-
-export default ApiError;
+export { ApiError, RequiredBodyError, UnauthorizedError, UserNotFoundError };

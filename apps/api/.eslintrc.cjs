@@ -18,6 +18,8 @@ module.exports = {
     'no-multiple-empty-lines': [2, { max: 3, maxEOF: 1 }],
     'import/no-unresolved': 'off',
     'import/named': 'off',
+    'no-unused-vars': 'off',
+    'no-unsafe-finally': 'off',
   },
   env: {
     browser: true,

@@ -1,4 +1,4 @@
-class ApiResponse {
+export class ApiResponse {
   success: boolean;
   statusCode: number;
   message: string;
@@ -35,5 +35,3 @@ export class InternalServerErrorResponse extends ApiResponse {
     super(500, message || 'Something went wrong.', data);
   }
 }
-
-export default ApiResponse;
