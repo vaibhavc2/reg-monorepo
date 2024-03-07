@@ -12,9 +12,11 @@
     "tsc": "pnpm exec nx run-many --target=tsc",
     "validate": "pnpm format:write && pnpm tsc && pnpm lint",
     "dev": "pnpm exec nx run-many --target=dev",
+    "dev:api": "pnpm exec nx run-many --target=dev --projects=@reg/api",
+    "dev:web": "pnpm exec nx run-many --target=dev --projects=@reg/web",
     "prepare": "husky install",
     "cm": "cz",
-    "cm:all": "git add . && pnpm cm"
+    "cm:all": "git add . && cz"
   },
   "keywords": [
     "nx",
