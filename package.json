@@ -16,7 +16,8 @@
     "dev:web": "pnpm exec nx run-many --target=dev --projects=@reg/web",
     "prepare": "husky install",
     "cm": "cz",
-    "cm:all": "git add . && cz"
+    "cm:offline": "git add . && cz",
+    "cm:all": "git add . && cz && git push"
   },
   "keywords": [
     "nx",
