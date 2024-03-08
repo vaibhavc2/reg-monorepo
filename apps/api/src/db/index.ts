@@ -27,6 +27,10 @@ class Database {
         })
         .catch((error) => {
           dbError(error);
+        })
+        .finally(() => {
+          // stopping the process
+          process.exit(0);
         });
     } else {
       // return promise to connect to database
@@ -66,8 +70,7 @@ class Database {
     const input = prompt('Migrate database? (y/N)');
     if (input?.toLowerCase() === 'y') this.migrate();
     else {
-      lg.warn('⚠️  Database not migrated! Exiting process...');
-      process.exit(0);
+      lg.warn('⚠️  You have selected to not migrate database!');
     }
   }
 

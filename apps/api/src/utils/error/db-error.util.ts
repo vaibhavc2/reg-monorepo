@@ -8,7 +8,4 @@ export const dbError = (error: unknown, reject?: (reason?: any) => void) => {
 
   // rejecting the promise
   if (reject) reject(error);
-
-  // stopping the process
-  process.exit(1);
 };
