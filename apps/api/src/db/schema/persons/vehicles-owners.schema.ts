@@ -32,3 +32,5 @@ export const vehiclesOwners = mysqlTable(
     ),
   }),
 );
+
+export type IVehicleOwner = typeof vehiclesOwners;

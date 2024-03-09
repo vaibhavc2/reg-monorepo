@@ -22,3 +22,5 @@ export const usersHistory = mysqlTable(
     activityIdx: index('activity_idx').on(usersHistory.activity),
   }),
 );
+
+export type IUserHistory = typeof usersHistory;

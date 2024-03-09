@@ -32,3 +32,5 @@ export const personsDuties = mysqlTable(
     ),
   }),
 );
+
+export type IPersonDuty = typeof personsDuties;

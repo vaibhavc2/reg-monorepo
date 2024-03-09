@@ -32,3 +32,5 @@ export const relations = mysqlTable(
     valueIdx: index('value_idx').on(relations.value),
   }),
 );
+
+export type IRelation = typeof relations;

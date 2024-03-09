@@ -33,3 +33,5 @@ export const duties = mysqlTable(
     valueIdx: index('value_idx').on(duties.value),
   }),
 );
+
+export type IDuty = typeof duties;

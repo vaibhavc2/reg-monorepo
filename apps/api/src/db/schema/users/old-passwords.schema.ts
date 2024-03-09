@@ -20,3 +20,5 @@ export const oldPasswords = mysqlTable(
   // TODO: make sure to add a method to admin to delete all or some expired oldPasswords (also acc to time-range)
   // TODO: delete all oldPasswords when the user is deleted
 );
+
+export type IOldPassword = typeof oldPasswords;

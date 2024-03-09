@@ -37,3 +37,5 @@ export const otps = mysqlTable(
     userIdx: index('user_idx').on(otps.user),
   }),
 );
+
+export type IOTP = typeof otps;

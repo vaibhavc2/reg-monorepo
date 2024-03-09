@@ -34,3 +34,5 @@ export const requests = mysqlTable(
     titleIdx: index('title_idx').on(requests.title),
   }),
 );
+
+export type IRequest = typeof requests;

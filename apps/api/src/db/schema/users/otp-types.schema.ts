@@ -33,3 +33,5 @@ export const otpTypes = mysqlTable(
     titleIdx: index('title_idx').on(otpTypes.title),
   }),
 );
+
+export type IOTPType = typeof otpTypes;

@@ -35,3 +35,5 @@ export const activities = mysqlTable(
     activityTypeIdx: index('activity_type_idx').on(activities.activityType),
   }),
 );
+
+export type IActivity = typeof activities;

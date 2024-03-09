@@ -36,3 +36,5 @@ export const personsRelations = mysqlTable(
     ),
   }),
 );
+
+export type IPersonRelation = typeof personsRelations;

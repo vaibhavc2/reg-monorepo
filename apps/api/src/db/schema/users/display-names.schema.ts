@@ -33,3 +33,5 @@ export const displayNames = mysqlTable(
     valueIdx: index('value_idx').on(displayNames.value),
   }),
 );
+
+export type IDisplayName = typeof displayNames;

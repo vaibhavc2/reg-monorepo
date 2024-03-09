@@ -34,3 +34,5 @@ export const userSessions = mysqlTable(
     tokenIdx: index('token_idx').on(userSessions.token),
   }),
 );
+
+export type IUserSession = typeof userSessions;

@@ -24,3 +24,5 @@ export const userSettings = mysqlTable('user_settings', {
     .default(sql`CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6)`)
     .notNull(),
 });
+
+export type IUserSetting = typeof userSettings;

@@ -35,3 +35,5 @@ export const vehicles = mysqlTable(
     regNumberIdx: index('reg_number_idx').on(vehicles.regNumber),
   }),
 );
+
+export type IVehicle = typeof vehicles;

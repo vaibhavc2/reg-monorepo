@@ -33,3 +33,5 @@ export const users = mysqlTable(
     fullNameIdx: index('full_name_idx').on(users.fullName),
   }),
 );
+
+export type IUser = typeof users;

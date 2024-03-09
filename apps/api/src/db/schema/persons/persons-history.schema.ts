@@ -22,3 +22,5 @@ export const personsHistory = mysqlTable(
     activityIdx: index('activity_idx').on(personsHistory.activity),
   }),
 );
+
+export type IPersonHistory = typeof personsHistory;

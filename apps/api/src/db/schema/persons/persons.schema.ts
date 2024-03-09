@@ -44,3 +44,5 @@ export const persons = mysqlTable(
     state: index('state_idx').on(persons.state),
   }),
 );
+
+export type IPerson = typeof persons;

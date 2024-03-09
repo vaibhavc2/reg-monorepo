@@ -36,3 +36,5 @@ export const userCredentials = mysqlTable(
     phoneIdx: index('phone_idx').on(userCredentials.phone),
   }),
 );
+
+export type IUserCredential = typeof userCredentials;

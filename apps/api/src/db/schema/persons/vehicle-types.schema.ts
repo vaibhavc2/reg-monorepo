@@ -31,3 +31,5 @@ export const vehiclesTypes = mysqlTable(
     titleIdx: index('title_idx').on(vehiclesTypes.title),
   }),
 );
+
+export type IVehicleType = typeof vehiclesTypes;

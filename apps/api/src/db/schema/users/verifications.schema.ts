@@ -33,3 +33,5 @@ export const verifications = mysqlTable(
     userIdx: index('user_idx').on(verifications.user),
   }),
 );
+
+export type IVerification = typeof verifications;

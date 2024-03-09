@@ -28,3 +28,5 @@ export const usernames = mysqlTable(
     valueIdx: index('value_idx').on(usernames.value),
   }),
 );
+
+export type IUsername = typeof usernames;
