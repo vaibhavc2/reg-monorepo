@@ -43,7 +43,9 @@ class Database {
     return new Promise<Connection | void>((resolve, reject) => {
       if (!this.connection) {
         mysql
-          .createConnection(env.DB_URL)
+          .createConnection(
+            env.isProd ? env.DB_URL + '?sslmode=require' : env.DEV_DB_URL,
+          )
           .then((conn) => {
             this.connection = conn;
             this.db = drizzle(this.connection, {
