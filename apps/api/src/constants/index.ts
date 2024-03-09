@@ -2,10 +2,7 @@ import * as path from 'path';
 
 const ct = {
   paths: {
-    migrationsFolder: path.join(
-      path.dirname(path.dirname(__dirname)),
-      'drizzle',
-    ),
+    migrations: path.join(path.dirname(path.dirname(__dirname)), 'drizzle'),
   },
   expressLimit: '50mb',
   prefixApiVersion: '/api/v1',

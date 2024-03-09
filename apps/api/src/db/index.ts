@@ -8,6 +8,7 @@ import mysql, { Connection } from 'mysql2/promise';
 import promptSync from 'prompt-sync';
 
 const prompt = promptSync({ sigint: true });
+const migrationsFolder = ct.paths.migrations;
 
 class Database {
   public connection: mysql.Connection | undefined;
@@ -67,18 +68,19 @@ class Database {
   }
 
   private promptToMigrate() {
-    const input = prompt('Migrate database? (y/N)');
-    if (input?.toLowerCase() === 'y') this.migrate();
-    else {
+    const input = prompt('\nprompt: Migrate database? (Y/n) ');
+    if (!input || input?.toLowerCase() === 'y') {
+      this.migrate().finally(() => process.exit(0));
+    } else {
       lg.warn('⚠️  You have selected to not migrate database!');
     }
   }
 
-  private migrate() {
+  private async migrate() {
     // migrating database
-    lg.info('migration started');
     if (this.db) {
-      migrate(this.db, { migrationsFolder: ct.paths.migrationsFolder })
+      lg.info('🚀  Migrating database....');
+      await migrate(this.db, { migrationsFolder })
         .then(() => {
           lg.info('✅  Migration completed successfully!');
           lg.warn('⚠️  Database migrated! Turn off MIGRATE_DB in .env file!');
@@ -86,10 +88,6 @@ class Database {
         .catch((error) => {
           lg.error('❌  Migration failed due to an Error. Try running again!');
           printErrorMessage(error, 'db: migrate()');
-        })
-        .finally(() => {
-          // stopping the process
-          process.exit(0);
         });
     } else {
       lg.error('❌  Database not connected! Unable to migrate database!');
