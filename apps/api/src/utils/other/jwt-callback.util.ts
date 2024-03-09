@@ -1,8 +1,8 @@
 import { ApiError } from '@/utils';
 
-export const jwtCallback = (err: unknown, decoded: any) => {
+export const jwtCallback = (err: unknown, payload: any) => {
   if (err) {
-    throw new ApiError(401, 'Invalid Access Token!');
+    throw new ApiError(401, 'Invalid Access Token! Unauthorized!');
   }
-  return decoded;
+  return payload;
 };
