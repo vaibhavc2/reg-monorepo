@@ -44,7 +44,9 @@ class Database {
       if (!this.connection) {
         mysql
           .createConnection(
-            env.isProd ? env.DB_URL + '?sslmode=require' : env.DEV_DB_URL,
+            env.isProduction
+              ? env.PROD_DB_URL + `?ssl={"rejectUnauthorized":true}`
+              : env.DEV_DB_URL,
           )
           .then((conn) => {
             this.connection = conn;

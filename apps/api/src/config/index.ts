@@ -12,7 +12,7 @@ const env = e.cleanEnv(process.env, {
     default: 8000,
     devDefault: 8000,
   }),
-  DB_URL: e.str({
+  PROD_DB_URL: e.str({
     default: 'mysql://root:password@localhost:3306/db',
   }),
   DEV_DB_URL: e.str({
