@@ -5,79 +5,76 @@ import {
   lg,
   printErrorMessage,
 } from '@/utils';
-import { UploadApiResponse, v2 as cloudinary } from 'cloudinary';
+import { UploadApiResponse, v2 } from 'cloudinary';
 
 class CloudinaryService {
-  cloudinaryResponse: UploadApiResponse | null;
+  response: UploadApiResponse | null;
 
   constructor(cloud_name: string, api_key: string, api_secret: string) {
-    this.cloudinaryResponse = null;
+    this.response = null;
 
     // configure cloudinary
-    cloudinary.config({ cloud_name, api_key, api_secret });
+    v2.config({ cloud_name, api_key, api_secret });
   }
 
-  uploadFileToCloudinary = async (localFilePath: string) => {
+  upload = async (localFilePath: string) => {
     try {
       // check if file path is missing
       if (!localFilePath || localFilePath.length < 1) {
         printErrorMessage(
           '💀⚠️   No File Path Found!!',
-          'uploadFileToCloudinary()',
+          'cloudinary: upload()',
         );
         return null;
       }
 
       // check if file exists on the local server
-      const response = await cloudinary.uploader.upload(localFilePath, {
+      const response = await v2.uploader.upload(localFilePath, {
         resource_type: 'auto',
         // timeout: 600000,
       });
 
       lg.info(`✅   File is uploaded on Cloudinary: ${response.url}`);
 
-      this.cloudinaryResponse = response;
+      this.response = response;
     } catch (error) {
       printErrorMessage(
         `💀⚠️   ${getErrorMessage(error)}`,
-        'uploadFileToCloudinary()',
+        'cloudinary: upload()',
       );
     } finally {
       await deleteLocalFile(localFilePath);
 
-      return this.cloudinaryResponse;
+      return this.response;
     }
   };
 
-  deleteFileFromCloudinary = async (fileURL: string) => {
+  delete = async (fileURL: string) => {
     try {
       // check if file URL is missing
       if (!fileURL || fileURL.length < 1) {
-        printErrorMessage(
-          '💀⚠️   No File URL Found!!',
-          'deleteFileFromCloudinary()',
-        );
+        printErrorMessage('💀⚠️   No File URL Found!!', 'cloudinary: delete()');
         return null;
       }
 
       // delete file from cloudinary
-      const response = await cloudinary.uploader.destroy(fileURL);
+      const response = await v2.uploader.destroy(fileURL);
 
       lg.info(`✅   File is deleted from Cloudinary: ${response}`);
 
-      this.cloudinaryResponse = response;
+      this.response = response;
     } catch (error) {
       printErrorMessage(
         `💀⚠️   ${getErrorMessage(error)}`,
-        'deleteFileFromCloudinary()',
+        'cloudinary: delete()',
       );
     } finally {
-      return this.cloudinaryResponse;
+      return this.response;
     }
   };
 }
 
-export const cloudinaryService = new CloudinaryService(
+export const cloudinary = new CloudinaryService(
   env.CLOUDINARY_CLOUD_NAME,
   env.CLOUDINARY_API_KEY,
   env.CLOUDINARY_API_SECRET,

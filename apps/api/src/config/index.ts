@@ -30,6 +30,10 @@ const env = e.cleanEnv(process.env, {
   REFRESH_TOKEN_SECRET: e.str(),
   ACCESS_TOKEN_EXPIRY: e.str(),
   REFRESH_TOKEN_EXPIRY: e.str(),
+  EMAIL_TOKEN_SECRET: e.str(),
+  EMAIL_TOKEN_EXPIRY: e.str(),
+  RESEND_API_KEY: e.str(),
+  EMAIL_FROM: e.str(),
 });
 
 export default env;

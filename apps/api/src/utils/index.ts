@@ -12,6 +12,7 @@ export {
   SuccessResponse,
 } from './api/api-response.util';
 export { asyncHandler } from './api/async-handler.util';
+export { emailHTML } from './email/email-html.util';
 export { dbError } from './error/db-error.util';
 export { getErrorStatusCode } from './error/error-code.util';
 export { getErrorMessage } from './error/error-message.util';

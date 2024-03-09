@@ -84,10 +84,8 @@ class Database {
           lg.warn('⚠️  Database migrated! Turn off MIGRATE_DB in .env file!');
         })
         .catch((error) => {
-          printErrorMessage(
-            error,
-            'Migration failed due to an Error. Try running again!',
-          );
+          lg.error('❌  Migration failed due to an Error. Try running again!');
+          printErrorMessage(error, 'db: migrate()');
         })
         .finally(() => {
           // stopping the process

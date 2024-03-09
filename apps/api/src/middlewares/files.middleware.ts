@@ -1,5 +1,5 @@
 import ct from '@/constants';
-import { cloudinaryService } from '@/services';
+import { cloudinary } from '@/services';
 import { ApiError, asyncHandler } from '@/utils';
 import { NextFunction, Request, Response } from 'express';
 import multer from 'multer';
@@ -42,8 +42,7 @@ export class FilesMiddleware {
       }
 
       // upload image to cloudinary
-      const image =
-        await cloudinaryService.uploadFileToCloudinary(imageLocalPath);
+      const image = await cloudinary.upload(imageLocalPath);
 
       // check if image upload failed
       if (!image?.secure_url) {
