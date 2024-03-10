@@ -1,4 +1,3 @@
-import ct from '@/constants';
 import { Router } from 'express';
 import { appHealthRouter } from './routes';
 
@@ -12,10 +11,10 @@ class AppRouter {
 
   private routes() {
     // admin routes
-    // this.router.use(`${ct.prefixApiVersion}/admin`, adminRouter);
+    // this.router.use('/admin', adminRouter);
 
     // app health route
-    this.router.use(`${ct.prefixApiVersion}`, appHealthRouter);
+    this.router.use(appHealthRouter);
   }
 }
 

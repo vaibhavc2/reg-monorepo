@@ -31,7 +31,7 @@ export class App {
     this.usePreBuiltMiddlewares();
 
     // using routes
-    this.app.use(router);
+    this.app.use(`${ct.prefixApiVersion}`, router);
 
     // error handler middlewares
     this.useErrorHandlers();
