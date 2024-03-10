@@ -1,11 +1,13 @@
 import type { Config } from 'drizzle-kit';
-import env from './src/config';
 
 export default {
-  schema: './src/db/schema/*',
+  schema: './libs/db/schema/*',
   out: './drizzle',
   driver: 'mysql2',
   dbCredentials: {
-    uri: env.DB_URL,
+    host: 'localhost',
+    user: 'vaibhav',
+    password: 'vaibhav',
+    database: 'reg-db',
   },
 } satisfies Config;

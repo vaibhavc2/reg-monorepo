@@ -1,4 +1,4 @@
-import { IUser, IUserCredential, IUsername } from '@/db/schema';
+import { IUser, IUserCredential, IUsername } from '@reg/db/types';
 
 declare global {
   namespace Express {

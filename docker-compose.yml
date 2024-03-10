@@ -8,8 +8,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: admin
       MYSQL_DATABASE: reg-db
-      MYSQL_USER: mysql
-      MYSQL_PASSWORD: mysql
+      MYSQL_USER: vaibhav
+      MYSQL_PASSWORD: vaibhav
     ports:
       - 3306:3306 # make sure you don't have anything running on this port
     volumes:

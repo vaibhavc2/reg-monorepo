@@ -1,7 +1,7 @@
 import env from '@/config';
 import ct from '@/constants';
-import * as schema from '@/db/schema';
 import { dbError, lg, printErrorMessage } from '@/utils';
+import * as schema from '@reg/db';
 import { MySql2Database, drizzle } from 'drizzle-orm/mysql2';
 import { migrate } from 'drizzle-orm/mysql2/migrator';
 import mysql, { Connection } from 'mysql2/promise';
