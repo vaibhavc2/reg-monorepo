@@ -28,7 +28,7 @@ export class App {
     this.setExpressAppVariables();
 
     // using pre-built middlewares
-    this.usePreBuiltMiddlewares();
+    this.useMiddlewares();
 
     // using routes
     this.app.use(`${ct.prefixApiVersion}`, router);
@@ -42,7 +42,7 @@ export class App {
     this.app.set('trust proxy', true);
   }
 
-  private usePreBuiltMiddlewares() {
+  private useMiddlewares() {
     // using pre-built middlewares
     this.app.use(
       cors({
@@ -57,6 +57,9 @@ export class App {
       express.urlencoded({ extended: true, limit: ct.expressLimit }),
       express.static('public'),
     );
+
+    // setting app version
+    this.app.use(middlewares.versioning.supplyAppVersion);
 
     // logs requests in development mode
     if (env.isDev) this.app.use(morgan('combined'));

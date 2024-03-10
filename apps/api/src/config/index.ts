@@ -39,6 +39,9 @@ const env = e.cleanEnv(process.env, {
   EMAIL_TOKEN_EXPIRY: e.str(),
   RESEND_API_KEY: e.str(),
   EMAIL_FROM: e.str(),
+  APP_VERSION: e.str({
+    default: '1.0.0',
+  }),
 });
 
 export default env;

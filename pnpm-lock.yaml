@@ -108,6 +108,9 @@ importers:
       resend:
         specifier: ^3.2.0
         version: 3.2.0
+      semver:
+        specifier: ^7.6.0
+        version: 7.6.0
       uuid:
         specifier: ^9.0.1
         version: 9.0.1
@@ -149,6 +152,9 @@ importers:
       '@types/prompt-sync':
         specifier: ^4.2.3
         version: 4.2.3
+      '@types/semver':
+        specifier: ^7.5.8
+        version: 7.5.8
       '@types/uuid':
         specifier: ~9.0.8
         version: 9.0.8
@@ -225,6 +231,9 @@ importers:
 
   libs/contracts:
     dependencies:
+      '@reg/db':
+        specifier: workspace:^
+        version: link:../db
       '@ts-rest/core':
         specifier: ^3.33.0
         version: 3.33.0(zod@3.22.4)

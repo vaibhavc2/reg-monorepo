@@ -20,6 +20,7 @@ module.exports = {
     'import/named': 'off',
     'no-unused-vars': 'off',
     'no-unsafe-finally': 'off',
+    indent: 'off',
   },
   env: {
     browser: true,
