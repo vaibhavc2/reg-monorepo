@@ -1,0 +1,23 @@
+{
+  "name": "@reg/contracts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsc",
+    "build": "tsc",
+    "tsc": "tsc"
+  },
+  "keywords": [],
+  "author": "Vaibhav Chopra",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@reg/db": "workspace:^",
+    "@ts-rest/core": "^3.33.0",
+    "zod": "^3.22.4"
+  }
+}
