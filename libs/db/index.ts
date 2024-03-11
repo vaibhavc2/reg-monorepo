@@ -1,4 +1,5 @@
-export {
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import {
   activities,
   displayNames,
   duties,
@@ -22,3 +23,55 @@ export {
   vehiclesTypes,
   verifications,
 } from './schema';
+
+// Insert schemas
+export const insertSchema = {
+  activities: createInsertSchema(activities),
+  displayNames: createInsertSchema(displayNames),
+  duties: createInsertSchema(duties),
+  oldPasswords: createInsertSchema(oldPasswords),
+  otpTypes: createInsertSchema(otpTypes),
+  otps: createInsertSchema(otps),
+  persons: createInsertSchema(persons),
+  personsDuties: createInsertSchema(personsDuties),
+  personsHistory: createInsertSchema(personsHistory),
+  personsRelations: createInsertSchema(personsRelations),
+  relations: createInsertSchema(relations),
+  requests: createInsertSchema(requests),
+  userCredentials: createInsertSchema(userCredentials),
+  userSessions: createInsertSchema(userSessions),
+  userSettings: createInsertSchema(userSettings),
+  usernames: createInsertSchema(usernames),
+  users: createInsertSchema(users),
+  usersHistory: createInsertSchema(usersHistory),
+  vehicles: createInsertSchema(vehicles),
+  vehiclesOwners: createInsertSchema(vehiclesOwners),
+  vehiclesTypes: createInsertSchema(vehiclesTypes),
+  verifications: createInsertSchema(verifications),
+};
+
+// Select schemas
+export const selectSchema = {
+  activities: createSelectSchema(activities),
+  displayNames: createSelectSchema(displayNames),
+  duties: createSelectSchema(duties),
+  oldPasswords: createSelectSchema(oldPasswords),
+  otpTypes: createSelectSchema(otpTypes),
+  otps: createSelectSchema(otps),
+  persons: createSelectSchema(persons),
+  personsDuties: createSelectSchema(personsDuties),
+  personsHistory: createSelectSchema(personsHistory),
+  personsRelations: createSelectSchema(personsRelations),
+  relations: createSelectSchema(relations),
+  requests: createSelectSchema(requests),
+  userCredentials: createSelectSchema(userCredentials),
+  userSessions: createSelectSchema(userSessions),
+  userSettings: createSelectSchema(userSettings),
+  usernames: createSelectSchema(usernames),
+  users: createSelectSchema(users),
+  usersHistory: createSelectSchema(usersHistory),
+  vehicles: createSelectSchema(vehicles),
+  vehiclesOwners: createSelectSchema(vehiclesOwners),
+  vehiclesTypes: createSelectSchema(vehiclesTypes),
+  verifications: createSelectSchema(verifications),
+};

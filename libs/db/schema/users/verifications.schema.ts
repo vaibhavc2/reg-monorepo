@@ -8,8 +8,8 @@ import {
 } from 'drizzle-orm/mysql-core';
 import { users } from './users.schema';
 
+// !every user must have a verification record (create it when the user is created)
 export const verifications = mysqlTable(
-  // !every user must have a verification record (create it when the user is created)
   'verifications',
   {
     id: int('id').primaryKey().autoincrement().notNull(),
