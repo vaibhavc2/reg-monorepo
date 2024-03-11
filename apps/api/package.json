@@ -60,6 +60,7 @@
     "drizzle-kit": "^0.20.14",
     "eslint": "^8",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-drizzle": "^0.2.3",
     "tsc-alias": "^1.8.8",
     "tsx": "^4.7.1",
     "typescript": "^5"
