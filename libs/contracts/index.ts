@@ -1,1 +1,1 @@
-export { default as UserContract } from 'shared/user.contract';
+export { AppHealthContract, UserContract } from './main';

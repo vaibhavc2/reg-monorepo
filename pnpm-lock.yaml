@@ -57,9 +57,15 @@ importers:
 
   apps/api:
     dependencies:
+      '@reg/contracts':
+        specifier: workspace:^
+        version: link:../../libs/contracts
       '@reg/db':
         specifier: workspace:^
         version: link:../../libs/db
+      '@reg/messages':
+        specifier: workspace:^
+        version: link:../../libs/messages
       '@ts-rest/express':
         specifier: ^3.33.0
         version: 3.33.0(express@4.18.2)(zod@3.22.4)
@@ -256,6 +262,12 @@ importers:
       drizzle-zod:
         specifier: ^0.5.1
         version: 0.5.1(drizzle-orm@0.30.1)(zod@3.22.4)
+    devDependencies:
+      typescript:
+        specifier: ^5
+        version: 5.3.3
+
+  libs/messages:
     devDependencies:
       typescript:
         specifier: ^5

@@ -1,3 +1,4 @@
+import { initServer } from '@ts-rest/express';
 import * as path from 'path';
 
 const ct = {
@@ -5,7 +6,6 @@ const ct = {
     migrations: path.join(path.dirname(path.dirname(__dirname)), 'drizzle'),
   },
   expressLimit: '50mb',
-  prefixApiVersion: '/api/v1',
   corsMethods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD'],
   mimeTypes: {
     image: [
@@ -18,6 +18,7 @@ const ct = {
       'image/svg+xml',
     ],
   },
+  s: initServer(),
 };
 
 export default ct;

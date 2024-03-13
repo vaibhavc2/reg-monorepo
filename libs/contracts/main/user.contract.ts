@@ -1,6 +1,6 @@
 import { insertSchema } from '@reg/db';
-import { contract } from 'contract';
-import { addPrefixToRoutes } from 'utils';
+import { contract } from '../contract';
+import { addPrefixToRoutes } from '../utils';
 
 const routes = {
   register: {

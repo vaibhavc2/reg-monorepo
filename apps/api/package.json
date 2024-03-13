@@ -19,7 +19,9 @@
   "author": "Vaibhav Chopra",
   "license": "ISC",
   "dependencies": {
+    "@reg/contracts": "workspace:^",
     "@reg/db": "workspace:^",
+    "@reg/messages": "workspace:^",
     "@ts-rest/express": "^3.33.0",
     "argon2": "^0.40.1",
     "cloudinary": "^2.0.1",

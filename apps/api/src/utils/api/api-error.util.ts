@@ -45,10 +45,4 @@ class UnauthorizedError extends ApiError {
   }
 }
 
-class UserNotFoundError extends ApiError {
-  constructor() {
-    super(404, 'User not found!');
-  }
-}
-
-export { ApiError, RequiredBodyError, UnauthorizedError, UserNotFoundError };
+export { ApiError, RequiredBodyError, UnauthorizedError };
