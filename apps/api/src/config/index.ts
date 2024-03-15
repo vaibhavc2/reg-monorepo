@@ -10,7 +10,9 @@ const env = e.cleanEnv(process.env, {
   }),
   PORT: e.num({
     default: 8000,
-    devDefault: 8000,
+  }),
+  HOST: e.str({
+    devDefault: 'localhost',
   }),
   PROD_DB_URL: e.str({
     default: 'mysql://root:password@localhost:3306/db',
@@ -20,7 +22,6 @@ const env = e.cleanEnv(process.env, {
   }),
   MIGRATE_DB: e.bool({
     default: false,
-    devDefault: false,
     docs: 'Set to true to migrate the database',
     desc: 'Set to true to migrate the database',
   }),
@@ -44,11 +45,6 @@ const env = e.cleanEnv(process.env, {
   }),
   GOOGLE_OAUTH_CLIENT_ID: e.str(),
   GOOGLE_OAUTH_CLIENT_SECRET: e.str(),
-  SERVER_BASE_URL: e.str({
-    devDefault: 'http://localhost:8000',
-    desc: 'The base url for the server',
-    docs: 'The base url for the server',
-  }),
 });
 
 export default env;

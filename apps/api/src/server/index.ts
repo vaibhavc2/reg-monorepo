@@ -1,5 +1,6 @@
 import { App } from '@/app';
 import env from '@/config';
+import ct from '@/constants';
 import { database } from '@/db';
 import { dbError, log, printErrorMessage } from '@/utils';
 import { Application } from 'express';
@@ -46,7 +47,7 @@ class Server {
     // starting http server
     const server = this.app.listen(env.PORT, () => {
       log.info(
-        `⚙️   Server is running at http://localhost:${env.PORT} in ${env.NODE_ENV} mode.`,
+        `⚙️   Server is running at ${ct.chalk.highlight(`${ct.base_url}`)} in ${env.NODE_ENV} mode.`,
       );
     });
 

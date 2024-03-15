@@ -1,3 +1,4 @@
+import env from '@/config';
 import { initServer } from '@ts-rest/express';
 import chalk from 'chalk';
 import * as path from 'path';
@@ -29,7 +30,9 @@ const ct = {
     success: chalk.bold.green,
     error: chalk.bold.red,
     warning: chalk.bold.yellow,
+    highlight: chalk.bold.blue,
   },
+  base_url: `${env.isDev ? 'http' : 'https'}://${env.HOST}:${env.isDev ? env.PORT : ''}`,
 };
 
 export default ct;

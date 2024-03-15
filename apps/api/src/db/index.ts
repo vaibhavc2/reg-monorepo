@@ -67,7 +67,7 @@ class Database {
             dbError(error, reject);
           });
       } else {
-        log.warn('⚠️✅  Database already connected!');
+        log.warn(ct.chalk.warning('⚠️✅  Database already connected!'));
         resolve();
       }
     });
@@ -78,7 +78,9 @@ class Database {
     if (!input || input?.toLowerCase() === 'y') {
       this.migrate().finally(() => process.exit(0));
     } else {
-      log.warn('⚠️  You have selected to not migrate database!');
+      log.warn(
+        ct.chalk.warning('⚠️  You have selected to not migrate database!'),
+      );
     }
   }
 
@@ -89,14 +91,26 @@ class Database {
       await migrate(this.db, { migrationsFolder })
         .then(() => {
           log.info('✅  Migration completed successfully!');
-          log.warn('⚠️  Database migrated! Turn off MIGRATE_DB in .env file!');
+          log.warn(
+            ct.chalk.warning(
+              '⚠️  Database migrated! Turn off MIGRATE_DB in .env file!',
+            ),
+          );
         })
         .catch((error) => {
-          log.error('❌  Migration failed due to an Error. Try running again!');
+          log.error(
+            ct.chalk.error(
+              '❌  Migration failed due to an Error. Try running again!\n',
+            ),
+          );
           printErrorMessage(error, 'db: migrate()');
         });
     } else {
-      log.error('❌  Database not connected! Unable to migrate database!');
+      log.error(
+        ct.chalk.error(
+          '❌  Database not connected! Unable to migrate database!',
+        ),
+      );
       process.exit(0);
     }
   }

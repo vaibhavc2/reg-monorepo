@@ -9,7 +9,7 @@ export class GoogleOAuthService {
     this.client = new OAuth2Client(
       env.GOOGLE_OAUTH_CLIENT_ID,
       env.GOOGLE_OAUTH_CLIENT_SECRET,
-      `${env.SERVER_BASE_URL}${ct.routes.oauth.google}`,
+      `${ct.base_url}${ct.routes.oauth.google}`,
     );
   }
 

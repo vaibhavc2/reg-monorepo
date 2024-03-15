@@ -1,3 +1,4 @@
+import ct from '@/constants';
 import { ApiError, log } from '@/utils';
 import { NextFunction, Request, Response } from 'express';
 
@@ -31,11 +32,15 @@ export class ErrorMiddleware {
   ) => {
     if (error instanceof Error || error instanceof ApiError) {
       log.error(
-        `⚠️   Error occurred on the route: ${req.path}.\n ${error.stack}`,
+        ct.chalk.error(
+          `⚠️   Error occurred on the route: ${req.path}.\n ${error.stack}`,
+        ),
       );
     } else {
       log.error(
-        `💀   Something went wrong!! Terribly !!\n ⚠️   Error occurred on the route: ${req.path}.\n ${error}`,
+        ct.chalk.error(
+          `💀   Something went wrong!! Terribly !!\n ⚠️   Error occurred on the route: ${req.path}.\n ${error}`,
+        ),
       );
     }
 
@@ -43,7 +48,7 @@ export class ErrorMiddleware {
   };
 
   public routeNotFound = (req: Request, res: Response, next: NextFunction) => {
-    log.error(`⚠️   Route not found: ${req.path}`);
+    log.error(ct.chalk.error(`⚠️   Route not found: ${req.path}`));
     return res.status(404).json({
       status: 404,
       message: 'Route not found',
