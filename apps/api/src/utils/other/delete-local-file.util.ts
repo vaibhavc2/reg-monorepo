@@ -1,6 +1,5 @@
-import { printErrorMessage } from '@/utils';
+import { log, printErrorMessage } from '@/utils';
 import fs from 'fs';
-import { lg } from './logger.util';
 
 export const deleteLocalFile = (filePath: string) => {
   return new Promise((resolve, reject) => {
@@ -27,7 +26,7 @@ export const deleteLocalFile = (filePath: string) => {
         );
         reject(err);
       } else {
-        lg.info(
+        log.info(
           `✅   File removed from the local server. File Path: ${filePath}`,
         );
         resolve(true);

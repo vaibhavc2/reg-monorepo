@@ -1,4 +1,5 @@
 import { initServer } from '@ts-rest/express';
+import chalk from 'chalk';
 import * as path from 'path';
 
 const ct = {
@@ -19,6 +20,16 @@ const ct = {
     ],
   },
   s: initServer(),
+  routes: {
+    oauth: {
+      google: '/oauth/google',
+    },
+  },
+  chalk: {
+    success: chalk.bold.green,
+    error: chalk.bold.red,
+    warning: chalk.bold.yellow,
+  },
 };
 
 export default ct;

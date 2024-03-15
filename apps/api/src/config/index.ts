@@ -42,6 +42,13 @@ const env = e.cleanEnv(process.env, {
   APP_VERSION: e.str({
     default: '1.0.0',
   }),
+  GOOGLE_OAUTH_CLIENT_ID: e.str(),
+  GOOGLE_OAUTH_CLIENT_SECRET: e.str(),
+  SERVER_BASE_URL: e.str({
+    devDefault: 'http://localhost:8000',
+    desc: 'The base url for the server',
+    docs: 'The base url for the server',
+  }),
 });
 
 export default env;

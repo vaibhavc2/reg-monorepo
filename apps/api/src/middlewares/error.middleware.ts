@@ -1,4 +1,4 @@
-import { ApiError, lg } from '@/utils';
+import { ApiError, log } from '@/utils';
 import { NextFunction, Request, Response } from 'express';
 
 export class ErrorMiddleware {
@@ -30,11 +30,11 @@ export class ErrorMiddleware {
     next: NextFunction,
   ) => {
     if (error instanceof Error || error instanceof ApiError) {
-      lg.error(
+      log.error(
         `⚠️   Error occurred on the route: ${req.path}.\n ${error.stack}`,
       );
     } else {
-      lg.error(
+      log.error(
         `💀   Something went wrong!! Terribly !!\n ⚠️   Error occurred on the route: ${req.path}.\n ${error}`,
       );
     }
@@ -43,7 +43,7 @@ export class ErrorMiddleware {
   };
 
   public routeNotFound = (req: Request, res: Response, next: NextFunction) => {
-    lg.error(`⚠️   Route not found: ${req.path}`);
+    log.error(`⚠️   Route not found: ${req.path}`);
     return res.status(404).json({
       status: 404,
       message: 'Route not found',

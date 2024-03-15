@@ -2,7 +2,7 @@ import env from '@/config';
 import {
   deleteLocalFile,
   getErrorMessage,
-  lg,
+  log,
   printErrorMessage,
 } from '@/utils';
 import { UploadApiResponse, v2 } from 'cloudinary';
@@ -34,7 +34,7 @@ class CloudinaryService {
         // timeout: 600000,
       });
 
-      lg.info(`✅   File is uploaded on Cloudinary: ${response.url}`);
+      log.info(`✅   File is uploaded on Cloudinary: ${response.url}`);
 
       this.response = response;
     } catch (error) {
@@ -60,7 +60,7 @@ class CloudinaryService {
       // delete file from cloudinary
       const response = await v2.uploader.destroy(fileURL);
 
-      lg.info(`✅   File is deleted from Cloudinary: ${response}`);
+      log.info(`✅   File is deleted from Cloudinary: ${response}`);
 
       this.response = response;
     } catch (error) {

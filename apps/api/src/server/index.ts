@@ -1,7 +1,7 @@
 import { App } from '@/app';
 import env from '@/config';
 import { database } from '@/db';
-import { dbError, lg, printErrorMessage } from '@/utils';
+import { dbError, log, printErrorMessage } from '@/utils';
 import { Application } from 'express';
 
 class Server {
@@ -45,7 +45,7 @@ class Server {
   private httpServer() {
     // starting http server
     const server = this.app.listen(env.PORT, () => {
-      lg.info(
+      log.info(
         `⚙️   Server is running at http://localhost:${env.PORT} in ${env.NODE_ENV} mode.`,
       );
     });

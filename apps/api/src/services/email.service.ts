@@ -1,5 +1,5 @@
 import env from '@/config';
-import { emailHTML, lg, printErrorMessage } from '@/utils';
+import { emailHTML, log, printErrorMessage } from '@/utils';
 import { Resend } from 'resend';
 
 class EmailService {
@@ -24,7 +24,7 @@ class EmailService {
         html: emailHTML(title, message, content),
       });
 
-      lg.info(`✅  Email sent to '${email}' successfully!`);
+      log.info(`✅  Email sent to '${email}' successfully!`);
 
       return response;
     } catch (error) {

@@ -1,6 +1,6 @@
 import env from '@/config';
 import ct from '@/constants';
-import { dbError, lg, printErrorMessage } from '@/utils';
+import { dbError, log, printErrorMessage } from '@/utils';
 import * as schema from '@reg/db';
 import { MySql2Database, drizzle } from 'drizzle-orm/mysql2';
 import { migrate } from 'drizzle-orm/mysql2/migrator';
@@ -55,8 +55,10 @@ class Database {
               mode: 'default',
             } as any);
             if (this.connection && this.db) {
-              lg.info(
-                `✅  Database connected successfully! Host: ${this.connection.config.host}`,
+              log.info(
+                ct.chalk.success(
+                  `✅  Database connected successfully! Host: ${this.connection.config.host}`,
+                ),
               );
               resolve(this.connection);
             }
@@ -65,7 +67,7 @@ class Database {
             dbError(error, reject);
           });
       } else {
-        lg.warn('⚠️✅  Database already connected!');
+        log.warn('⚠️✅  Database already connected!');
         resolve();
       }
     });
@@ -76,25 +78,25 @@ class Database {
     if (!input || input?.toLowerCase() === 'y') {
       this.migrate().finally(() => process.exit(0));
     } else {
-      lg.warn('⚠️  You have selected to not migrate database!');
+      log.warn('⚠️  You have selected to not migrate database!');
     }
   }
 
   private async migrate() {
     // migrating database
     if (this.db) {
-      lg.info('🚀  Migrating database....');
+      log.info('🚀  Migrating database....');
       await migrate(this.db, { migrationsFolder })
         .then(() => {
-          lg.info('✅  Migration completed successfully!');
-          lg.warn('⚠️  Database migrated! Turn off MIGRATE_DB in .env file!');
+          log.info('✅  Migration completed successfully!');
+          log.warn('⚠️  Database migrated! Turn off MIGRATE_DB in .env file!');
         })
         .catch((error) => {
-          lg.error('❌  Migration failed due to an Error. Try running again!');
+          log.error('❌  Migration failed due to an Error. Try running again!');
           printErrorMessage(error, 'db: migrate()');
         });
     } else {
-      lg.error('❌  Database not connected! Unable to migrate database!');
+      log.error('❌  Database not connected! Unable to migrate database!');
       process.exit(0);
     }
   }
