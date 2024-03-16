@@ -3,10 +3,12 @@ import {
   boolean,
   index,
   int,
+  mysqlEnum,
   mysqlTable,
   timestamp,
   varchar,
 } from 'drizzle-orm/mysql-core';
+import ct from '../../constants';
 import { users } from './users.schema';
 
 export const userSessions = mysqlTable(
@@ -17,6 +19,7 @@ export const userSessions = mysqlTable(
       .references(() => users.id)
       .notNull()
       .unique(),
+    authType: mysqlEnum('auth_type', ct.authType).default('google').notNull(),
     deviceId: varchar('device_id', { length: 256 }).notNull(),
     deviceName: varchar('device_name', { length: 256 }).notNull(),
     token: varchar('token', { length: 256 }).notNull().unique(),

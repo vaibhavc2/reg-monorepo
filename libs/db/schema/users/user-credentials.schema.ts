@@ -1,12 +1,13 @@
 import { sql } from 'drizzle-orm';
 import {
-  boolean,
   index,
   int,
+  mysqlEnum,
   mysqlTable,
   timestamp,
   varchar,
 } from 'drizzle-orm/mysql-core';
+import ct from '../../constants';
 import { users } from './users.schema';
 
 export const userCredentials = mysqlTable(
@@ -18,7 +19,7 @@ export const userCredentials = mysqlTable(
       .notNull()
       .unique(),
     email: varchar('email', { length: 256 }).notNull().unique(),
-    googleAuth: boolean('google_auth').default(false).notNull(),
+    authType: mysqlEnum('auth_type', ct.authType).default('google').notNull(),
     // TODO: default to email, but if the user logs in using google or apple, then also allow the user to login using email-password, or google/apple
     phone: varchar('phone', { length: 20 }).notNull().unique(), // use e164 format
     salt: varchar('salt', { length: 256 }).notNull(),
