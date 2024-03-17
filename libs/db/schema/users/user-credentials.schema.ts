@@ -22,7 +22,7 @@ export const userCredentials = mysqlTable(
     authType: mysqlEnum('auth_type', ct.authType).default('google').notNull(),
     // TODO: default to email, but if the user logs in using google or apple, then also allow the user to login using email-password, or google/apple
     phone: varchar('phone', { length: 20 }).notNull().unique(), // use e164 format
-    salt: varchar('salt', { length: 256 }).notNull(),
+    salt: varchar('salt', { length: 256 }),
     password: varchar('password', { length: 256 }).unique(),
     // TODO: make sure that the password is hashed and salted automatically using triggers and event scheduler, similar to 'pre' and 'post' hooks in mongoose
     createdAt: timestamp('created_at', { mode: 'date', fsp: 6 })

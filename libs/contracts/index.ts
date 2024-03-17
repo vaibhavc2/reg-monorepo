@@ -1,1 +1,1 @@
-export { AppHealthContract, UserContract } from './main';
+export { AppHealthContract, GoogleOAuthContract, UserContract } from './main';

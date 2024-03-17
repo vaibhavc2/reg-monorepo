@@ -23,7 +23,7 @@ export const userSessions = mysqlTable(
     deviceId: varchar('device_id', { length: 256 }).notNull(),
     deviceName: varchar('device_name', { length: 256 }).notNull(),
     token: varchar('token', { length: 256 }).notNull().unique(),
-    expiredAt: timestamp('expired_at', { mode: 'date', fsp: 6 }).notNull(),
+    expiredAt: timestamp('expired_at', { mode: 'date', fsp: 6 }),
     revoked: boolean('revoked').default(false).notNull(),
     revokedAt: timestamp('revoked_at', { mode: 'date', fsp: 6 }),
     revokedBy: int('revoked_by').references(() => users.id),

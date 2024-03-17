@@ -1,0 +1,1 @@
+ALTER TABLE `user_sessions` MODIFY COLUMN `expired_at` timestamp(6);

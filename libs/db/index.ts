@@ -24,6 +24,32 @@ import {
   verifications,
 } from './schema';
 
+// export schemas
+export {
+  activities,
+  displayNames,
+  duties,
+  oldPasswords,
+  otpTypes,
+  otps,
+  persons,
+  personsDuties,
+  personsHistory,
+  personsRelations,
+  relations,
+  requests,
+  userCredentials,
+  userSessions,
+  userSettings,
+  usernames,
+  users,
+  usersHistory,
+  vehicles,
+  vehiclesOwners,
+  vehiclesTypes,
+  verifications,
+} from './schema';
+
 // Insert schemas
 export const insertSchema = {
   activities: createInsertSchema(activities),

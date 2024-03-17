@@ -36,6 +36,20 @@
       "when": 1710588853492,
       "tag": "0004_silly_cannonball",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1710608318770,
+      "tag": "0005_purple_joystick",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1710706969424,
+      "tag": "0006_aspiring_lifeguard",
+      "breakpoints": true
     }
   ]
 }
