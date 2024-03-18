@@ -4,7 +4,7 @@ const GoogleOAuthContract = contract.router(
   {
     signup: {
       method: 'POST',
-      path: 'signup/oauth/google',
+      path: '/signup/oauth/google',
       query: contract.type<{
         code: string;
       }>(),
@@ -18,7 +18,10 @@ const GoogleOAuthContract = contract.router(
           message: string;
         }>(),
       },
-      body: contract.type<{}>(),
+      body: contract.type<{
+        deviceId: string;
+        deviceName: string;
+      }>(),
       summary: 'Sign up with Google OAuth',
     },
   },
