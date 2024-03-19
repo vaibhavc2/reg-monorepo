@@ -1,6 +1,7 @@
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import {
   activities,
+  devices,
   displayNames,
   duties,
   oldPasswords,
@@ -26,6 +27,7 @@ import {
 // export schemas
 export {
   activities,
+  devices,
   displayNames,
   duties,
   oldPasswords,
@@ -71,6 +73,7 @@ export const insertSchema = {
   vehiclesOwners: createInsertSchema(vehiclesOwners),
   vehiclesTypes: createInsertSchema(vehiclesTypes),
   verifications: createInsertSchema(verifications),
+  devices: createInsertSchema(devices),
 };
 
 // Select schemas
@@ -96,4 +99,5 @@ export const selectSchema = {
   vehiclesOwners: createSelectSchema(vehiclesOwners),
   vehiclesTypes: createSelectSchema(vehiclesTypes),
   verifications: createSelectSchema(verifications),
+  devices: createSelectSchema(devices),
 };
