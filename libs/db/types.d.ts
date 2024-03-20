@@ -6,7 +6,6 @@ export type {
   IEmailCredential,
   IOTP,
   IOTPType,
-  IOldPassword,
   IPerson,
   IPersonDuty,
   IPersonHistory,

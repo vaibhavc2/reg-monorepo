@@ -1,7 +1,7 @@
 type IEnum = readonly [string, ...string[]] | [string, ...string[]];
 
 const ct = {
-  authType: ['email-password', 'google', 'both'] as IEnum,
+  authType: ['email', 'google', 'phone'] as IEnum,
   deviceType: ['android', 'iphone', 'desktop', 'other'] as IEnum,
 };
 
