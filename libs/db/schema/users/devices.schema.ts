@@ -9,11 +9,15 @@ import {
   varchar,
 } from 'drizzle-orm/mysql-core';
 import ct from '../../constants';
+import { users } from './users.schema';
 
 export const devices = mysqlTable(
   'devices',
   {
     id: int('id').primaryKey().autoincrement().notNull(),
+    user: int('user')
+      .references(() => users.id)
+      .notNull(),
     name: varchar('name', { length: 256 }).notNull(),
     model: varchar('model', { length: 256 }).notNull(),
     type: mysqlEnum('type', ct.deviceType).notNull(),

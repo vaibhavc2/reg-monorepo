@@ -9,7 +9,6 @@ import {
   varchar,
 } from 'drizzle-orm/mysql-core';
 import ct from '../../constants';
-import { devices } from './devices.schema';
 import { users } from './users.schema';
 
 export const userSessions = mysqlTable(
@@ -18,13 +17,8 @@ export const userSessions = mysqlTable(
     id: int('id').primaryKey().autoincrement().notNull(),
     user: int('user')
       .references(() => users.id)
-      .notNull()
-      .unique(),
+      .notNull(),
     authType: mysqlEnum('auth_type', ct.authType).default('google').notNull(),
-    device: int('device')
-      .references(() => devices.id)
-      .notNull()
-      .unique(),
     token: varchar('token', { length: 256 }).notNull().unique(),
     expiredAt: timestamp('expired_at', { mode: 'date', fsp: 6 }),
     revoked: boolean('revoked').default(false).notNull(),
@@ -36,7 +30,7 @@ export const userSessions = mysqlTable(
       .notNull(),
   },
   (userSessions) => ({
-    deviceIdx: index('device_idx').on(userSessions.device),
+    userIdx: index('user_idx').on(userSessions.user),
     authTypeIdx: index('auth_type_idx').on(userSessions.authType),
   }),
 );
