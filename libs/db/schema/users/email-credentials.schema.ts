@@ -1,17 +1,16 @@
 import { sql } from 'drizzle-orm';
 import {
+  boolean,
   index,
   int,
-  mysqlEnum,
   mysqlTable,
   timestamp,
   varchar,
 } from 'drizzle-orm/mysql-core';
-import ct from '../../constants';
 import { users } from './users.schema';
 
-export const userCredentials = mysqlTable(
-  'user_credentials',
+export const emailCredentials = mysqlTable(
+  'email_credentials',
   {
     id: int('id').primaryKey().autoincrement().notNull(),
     user: int('user')
@@ -19,8 +18,7 @@ export const userCredentials = mysqlTable(
       .notNull()
       .unique(),
     email: varchar('email', { length: 256 }).notNull().unique(),
-    authType: mysqlEnum('auth_type', ct.authType).default('google').notNull(),
-    phone: varchar('phone', { length: 20 }).notNull().unique(), // use e164 format
+    googleAuth: boolean('google_auth').default(false).notNull(),
     password: varchar('password', { length: 256 }),
     createdAt: timestamp('created_at', { mode: 'date', fsp: 6 })
       .default(sql`CURRENT_TIMESTAMP(6)`)
@@ -29,10 +27,10 @@ export const userCredentials = mysqlTable(
       .default(sql`CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6)`)
       .notNull(),
   },
-  (userCredentials) => ({
-    emailIdx: index('email_idx').on(userCredentials.email),
-    phoneIdx: index('phone_idx').on(userCredentials.phone),
+  (emailCredentials) => ({
+    userIdx: index('user_idx').on(emailCredentials.user),
+    emailIdx: index('email_idx').on(emailCredentials.email),
   }),
 );
 
-export type IUserCredential = typeof userCredentials;
+export type IEmailCredential = typeof emailCredentials;
