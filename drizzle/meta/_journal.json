@@ -64,6 +64,20 @@
       "when": 1710878605728,
       "tag": "0008_smart_namor",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1710926317224,
+      "tag": "0009_hot_namora",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1710928833230,
+      "tag": "0010_good_silver_samurai",
+      "breakpoints": true
     }
   ]
 }

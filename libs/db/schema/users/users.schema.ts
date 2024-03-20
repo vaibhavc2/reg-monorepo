@@ -19,8 +19,6 @@ export const users = mysqlTable(
     role: mysqlEnum('role', ['user', 'moderator', 'admin'])
       .default('user')
       .notNull(),
-    verified: boolean('verified').default(false).notNull(),
-    //TODO: this should be true ONLY if emailVerified and phoneVerified are true, and admin or moderator has verified the user
     disabled: boolean('disabled').default(false).notNull(),
     createdAt: timestamp('created_at', { mode: 'date', fsp: 6 })
       .default(sql`CURRENT_TIMESTAMP(6)`)
