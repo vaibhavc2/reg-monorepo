@@ -1,7 +1,8 @@
 import env from '@/config';
 import ct from '@/constants';
 import { dbError, log, printErrorMessage } from '@/utils';
-import * as schema from '@reg/db';
+import * as schema from '@reg/db/schema';
+import { Logger } from 'drizzle-orm';
 import { MySql2Database, drizzle } from 'drizzle-orm/mysql2';
 import { migrate } from 'drizzle-orm/mysql2/migrator';
 import mysql, { Connection } from 'mysql2/promise';
@@ -10,9 +11,15 @@ import promptSync from 'prompt-sync';
 const prompt = promptSync({ sigint: true });
 const migrationsFolder = ct.paths.migrations;
 
+class MyLogger implements Logger {
+  logQuery(query: string, params: unknown[]): void {
+    log.debug(`SQL execution: \n ${{ query, params }}`);
+  }
+}
+
 class Database {
-  public connection: mysql.Connection | undefined;
-  public db: MySql2Database<Record<string, never>> | undefined;
+  private connection: mysql.Connection | undefined;
+  public db: MySql2Database<typeof schema> | undefined;
 
   constructor() {
     this.connection = undefined;
@@ -53,6 +60,7 @@ class Database {
             this.db = drizzle(this.connection, {
               schema,
               mode: 'default',
+              logger: env.isDev ? new MyLogger() : false,
             } as any);
             if (this.connection && this.db) {
               log.info(
@@ -117,3 +125,4 @@ class Database {
 }
 
 export const database = new Database();
+export const db = database.db;

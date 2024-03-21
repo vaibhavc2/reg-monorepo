@@ -31,6 +31,15 @@ class EmailService {
       printErrorMessage(error, 'sendEmail()');
     }
   };
+
+  public sendVerificationEmail = async (email: string, token: string) => {
+    const title = 'Email Verification: Registry App';
+    const subject = 'Verify your email';
+    const message = `Click the button below to verify your email address.`;
+    const content = `<a href="${env.CLIENT_URL}/verify-email/${token}" style="text-decoration: none; color: white; background-color: #4CAF50; padding: 10px 20px; border-radius: 5px;">Verify Email</a>`;
+
+    return this.send(email, title, subject, message, content);
+  };
 }
 
-export const email = new EmailService();
+export const emailService = new EmailService();

@@ -1,17 +1,24 @@
-import { IUser, IUserCredential, IUsername } from '@reg/db/types';
+import { insertSchema } from '@reg/db';
+import { z } from 'zod';
+
+type user = z.infer<typeof insertSchema.users>;
+type userId = user['id'];
+type userRole = user['role'];
 
 declare global {
   namespace Express {
+    type MulterFile = Express.Multer.File;
+    type MulterFiles = { [fieldname: string]: Express.Multer.File[] };
+
     interface Request {
-      user?: IUser;
-      username?: IUsername;
-      credentials?: IUserCredential;
+      userId?: userId;
+      userRole?: userRole;
+      file?: MulterFile;
+      files?: MulterFiles;
     }
   }
-
-  namespace GlobalTypes {
-    type MulterFiles = { [fieldname: string]: Express.Multer.File[] };
-  }
 }
+
+// custom types
 
 export {};

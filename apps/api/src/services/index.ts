@@ -1,4 +1,5 @@
 export { cloudinary } from './cloudinary.service';
-export { email } from './email.service';
+export { emailService } from './email.service';
+export { google } from './google-oauth.service';
 export { jwt } from './jwt.service';
 export { pwd } from './password.service';

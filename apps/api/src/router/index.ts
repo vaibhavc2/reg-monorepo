@@ -1,1 +1,1 @@
-export { default as appHealthRouter } from './app-health.routes';
+export { Router } from './router';

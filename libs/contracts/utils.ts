@@ -6,3 +6,6 @@ export const addPrefixToRoutes = (routes: any, prefix: string) => {
     return prefixedRoutes;
   }, {});
 };
+
+// for using url-path based versioning in the api
+export const apiVersionPrefix = (version: number) => `/api/v${version}`;

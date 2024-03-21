@@ -25,13 +25,12 @@ const env = e.cleanEnv(process.env, {
     docs: 'Set to true to migrate the database',
     desc: 'Set to true to migrate the database',
   }),
-  FRONTEND_URL: e.str({
+  CLIENT_URL: e.str({
     devDefault: '*',
   }),
   CLOUDINARY_CLOUD_NAME: e.str(),
   CLOUDINARY_API_KEY: e.str(),
   CLOUDINARY_API_SECRET: e.str(),
-  SECRET_KEY: e.str(),
   ACCESS_TOKEN_SECRET: e.str(),
   REFRESH_TOKEN_SECRET: e.str(),
   ACCESS_TOKEN_EXPIRY: e.str(),

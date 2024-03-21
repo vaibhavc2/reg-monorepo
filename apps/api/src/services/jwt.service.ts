@@ -83,10 +83,6 @@ class JWTService {
   public verifyEmailToken = async (token: string) => {
     return jt.verify(token, this.emailToken.secret, jwtCallback);
   };
-
-  public decodeToken = async (token: string) => {
-    return jt.decode(token);
-  };
 }
 
 export const jwt = new JWTService();

@@ -1,9 +1,7 @@
 import env from '@/config';
 import ct from '@/constants';
 import middlewares from '@/middlewares';
-import { appHealthRouter } from '@/router';
-import { AppHealthContract } from '@reg/contracts';
-import { createExpressEndpoints } from '@ts-rest/express';
+import { Router } from '@/router';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Application } from 'express';
@@ -32,8 +30,8 @@ export class App {
     // using pre-built middlewares
     this.useMiddlewares();
 
-    // using routers
-    this.useRouters();
+    // using routing
+    this.useRouting();
 
     // error handler middlewares
     this.useErrorHandlers();
@@ -48,7 +46,7 @@ export class App {
     // using pre-built middlewares
     this.app.use(
       cors({
-        origin: [env.FRONTEND_URL],
+        origin: [env.CLIENT_URL],
         credentials: true,
         methods: ct.corsMethods,
       }),
@@ -67,9 +65,8 @@ export class App {
     if (env.isDev) this.app.use(morgan('combined'));
   }
 
-  private useRouters() {
-    // app-health router
-    createExpressEndpoints(AppHealthContract, appHealthRouter, this.app);
+  private useRouting() {
+    new Router(this.app).init();
   }
 
   private useErrorHandlers() {
