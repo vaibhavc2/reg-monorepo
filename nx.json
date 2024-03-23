@@ -6,7 +6,7 @@
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next, dist, build"],
+      "outputs": ["{workspaceRoot}/.next, dist, build"],
       "defaultConfiguration": "production",
       "configurations": {
         "production": {}
@@ -17,6 +17,11 @@
       "cache": true
     },
     "tsc": {
+      "cache": true
+    },
+    "dev": {
+      "dependsOn": ["^dev"],
+      "outputs": ["{projectRoot}/.next, build, dist"],
       "cache": true
     }
   },
@@ -37,5 +42,10 @@
       }
     }
   ],
-  "nxCloudAccessToken": "ZjMyMTE4MzItYjg3Yi00NmFhLWFiMWQtYWMwODAxMzdhNzc1fHJlYWQtd3JpdGU="
+  "nxCloudAccessToken": "ZjMyMTE4MzItYjg3Yi00NmFhLWFiMWQtYWMwODAxMzdhNzc1fHJlYWQtd3JpdGU=",
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "sharedGlobals": [],
+    "production": ["default"]
+  }
 }
