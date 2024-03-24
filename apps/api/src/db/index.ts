@@ -9,7 +9,6 @@ import mysql, { Connection } from 'mysql2/promise';
 import promptSync from 'prompt-sync';
 
 const prompt = promptSync({ sigint: true });
-const migrationsFolder = ct.paths.migrations;
 
 class MyLogger implements Logger {
   logQuery(query: string, params: unknown[]): void {
@@ -18,12 +17,14 @@ class MyLogger implements Logger {
 }
 
 class Database {
+  private migrationsFolder: string | undefined;
   private connection: mysql.Connection | undefined;
   public db: MySql2Database<typeof schema> | undefined;
 
   constructor() {
     this.connection = undefined;
     this.db = undefined;
+    this.migrationsFolder = !env.isProduction ? ct.paths.migrations : undefined;
   }
 
   public async init() {
@@ -94,9 +95,9 @@ class Database {
 
   private async migrate() {
     // migrating database
-    if (this.db) {
+    if (!env.isProd && this.db && this.migrationsFolder) {
       log.info('🚀  Migrating database....');
-      await migrate(this.db, { migrationsFolder })
+      await migrate(this.db, { migrationsFolder: this.migrationsFolder })
         .then(() => {
           log.info('✅  Migration completed successfully!');
           log.warn(

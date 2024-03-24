@@ -17,10 +17,7 @@
     "rootDir": "./src",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@reg/contracts": ["libs/contracts/index.ts"],
-      "@reg/db": ["libs/db/index.ts"],
-      "@reg/messages": ["libs/messages/index.ts"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src/**/*", "src/types/**/*"],
