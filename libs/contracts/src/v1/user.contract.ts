@@ -1,32 +1,40 @@
-// import { insertSchema } from '@reg/db';
+import { insertSchema } from '@reg/db';
+import * as z from 'zod';
 import { contract } from '../../contract';
 import { apiVersionPrefix } from '../../utils';
 
+const user = insertSchema.users.merge(
+  insertSchema.emailCredentials.pick({ email: true }),
+);
+type data = z.infer<typeof user>;
+
 const UserContract = contract.router(
   {
-    // 'register-with-email': {
-    //   method: 'POST',
-    //   path: '/register',
-    //   responses: {
-    //     400: contract.type<{
-    //       status: number;
-    //       message: string;
-    //     }>(),
-    //     201: insertSchema.users
-    //       .pick({ id: true, fullName: true, createdAt: true, updatedAt: true })
-    //       .merge(insertSchema.emailCredentials.pick({ email: true })),
-    //     500: contract.type<{
-    //       status: number;
-    //       message: string;
-    //     }>(),
-    //   },
-    //   body: contract.type<{
-    //     fullName: string;
-    //     email: string;
-    //     password: string;
-    //   }>(),
-    //   summary: 'Register a new user using email and password.',
-    // },
+    'register-with-email': {
+      method: 'POST',
+      path: '/register',
+      responses: {
+        400: contract.type<{
+          status: number;
+          message: string;
+        }>(),
+        201: contract.type<{
+          data: data;
+          status: number;
+          message: string;
+        }>(),
+        500: contract.type<{
+          status: number;
+          message: string;
+        }>(),
+      },
+      body: contract.type<{
+        fullName: string;
+        email: string;
+        password: string;
+      }>(),
+      summary: 'Register a new user using email and password.',
+    },
     // 'register-with-phone': {
     //   method: 'POST',
     //   path: '/register-phone',

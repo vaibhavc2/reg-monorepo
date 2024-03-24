@@ -8,6 +8,13 @@ const userRouter = ct.s.router(contracts.v1.UserContract, {
   'google-signup': {
     handler: handlers.v1.users.googleSignupHandler,
   },
+  'register-with-email': {
+    middleware: [
+      middlewares.validation.zod(validator.zod.userDetails),
+      middlewares.validation.zod(validator.zod.emailCredentials),
+    ],
+    handler: handlers.v1.users.registerWithEmailHandler,
+  },
   'device-details': {
     middleware: [
       middlewares.auth.user,
