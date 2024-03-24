@@ -1,6 +1,6 @@
 // import { insertSchema } from '@reg/db';
-import { contract } from '../contract';
-import { apiVersionPrefix } from '../utils';
+import { contract } from '../../contract';
+import { apiVersionPrefix } from '../../utils';
 
 const UserContract = contract.router(
   {

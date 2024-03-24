@@ -1,1 +1,1 @@
-export { appHealthMessages } from './main';
+export * from './main';

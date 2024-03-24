@@ -8,7 +8,7 @@ import {
   timestamp,
   varchar,
 } from 'drizzle-orm/mysql-core';
-import ct from '../../constants';
+import { db_ct } from '../../constants';
 import { users } from './users.schema';
 
 export const userSessions = mysqlTable(
@@ -18,7 +18,9 @@ export const userSessions = mysqlTable(
     user: int('user')
       .references(() => users.id)
       .notNull(),
-    authType: mysqlEnum('auth_type', ct.authType).default('google').notNull(),
+    authType: mysqlEnum('auth_type', db_ct.authType)
+      .default('google')
+      .notNull(),
     token: varchar('token', { length: 256 }).notNull().unique(),
     expiredAt: timestamp('expired_at', { mode: 'date', fsp: 6 }),
     revoked: boolean('revoked').default(false).notNull(),

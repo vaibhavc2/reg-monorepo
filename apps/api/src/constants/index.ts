@@ -1,5 +1,5 @@
 import env from '@/config';
-import db_ct from '@reg/db/constants';
+import { db_ct } from '@reg/db';
 import { initServer } from '@ts-rest/express';
 import chalk from 'chalk';
 import * as path from 'path';

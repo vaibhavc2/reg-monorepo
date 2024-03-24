@@ -7,7 +7,7 @@ import {
   timestamp,
   varchar,
 } from 'drizzle-orm/mysql-core';
-import { users } from '..';
+import { users } from '../../schema/users/users.schema';
 
 export const otpTypes = mysqlTable(
   'otp_types',

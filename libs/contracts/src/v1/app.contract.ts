@@ -1,5 +1,5 @@
-import { contract } from '../contract';
-import { apiVersionPrefix } from '../utils';
+import { contract } from '../../contract';
+import { apiVersionPrefix } from '../../utils';
 
 const AppContract = contract.router(
   {

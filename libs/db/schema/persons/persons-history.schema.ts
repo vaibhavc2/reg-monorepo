@@ -1,6 +1,6 @@
 import { sql } from 'drizzle-orm';
 import { index, int, mysqlTable, timestamp } from 'drizzle-orm/mysql-core';
-import { users } from '..';
+import { users } from '../../schema/users/users.schema';
 import { activities } from '../common/activities.schema';
 
 export const personsHistory = mysqlTable(

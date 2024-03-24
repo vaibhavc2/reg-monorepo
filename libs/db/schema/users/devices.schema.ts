@@ -8,7 +8,7 @@ import {
   timestamp,
   varchar,
 } from 'drizzle-orm/mysql-core';
-import ct from '../../constants';
+import { db_ct } from '../../constants';
 import { users } from './users.schema';
 
 export const devices = mysqlTable(
@@ -20,7 +20,7 @@ export const devices = mysqlTable(
       .notNull(),
     name: varchar('name', { length: 256 }).notNull(),
     model: varchar('model', { length: 256 }).notNull(),
-    type: mysqlEnum('type', ct.deviceType).notNull(),
+    type: mysqlEnum('type', db_ct.deviceType).notNull(),
     manufacturer: varchar('manufacturer', { length: 256 }).notNull(),
     os: varchar('os', { length: 256 }).notNull(),
     osVersion: varchar('os_version', { length: 256 }).notNull(),
