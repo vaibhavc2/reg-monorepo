@@ -11,9 +11,9 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "baseUrl": "./",
     "paths": {
-      "@reg/contracts": ["apps/libs/contracts/src/index.ts"],
-      "@reg/db": ["apps/libs/db/src/index.ts"],
-      "@reg/messages": ["apps/libs/messages/src/index.ts"]
+      "@reg/contracts": ["libs/contracts/index.ts"],
+      "@reg/db": ["libs/db/index.ts"],
+      "@reg/messages": ["libs/messages/index.ts"]
     }
   },
   "exclude": ["node_modules"]
