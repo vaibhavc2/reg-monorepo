@@ -10,7 +10,6 @@ import { relations } from './persons/relations.schema';
 import { vehiclesTypes } from './persons/vehicle-types.schema';
 import { vehiclesOwners } from './persons/vehicles-owners.schema';
 import { vehicles } from './persons/vehicles.schema';
-import { devices } from './users/devices.schema';
 import { displayNames } from './users/display-names.schema';
 import { emailCredentials } from './users/email-credentials.schema';
 import { otpTypes } from './users/otp-types.schema';
@@ -26,7 +25,6 @@ import { verifications } from './users/verifications.schema';
 // export schemas
 export const schema = {
   activities,
-  devices,
   displayNames,
   duties,
   emailCredentials,
@@ -52,7 +50,6 @@ export const schema = {
 // export schemas separately
 export {
   activities,
-  devices,
   displayNames,
   duties,
   emailCredentials,
@@ -86,7 +83,6 @@ export type { IRelation } from './persons/relations.schema';
 export type { IVehicleType } from './persons/vehicle-types.schema';
 export type { IVehicleOwner } from './persons/vehicles-owners.schema';
 export type { IVehicle } from './persons/vehicles.schema';
-export type { IDevice } from './users/devices.schema';
 export type { IDisplayName } from './users/display-names.schema';
 export type { IEmailCredential } from './users/email-credentials.schema';
 export type { IOTPType } from './users/otp-types.schema';
@@ -121,7 +117,6 @@ export const insertSchema = {
   vehiclesOwners: createInsertSchema(vehiclesOwners),
   vehiclesTypes: createInsertSchema(vehiclesTypes),
   verifications: createInsertSchema(verifications),
-  devices: createInsertSchema(devices),
   phoneDetails: createInsertSchema(phoneDetails),
 };
 
@@ -147,6 +142,5 @@ export const selectSchema = {
   vehiclesOwners: createSelectSchema(vehiclesOwners),
   vehiclesTypes: createSelectSchema(vehiclesTypes),
   verifications: createSelectSchema(verifications),
-  devices: createSelectSchema(devices),
   phoneDetails: createSelectSchema(phoneDetails),
 };

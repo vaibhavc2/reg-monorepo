@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 export class FilesMiddleware {
   constructor() {}
 
-  public uploadLocally = multer({
+  private multerUpload = multer({
     storage: multer.diskStorage({
       destination: function (req, file, cb) {
         cb(null, 'temp/uploads');
@@ -18,7 +18,29 @@ export class FilesMiddleware {
         cb(null, uuidv4() + '-' + Date.now() + path.extname(file.originalname));
       },
     }),
-  });
+  }).any();
+
+  private multerPromise = (req: Request, res: Response) => {
+    return new Promise((resolve, reject) => {
+      this.multerUpload(req, res, (err) => {
+        if (!err) resolve(req);
+        reject(err);
+      });
+    });
+  };
+
+  public uploadLocally = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      await this.multerPromise(req, res);
+      next();
+    } catch (err) {
+      next(err);
+    }
+  };
 
   public uploadImage = ({ thumbnail = false }) =>
     asyncHandler(async (req: Request, res: Response, next: NextFunction) => {

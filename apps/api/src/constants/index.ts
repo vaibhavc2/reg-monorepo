@@ -38,6 +38,13 @@ const ct = {
     },
   },
   db: db_ct,
+  cookieOptions: {
+    auth: {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'Strict' as 'Lax' | 'None' | 'Strict',
+    },
+  },
 };
 
 export default ct;

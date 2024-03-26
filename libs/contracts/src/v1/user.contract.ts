@@ -1,30 +1,25 @@
-import { insertSchema } from '@reg/db';
-import * as z from 'zod';
+import { UserData } from '@reg/types';
 import { contract } from '../../contract';
 import { apiVersionPrefix } from '../../utils';
 
-const user = insertSchema.users.merge(
-  insertSchema.emailCredentials.pick({ email: true }),
-);
-type data = z.infer<typeof user>;
-
 const UserContract = contract.router(
   {
-    'register-with-email': {
+    'auth-with-email': {
       method: 'POST',
-      path: '/register',
+      path: '/auth/email',
+      headers: contract.type<{
+        'User-Agent': string;
+      }>(),
       responses: {
         400: contract.type<{
           status: number;
           message: string;
         }>(),
         201: contract.type<{
-          data: data;
           status: number;
-          message: string;
-        }>(),
-        500: contract.type<{
-          status: number;
+          data: {
+            user: UserData;
+          };
           message: string;
         }>(),
       },
@@ -33,11 +28,11 @@ const UserContract = contract.router(
         email: string;
         password: string;
       }>(),
-      summary: 'Register a new user using email and password.',
+      summary: 'Register or Login a new user using email and password.',
     },
-    // 'register-with-phone': {
+    // 'auth-with-phone': {
     //   method: 'POST',
-    //   path: '/register-phone',
+    //   path: '/auth/phone',
     //   responses: {
     //     400: contract.type<{
     //       status: number;
@@ -56,30 +51,32 @@ const UserContract = contract.router(
     //     phone: string;
     //     password: string;
     //   }>(),
-    //   summary: 'Register a new user using phone number.',
+    //   summary: 'Register or Login a new user using phone number.',
     // },
-    'google-signup': {
+    'google-oauth': {
       method: 'POST',
-      path: '/oauth/google/signup',
+      path: '/oauth/google',
       query: contract.type<{
         code: string;
+      }>(),
+      headers: contract.type<{
+        'User-Agent': string;
       }>(),
       responses: {
         200: contract.type<{
           status: number;
+          data: {
+            user: UserData;
+          };
           message: string;
         }>(),
         400: contract.type<{
           status: number;
           message: string;
         }>(),
-        500: contract.type<{
-          status: number;
-          message: string;
-        }>(),
       },
       body: contract.type<{}>(),
-      summary: 'Sign up with Google OAuth',
+      summary: 'Sign up or Log in with Google OAuth.',
     },
     // 'verify-email': {
     //   method: 'POST',
@@ -90,10 +87,6 @@ const UserContract = contract.router(
     //       message: string;
     //     }>(),
     //     200: contract.type<{
-    //       status: number;
-    //       message: string;
-    //     }>(),
-    //     500: contract.type<{
     //       status: number;
     //       message: string;
     //     }>(),
@@ -125,33 +118,6 @@ const UserContract = contract.router(
     //   }>(),
     //   summary: 'Verify user phone using token.',
     // },
-    'device-details': {
-      method: 'POST',
-      path: '/device-details',
-      responses: {
-        400: contract.type<{
-          status: number;
-          message: string;
-        }>(),
-        200: contract.type<{
-          status: number;
-          message: string;
-        }>(),
-        500: contract.type<{
-          status: number;
-          message: string;
-        }>(),
-      },
-      body: contract.type<{
-        deviceName: string;
-        deviceOs: string;
-        deviceOsVersion: string;
-        deviceType: string;
-        deviceManufacturer: string;
-        deviceModel: string;
-      }>(),
-      summary: 'Save device details.',
-    },
   },
   {
     strictStatusCodes: true,

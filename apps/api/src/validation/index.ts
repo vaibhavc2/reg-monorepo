@@ -4,14 +4,12 @@ import * as z from 'zod';
 class Validation {
   public readonly zod: {
     userDetails: z.ZodObject<any, any, any>;
-    deviceDetails: z.ZodObject<any, any, any>;
     emailCredentials: z.ZodObject<any, any, any>;
   };
 
   constructor() {
     this.zod = {
       userDetails: this.userDetails,
-      deviceDetails: this.deviceDetails,
       emailCredentials: this.emailCredentials,
     };
   }
@@ -25,29 +23,6 @@ class Validation {
         .regex(/^[a-zA-Z\s]*$/, {
           message: 'Full Name can only contain: letters and spaces',
         }),
-    }),
-  });
-
-  private deviceDetails = z.object({
-    body: z.object({
-      deviceName: z
-        .string({ required_error: requiredError('Device Name') })
-        .max(255, { message: largeStringError('Device Name', 255) }),
-      deviceModel: z
-        .string({ required_error: requiredError('Device Model') })
-        .max(255, { message: largeStringError('Device Model', 255) }),
-      deviceManufacturer: z
-        .string({ required_error: requiredError('Device Manufacturer') })
-        .max(255, { message: largeStringError('Device Manufacturer', 255) }),
-      deviceOs: z
-        .string({ required_error: requiredError('Device OS') })
-        .max(255, { message: largeStringError('Device OS', 255) }),
-      deviceOsVersion: z
-        .string({ required_error: requiredError('Device OS Version') })
-        .max(255, { message: largeStringError('Device OS Version', 255) }),
-      deviceType: z
-        .string({ required_error: requiredError('Device Type') })
-        .max(255, { message: largeStringError('Device Type', 255) }),
     }),
   });
 

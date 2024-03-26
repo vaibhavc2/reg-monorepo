@@ -12,21 +12,14 @@ class GoogleOAuthService {
     this.client = new OAuth2Client(
       env.GOOGLE_OAUTH_CLIENT_ID,
       env.GOOGLE_OAUTH_CLIENT_SECRET,
-      `${ct.base_url}${contracts.v1.UserContract['google-signup'].path}`,
+      `${ct.base_url}${contracts.v1.UserContract['google-oauth'].path}`,
     );
-
-    // listen for the 'tokens' event to store the refresh token in the database
-    this.client.on('tokens', (tokens) => {
-      if (tokens.refresh_token) {
-        // store the refresh token in the database
-      }
-    });
   }
 
   // get the authorization URL
   public getAuthorizationUrl() {
     return this.client.generateAuthUrl({
-      access_type: ct.oauth.google.accessType,
+      // access_type: ct.oauth.google.accessType, //? no need for refresh token of google, create my own refresh token
       prompt: ct.oauth.google.prompt,
       scope: ct.oauth.google.scopes,
     });

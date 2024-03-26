@@ -1,5 +1,5 @@
 {
-  "name": "@reg/contracts",
+  "name": "@reg/types",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -17,8 +17,6 @@
   },
   "dependencies": {
     "@reg/db": "workspace:^",
-    "@reg/types": "workspace:^",
-    "@ts-rest/core": "^3.33.0",
     "zod": "^3.22.4"
   }
 }

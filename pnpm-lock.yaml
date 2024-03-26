@@ -75,6 +75,9 @@ importers:
       '@reg/messages':
         specifier: workspace:^
         version: link:../../libs/messages
+      '@reg/types':
+        specifier: workspace:^
+        version: link:../../libs/types
       '@ts-rest/express':
         specifier: ^3.33.0
         version: 3.33.0(express@4.18.2)(zod@3.22.4)
@@ -252,6 +255,9 @@ importers:
       '@reg/db':
         specifier: workspace:^
         version: link:../db
+      '@reg/types':
+        specifier: workspace:^
+        version: link:../types
       '@ts-rest/core':
         specifier: ^3.33.0
         version: 3.33.0(zod@3.22.4)
@@ -276,6 +282,19 @@ importers:
         version: 5.3.3
 
   libs/sample-lib:
+    devDependencies:
+      typescript:
+        specifier: ^5
+        version: 5.3.3
+
+  libs/types:
+    dependencies:
+      '@reg/db':
+        specifier: workspace:^
+        version: link:../db
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       typescript:
         specifier: ^5

@@ -33,14 +33,14 @@ export class ErrorMiddleware {
     if (error instanceof Error || error instanceof ApiError) {
       log.error(
         ct.chalk.error(
-          `⚠️   Error occurred on the route: ${req.path}.\n ${error.stack}`,
-        ),
+          `⚠️   Error occurred on the route: ${req.path}.\n Error: ${error.message}\n`,
+        ) + `Stack Trace: ${error.stack}`,
       );
     } else {
       log.error(
         ct.chalk.error(
-          `💀   Something went wrong!! Terribly !!\n ⚠️   Error occurred on the route: ${req.path}.\n ${error}`,
-        ),
+          `💀   Something went wrong!! Terribly !!\n ⚠️   Error occurred on the route: ${req.path}.\n`,
+        ) + `Error: ${error}`,
       );
     }
 

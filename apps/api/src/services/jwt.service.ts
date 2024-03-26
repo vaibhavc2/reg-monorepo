@@ -27,7 +27,7 @@ class JWTService {
     };
   }
 
-  public generateAccessToken = async (userId: string) => {
+  public generateAccessToken = async (userId: number) => {
     const accessToken = jt.sign(
       {
         id: userId,
@@ -40,16 +40,11 @@ class JWTService {
     return accessToken;
   };
 
-  public generateRefreshToken = async (
-    userId: string,
-    email: string,
-    username: string,
-  ) => {
+  public generateRefreshToken = async (userId: number, email: string) => {
     const refreshToken = jt.sign(
       {
         id: userId,
         email,
-        username,
       },
       this.refreshToken.secret,
       {
@@ -57,6 +52,13 @@ class JWTService {
       },
     );
     return refreshToken;
+  };
+
+  public generateAuthTokens = async (userId: number, email: string) => {
+    const accessToken = await this.generateAccessToken(userId);
+    const refreshToken = await this.generateRefreshToken(userId, email);
+
+    return { accessToken, refreshToken };
   };
 
   public generateEmailToken = async (userId: string) => {
