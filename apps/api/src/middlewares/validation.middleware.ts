@@ -3,6 +3,7 @@ import {
   RequiredBodyError,
   asyncHandler,
   getErrorMessage,
+  log,
 } from '@/utils';
 import { NextFunction, Request, Response } from 'express';
 import { AnyZodObject, ZodError } from 'zod';
@@ -29,11 +30,13 @@ export class ValidationMiddleware {
 
   public zod = (schema: AnyZodObject) =>
     asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+      log.info(JSON.stringify(req.body, null, 2));
       try {
         await schema.parseAsync({
           body: req.body,
           query: req.query,
           params: req.params,
+          headers: req.headers,
         });
 
         return next();
