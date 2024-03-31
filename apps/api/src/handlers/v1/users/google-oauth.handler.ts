@@ -1,5 +1,5 @@
 import ct from '@/constants';
-import { db } from '@/db';
+import { database } from '@/db';
 import { UserService, google, jwt } from '@/services';
 import { ApiError, getCookieString } from '@/utils';
 import { contracts } from '@reg/contracts';
@@ -48,7 +48,14 @@ export const googleOAuthHandler: GoogleOAuthHandler = async ({
     const { email, name, picture } = userInfo;
 
     // use user service to upsert the user
-    const userService = new UserService(name, email, undefined, picture);
+    const userService = new UserService(
+      {
+        fullName: name,
+        email,
+        avatar: picture,
+      },
+      true,
+    );
 
     // upsert the user
     const upsertedUser = await userService.upsertUser();
@@ -64,7 +71,7 @@ export const googleOAuthHandler: GoogleOAuthHandler = async ({
     const tokens = await jwt.generateAuthTokens(userId, email);
 
     // insert the refresh token, and save the session
-    await db?.insert(userSessions).values({
+    await database.db?.insert(userSessions).values({
       user: userId,
       token: tokens?.refreshToken as string,
       authType: 'google',
@@ -72,13 +79,16 @@ export const googleOAuthHandler: GoogleOAuthHandler = async ({
     });
 
     // save verification record of the user
-    await db?.insert(verifications).values({
+    await database.db?.insert(verifications).values({
       user: userId,
       emailVerified: true,
     });
 
     // get the user and email credential to send as data in the response
-    const user = await db?.select().from(users).where(eq(users.id, userId));
+    const user = await database.db
+      ?.select()
+      .from(users)
+      .where(eq(users.id, userId));
 
     // check if the user is present
     if (!user || user.length === 0) {

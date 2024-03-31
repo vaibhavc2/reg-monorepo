@@ -28,6 +28,20 @@ class Database {
   }
 
   public async init() {
+    await this.initDB();
+
+    return this.connection;
+  }
+
+  public poolConnection() {
+    return mysql.createPool(
+      env.isProduction
+        ? env.PROD_DB_URL + `?ssl={"rejectUnauthorized":true}`
+        : env.DEV_DB_URL,
+    );
+  }
+
+  private async initDB() {
     // if MIGRATE_DB is true and environment is development or test
     if ((env.isDev || env.isTest) && env.MIGRATE_DB) {
       this.connect()
@@ -126,4 +140,3 @@ class Database {
 }
 
 export const database = new Database();
-export const db = database.db;

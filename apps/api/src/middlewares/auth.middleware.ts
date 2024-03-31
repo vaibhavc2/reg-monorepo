@@ -1,4 +1,4 @@
-import { db } from '@/db';
+import { database } from '@/db';
 import { jwt } from '@/services';
 import { ApiError, asyncHandler } from '@/utils';
 import { users } from '@reg/db';
@@ -25,7 +25,7 @@ export class Authentication {
       const decodedToken: any = jwt.verifyAccessToken(token);
 
       // find user in db using the decoded token
-      const user = await db
+      const user = await database.db
         ?.select()
         .from(users)
         .where(eq(users.id, decodedToken.id));
