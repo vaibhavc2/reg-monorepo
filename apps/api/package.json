@@ -21,7 +21,6 @@
   "dependencies": {
     "@reg/contracts": "workspace:^",
     "@reg/db": "workspace:^",
-    "@reg/messages": "workspace:^",
     "@reg/types": "workspace:^",
     "@ts-rest/express": "^3.33.0",
     "argon2": "^0.40.1",
