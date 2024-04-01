@@ -10,11 +10,11 @@ const userRouter = ct.s.router(contracts.v1.UserContract, {
   },
   'auth-with-email': {
     middleware: [
-      middlewares.files.uploadLocally, // for handling form data or file uploads
+      middlewares.files.multer, // for handling form data or file uploads
       middlewares.validation.zod(validator.zod.userDetails),
       middlewares.validation.zod(validator.zod.emailCredentials),
     ],
-    handler: handlers.v1.users.emailAuthHandler,
+    handler: handlers.v1.users.emailRegistrationHandler,
   },
 });
 

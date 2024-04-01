@@ -4,6 +4,7 @@ export {
   UnauthorizedError,
 } from './api/api-error.util';
 export { asyncHandler } from './api/async-handler.util';
+export { cookieHeaders } from './api/cookie-headers.util';
 export { getCookieString } from './api/get-cookie-string.util';
 export { emailHTML } from './email/email-html.util';
 export { dbError } from './error/db-error.util';

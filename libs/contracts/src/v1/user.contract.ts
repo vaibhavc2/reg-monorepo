@@ -22,6 +22,10 @@ const UserContract = contract.router(
           };
           message: string;
         }>(),
+        500: contract.type<{
+          status: number;
+          message: string;
+        }>(),
       },
       body: contract.type<{
         fullName: string;
@@ -71,6 +75,10 @@ const UserContract = contract.router(
           message: string;
         }>(),
         400: contract.type<{
+          status: number;
+          message: string;
+        }>(),
+        500: contract.type<{
           status: number;
           message: string;
         }>(),

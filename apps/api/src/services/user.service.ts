@@ -1,5 +1,5 @@
 import { database } from '@/db';
-import { emailCredentials, users } from '@reg/db';
+import { emailCredentials, users, verifications } from '@reg/db';
 import { eq } from 'drizzle-orm';
 import { MySqlRawQueryResult } from 'drizzle-orm/mysql2';
 
@@ -27,10 +27,45 @@ export class UserService {
     this.googleAuth = googleAuth;
   }
 
-  public async upsertUser() {
+  public async insertUser() {
+    // check if the user is registered with google
+    if (this.googleAuth) {
+      // upsert the user using google auth details
+      return await this.upsertGoogleUser();
+    }
+
+    const { fullName, email, password } = this.details;
+
+    // create a new user
+    const usersTable = await database.db?.insert(users).values({
+      fullName,
+    });
+
+    // create a new user credential
+    let emailTable: MySqlRawQueryResult | undefined;
+    if (usersTable && usersTable[0].affectedRows === 1) {
+      emailTable = await database.db?.insert(emailCredentials).values({
+        user: usersTable[0].insertId as number,
+        email,
+        password,
+      });
+
+      // save verification record of the user
+      await database.db?.insert(verifications).values({
+        user: usersTable[0].insertId as number,
+      });
+    } else {
+      return null;
+    }
+
+    return {
+      userId: usersTable[0].insertId,
+    };
+  }
+
+  public async upsertGoogleUser() {
     const { fullName, email, password, avatar, cover } = this.details;
 
-    // try {
     // check if the user is already registered
     const existingUser = await database.db
       ?.select()
@@ -55,6 +90,12 @@ export class UserService {
           email,
           password,
           googleAuth: this.googleAuth,
+        });
+
+        // save verification record of the user
+        await database.db?.insert(verifications).values({
+          user: usersTable[0].insertId as number,
+          emailVerified: true,
         });
       } else {
         return null;
@@ -84,8 +125,5 @@ export class UserService {
         userId: existingUser[0].user,
       };
     }
-    // } catch (error) {
-    //   throw new ApiError(500, 'Something went wrong!', error);
-    // }
   }
 }

@@ -29,6 +29,11 @@ class Server {
     database
       .init()
       .then((connection) => {
+        if (!connection) {
+          // stopping the process
+          process.exit(0);
+        }
+
         // adding connection to express app
         this.app.set('connection', connection);
 

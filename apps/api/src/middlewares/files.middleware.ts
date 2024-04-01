@@ -29,11 +29,7 @@ export class FilesMiddleware {
     });
   };
 
-  public uploadLocally = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) => {
+  public multer = async (req: Request, res: Response, next: NextFunction) => {
     try {
       await this.multerPromise(req, res);
       next();
@@ -42,7 +38,7 @@ export class FilesMiddleware {
     }
   };
 
-  public uploadImage = ({ thumbnail = false }) =>
+  public uploadImageToCloudinary = (imgName?: string) =>
     asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
       // get image local path
       const imageLocalPath = req.file?.path;
@@ -51,16 +47,13 @@ export class FilesMiddleware {
       if (!imageLocalPath) {
         throw new ApiError(
           400,
-          `${thumbnail ? 'Thumbnail' : 'Image'} file upload failed!`,
+          `${imgName ? imgName : 'Image'} file upload failed!`,
         );
       }
 
       // check if image is a valid image file
       if (!ct.mimeTypes.image.includes(req.file?.mimetype as string)) {
-        throw new ApiError(
-          400,
-          `Invalid ${thumbnail ? 'Thumbnail' : 'Image'} file!`,
-        );
+        throw new ApiError(400, `Invalid ${imgName ? imgName : 'Image'} file!`);
       }
 
       // upload image to cloudinary
@@ -70,7 +63,7 @@ export class FilesMiddleware {
       if (!image?.secure_url) {
         throw new ApiError(
           400,
-          `${thumbnail ? 'Thumbnail' : 'Image'} file upload failed!`,
+          `${imgName ? imgName : 'Image'} file upload failed!`,
         );
       }
 

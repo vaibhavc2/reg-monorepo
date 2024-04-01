@@ -1,9 +1,9 @@
 import ct from '@/constants';
 import { database } from '@/db';
-import { UserService, google, jwt } from '@/services';
+import { UserService, apiResponse, google, jwt } from '@/services';
 import { ApiError, getCookieString } from '@/utils';
 import { contracts } from '@reg/contracts';
-import { userSessions, users, verifications } from '@reg/db';
+import { userSessions, users } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
@@ -58,11 +58,11 @@ export const googleOAuthHandler: GoogleOAuthHandler = async ({
     );
 
     // upsert the user
-    const upsertedUser = await userService.upsertUser();
+    const upsertedUser = await userService.upsertGoogleUser();
 
     // verify the upsreted user
     if (!upsertedUser) {
-      throw new ApiError(500);
+      return apiResponse.serverError();
     }
 
     const { userId } = upsertedUser;
@@ -78,12 +78,6 @@ export const googleOAuthHandler: GoogleOAuthHandler = async ({
       userAgent: userAgent ? (userAgent as string) : null,
     });
 
-    // save verification record of the user
-    await database.db?.insert(verifications).values({
-      user: userId,
-      emailVerified: true,
-    });
-
     // get the user and email credential to send as data in the response
     const user = await database.db
       ?.select()
@@ -92,7 +86,7 @@ export const googleOAuthHandler: GoogleOAuthHandler = async ({
 
     // check if the user is present
     if (!user || user.length === 0) {
-      throw new ApiError(500);
+      return apiResponse.serverError();
     }
 
     // return success
