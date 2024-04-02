@@ -1,5 +1,6 @@
 import { sql } from 'drizzle-orm';
 import {
+  bigint,
   boolean,
   index,
   int,
@@ -14,7 +15,10 @@ import { users } from './users.schema';
 export const userSessions = mysqlTable(
   'user_sessions',
   {
-    id: int('id').primaryKey().autoincrement().notNull(),
+    id: bigint('id', { mode: 'number', unsigned: true })
+      .primaryKey()
+      .autoincrement()
+      .notNull(),
     user: int('user')
       .references(() => users.id)
       .notNull(),

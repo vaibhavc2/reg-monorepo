@@ -1,0 +1,1 @@
+ALTER TABLE `user_sessions` MODIFY COLUMN `id` bigint unsigned AUTO_INCREMENT NOT NULL;
