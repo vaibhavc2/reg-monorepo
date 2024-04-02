@@ -31,6 +31,9 @@ export const userSessions = mysqlTable(
     createdAt: timestamp('created_at', { mode: 'date', fsp: 6 })
       .default(sql`CURRENT_TIMESTAMP(6)`)
       .notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'date', fsp: 6 })
+      .default(sql`CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6)`)
+      .notNull(),
   },
   (userSessions) => ({
     userIdx: index('user_idx').on(userSessions.user),
