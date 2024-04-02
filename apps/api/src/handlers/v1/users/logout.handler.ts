@@ -26,20 +26,14 @@ export const logoutHandler: LogoutHandler = async ({
   }
 
   // delete session
-  const sessionTable = await database.db
+  await database.db
     ?.delete(userSessions)
     .where(
       and(
         eq(userSessions.user, user.id as number),
         eq(userSessions.token, refreshToken as string),
       ),
-    )
-    .execute();
-
-  // check if session was deleted
-  if (!sessionTable || sessionTable[0].affectedRows !== 1) {
-    return apiResponse.error(400, 'Invalid session!');
-  }
+    );
 
   // delete cookies
   res.clearCookie('accessToken');

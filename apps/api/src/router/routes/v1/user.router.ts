@@ -27,6 +27,10 @@ const userRouter = ct.s.router(contracts.v1.UserContract, {
     middleware: [middlewares.auth.user],
     handler: handlers.v1.users.logoutHandler,
   },
+  'get-user-details': {
+    middleware: [middlewares.auth.user],
+    handler: handlers.v1.users.getUserDetailsHandler,
+  },
 });
 
 export default userRouter;

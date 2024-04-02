@@ -1,3 +1,4 @@
+import { getUserDetailsHandler } from './get-user-details.handler';
 import { googleOAuthHandler } from './google-oauth.handler';
 import { loginWithEmailHandler } from './login-with-email.handler';
 import { logoutHandler } from './logout.handler';
@@ -8,4 +9,5 @@ export const usersHandlers = {
   registerWithEmailHandler,
   loginWithEmailHandler,
   logoutHandler,
+  getUserDetailsHandler,
 };

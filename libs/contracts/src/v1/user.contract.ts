@@ -100,24 +100,24 @@ const UserContract = contract.router(
       body: contract.type<{}>(),
       summary: 'Logout the current user.',
     },
-    // 'get-user-details': {
-    //   method: 'GET',
-    //   path: '/me',
-    //   responses: {
-    //     200: contract.type<{
-    //       status: number;
-    //       data: {
-    //         user: UserData;
-    //       };
-    //       message: string;
-    //     }>(),
-    //     401: contract.type<{
-    //       status: number;
-    //       message: string;
-    //     }>(),
-    //   },
-    //   summary: 'Get user details.',
-    // },
+    'get-user-details': {
+      method: 'GET',
+      path: '/me',
+      responses: {
+        200: contract.type<{
+          status: number;
+          data: {
+            user: UserData;
+          };
+          message: string;
+        }>(),
+        401: contract.type<{
+          status: number;
+          message: string;
+        }>(),
+      },
+      summary: 'Get user details.',
+    },
     // 'verify-email': {
     //   method: 'POST',
     //   path: '/verify-email',
