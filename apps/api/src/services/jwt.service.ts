@@ -27,7 +27,7 @@ class JWTService {
     };
   }
 
-  public generateAccessToken = async (userId: number) => {
+  public generateAccessToken = (userId: number) => {
     const accessToken = jt.sign(
       {
         id: userId,
@@ -40,7 +40,7 @@ class JWTService {
     return accessToken;
   };
 
-  public generateRefreshToken = async (userId: number, email: string) => {
+  public generateRefreshToken = (userId: number, email: string) => {
     const refreshToken = jt.sign(
       {
         id: userId,
@@ -54,14 +54,14 @@ class JWTService {
     return refreshToken;
   };
 
-  public generateAuthTokens = async (userId: number, email: string) => {
-    const accessToken = await this.generateAccessToken(userId);
-    const refreshToken = await this.generateRefreshToken(userId, email);
+  public generateAuthTokens = (userId: number, email: string) => {
+    const accessToken = this.generateAccessToken(userId);
+    const refreshToken = this.generateRefreshToken(userId, email);
 
     return { accessToken, refreshToken };
   };
 
-  public generateEmailToken = async (userId: string) => {
+  public generateEmailToken = (userId: number) => {
     const emailToken = jt.sign(
       {
         id: userId,
@@ -74,16 +74,31 @@ class JWTService {
     return emailToken;
   };
 
-  public verifyAccessToken = async (token: string) => {
-    return jt.verify(token, this.accessToken.secret, jwtCallback);
+  public verifyAccessToken: (token: string) => { id: number } = (
+    token: string,
+  ) => {
+    return jt.verify(
+      token,
+      this.accessToken.secret,
+      jwtCallback,
+    ) as unknown as { id: number };
   };
 
-  public verifyRefreshToken = async (token: string) => {
-    return jt.verify(token, this.refreshToken.secret, jwtCallback);
-  };
+  public verifyRefreshToken: (token: string) => { id: number; email: string } =
+    (token: string) => {
+      return jt.verify(
+        token,
+        this.refreshToken.secret,
+        jwtCallback,
+      ) as unknown as { id: number; email: string };
+    };
 
-  public verifyEmailToken = async (token: string) => {
-    return jt.verify(token, this.emailToken.secret, jwtCallback);
+  public verifyEmailToken: (token: string) => { id: number } = (
+    token: string,
+  ) => {
+    return jt.verify(token, this.emailToken.secret, jwtCallback) as unknown as {
+      id: number;
+    };
   };
 }
 

@@ -12,7 +12,7 @@ export class Authentication {
     async (req: Request, res: Response, next: NextFunction) => {
       // this checks if user is authenticated
       // check if token exists
-      const token =
+      const token: string | undefined =
         req.cookies?.accessToken ||
         req.header('Authorization')?.replace('Bearer ', '');
 
@@ -22,7 +22,7 @@ export class Authentication {
       }
 
       // if yes, verify token
-      const decodedToken: any = jwt.verifyAccessToken(token);
+      const decodedToken = jwt.verifyAccessToken(token);
 
       // find user in db using the decoded token
       const user = await database.db
@@ -35,9 +35,8 @@ export class Authentication {
         throw new ApiError(401, 'Invalid Access Token!');
       }
 
-      // if user found, attach userId and userRole to req object
-      req.userId = user[0].id;
-      req.userRole = user[0].role;
+      // if user found, attach user to req object
+      req.user = user[0];
 
       next();
     },
@@ -45,7 +44,13 @@ export class Authentication {
 
   public admin = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
+      // authenticate user
+      await this.user(req, res, next);
+
       // check if user is admin
+      if (req.user?.role !== 'admin') {
+        throw new ApiError(403, 'Forbidden!');
+      }
 
       next();
     },
@@ -53,7 +58,13 @@ export class Authentication {
 
   public moderator = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
+      // authenticate user
+      await this.user(req, res, next);
+
       // check if user is moderator or admin
+      if (req.user?.role !== 'moderator' && req.user?.role !== 'admin') {
+        throw new ApiError(403, 'Forbidden!');
+      }
 
       next();
     },

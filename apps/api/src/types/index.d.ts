@@ -1,24 +1,25 @@
 import { insertSchema } from '@reg/db';
 import { z } from 'zod';
+// import { TsRestRequest as OriginalTsRestRequest } from '@ts-rest/express';
 
-type user = z.infer<typeof insertSchema.users>;
-type userId = user['id'];
-type userRole = user['role'];
+type User = z.infer<typeof insertSchema.users>;
 
 declare global {
   namespace Express {
-    type MulterFile = Express.Multer.File;
-    type MulterFiles = { [fieldname: string]: Express.Multer.File[] };
-
+    // type MulterFile = Express.Multer.File;
+    // type MulterFiles = { [fieldname: string]: Express.Multer.File[] };
     interface Request {
-      userId?: userId;
-      userRole?: userRole;
-      file?: MulterFile;
-      files?: MulterFiles;
+      user?: User;
+      // file?: MulterFile;
+      // files?: MulterFiles;
     }
   }
 }
 
-// custom types
+// declare module '@ts-rest/express' {
+//   export interface TsRestRequest extends OriginalTsRestRequest {
+//     user?: User;
+//   }
+// }
 
 export {};

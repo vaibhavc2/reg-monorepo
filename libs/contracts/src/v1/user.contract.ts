@@ -4,12 +4,9 @@ import { apiVersionPrefix } from '../../utils';
 
 const UserContract = contract.router(
   {
-    'auth-with-email': {
+    'register-with-email': {
       method: 'POST',
-      path: '/auth/email',
-      headers: contract.type<{
-        'User-Agent': string;
-      }>(),
+      path: '/auth/email/register',
       responses: {
         400: contract.type<{
           status: number;
@@ -32,39 +29,36 @@ const UserContract = contract.router(
         email: string;
         password: string;
       }>(),
-      summary: 'Register or Login a new user using email and password.',
+      summary: 'Register a new user using email and password.',
     },
-    // 'auth-with-phone': {
-    //   method: 'POST',
-    //   path: '/auth/phone',
-    //   responses: {
-    //     400: contract.type<{
-    //       status: number;
-    //       message: string;
-    //     }>(),
-    //     201: insertSchema.users
-    //       .pick({ id: true, fullName: true, createdAt: true, updatedAt: true })
-    //       .merge(insertSchema.phoneDetails.pick({ phone: true })),
-    //     500: contract.type<{
-    //       status: number;
-    //       message: string;
-    //     }>(),
-    //   },
-    //   body: contract.type<{
-    //     fullName: string;
-    //     phone: string;
-    //     password: string;
-    //   }>(),
-    //   summary: 'Register or Login a new user using phone number.',
-    // },
+    'login-with-email': {
+      method: 'POST',
+      path: '/auth/email/login',
+      responses: {
+        400: contract.type<{
+          status: number;
+          message: string;
+        }>(),
+        200: contract.type<{
+          status: number;
+          message: string;
+        }>(),
+        500: contract.type<{
+          status: number;
+          message: string;
+        }>(),
+      },
+      body: contract.type<{
+        email: string;
+        password: string;
+      }>(),
+      summary: 'Login a new user using email and password.',
+    },
     'google-oauth': {
       method: 'POST',
       path: '/oauth/google',
       query: contract.type<{
         code: string;
-      }>(),
-      headers: contract.type<{
-        'User-Agent': string;
       }>(),
       responses: {
         200: contract.type<{
@@ -86,6 +80,44 @@ const UserContract = contract.router(
       body: contract.type<{}>(),
       summary: 'Sign up or Log in with Google OAuth.',
     },
+    logout: {
+      method: 'POST',
+      path: '/auth/logout',
+      responses: {
+        200: contract.type<{
+          status: number;
+          message: string;
+        }>(),
+        400: contract.type<{
+          status: number;
+          message: string;
+        }>(),
+        401: contract.type<{
+          status: number;
+          message: string;
+        }>(),
+      },
+      body: contract.type<{}>(),
+      summary: 'Logout the current user.',
+    },
+    // 'get-user-details': {
+    //   method: 'GET',
+    //   path: '/me',
+    //   responses: {
+    //     200: contract.type<{
+    //       status: number;
+    //       data: {
+    //         user: UserData;
+    //       };
+    //       message: string;
+    //     }>(),
+    //     401: contract.type<{
+    //       status: number;
+    //       message: string;
+    //     }>(),
+    //   },
+    //   summary: 'Get user details.',
+    // },
     // 'verify-email': {
     //   method: 'POST',
     //   path: '/verify-email',
@@ -130,6 +162,10 @@ const UserContract = contract.router(
   {
     strictStatusCodes: true,
     pathPrefix: apiVersionPrefix(1) + '/users',
+    baseHeaders: contract.type<{
+      Authorization?: string;
+      'User-Agent'?: string;
+    }>(),
   },
 );
 

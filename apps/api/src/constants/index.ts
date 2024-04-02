@@ -40,10 +40,18 @@ const ct = {
   db: db_ct,
   cookieOptions: {
     auth: {
+      maxAge: 1000 * 60 * 60 * 24 * env.COOKIE_EXPIRES_IN, // 30 days by default
+      path: '/',
       httpOnly: true,
       secure: true,
-      sameSite: 'Strict' as 'Lax' | 'None' | 'Strict',
+      sameSite: 'strict' as boolean | 'strict' | 'lax' | 'none' | undefined,
+      // sameSite: 'Strict' as 'Lax' | 'None' | 'Strict',
     },
+    // auth2: {
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: 'Strict',
+    // },
   },
 };
 

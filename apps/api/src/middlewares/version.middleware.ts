@@ -9,8 +9,8 @@ export class Versioning {
     res: Response,
     next: NextFunction,
   ) => {
-    // set the APP-VERSION header
-    res.set('APP-VERSION', env.APP_VERSION);
+    // set the App-Version header
+    res.set('App-Version', env.APP_VERSION);
 
     next();
   };

@@ -3,18 +3,17 @@ import env from '@/config';
 class ApiResponseService {
   constructor() {}
 
-  public res<
-    T extends number,
-    TT extends string,
-    TTT extends Record<string, any>,
-  >(status: T, message: TT, headers?: TTT, data?: any) {
+  public res<T extends number, TT extends string>(
+    status: T,
+    message: TT,
+    data?: any,
+  ) {
     return {
       status,
-      headers,
       body: {
         status,
-        data,
         message,
+        data,
       },
     };
   }

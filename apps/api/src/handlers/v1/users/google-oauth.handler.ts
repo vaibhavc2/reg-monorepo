@@ -1,6 +1,6 @@
+import ct from '@/constants';
 import { database } from '@/db';
 import { UserService, apiResponse, google, jwt } from '@/services';
-import { cookieHeaders } from '@/utils';
 import { contracts } from '@reg/contracts';
 import { userSessions, users } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
@@ -10,8 +10,9 @@ type GoogleOAuth = (typeof contracts.v1.UserContract)['google-oauth'];
 type GoogleOAuthHandler = AppRouteImplementation<GoogleOAuth>;
 
 export const googleOAuthHandler: GoogleOAuthHandler = async ({
+  headers,
   query: { code },
-  headers: { 'User-Agent': userAgent },
+  res,
 }) => {
   // get tokens from the code
   const googleAuthTokens = await google.getTokens(code);
@@ -52,14 +53,14 @@ export const googleOAuthHandler: GoogleOAuthHandler = async ({
   const { userId } = upsertedUser;
 
   // create tokens
-  const tokens = await jwt.generateAuthTokens(userId, email);
+  const tokens = jwt.generateAuthTokens(userId, email);
 
   // insert the refresh token, and save the session
   await database.db?.insert(userSessions).values({
     user: userId,
     token: tokens?.refreshToken as string,
     authType: 'google',
-    userAgent: userAgent ? (userAgent as string) : null,
+    userAgent: headers['user-agent'] ? (headers['user-agent'] as string) : null,
   });
 
   // get the user and email credential to send as data in the response
@@ -73,16 +74,16 @@ export const googleOAuthHandler: GoogleOAuthHandler = async ({
     return apiResponse.serverError();
   }
 
+  // set the cookies
+  res
+    .cookie('refreshToken', tokens.refreshToken, ct.cookieOptions.auth)
+    .cookie('accessToken', tokens.accessToken, ct.cookieOptions.auth);
+
   // return success
-  return apiResponse.res(
-    200,
-    'User authenticated successfully!',
-    cookieHeaders(tokens),
-    {
-      user: {
-        ...user[0],
-        email,
-      },
+  return apiResponse.res(200, 'User authenticated successfully!', {
+    user: {
+      ...user[0],
+      email,
     },
-  );
+  });
 };

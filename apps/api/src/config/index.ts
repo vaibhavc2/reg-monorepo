@@ -44,6 +44,9 @@ const env = e.cleanEnv(process.env, {
   }),
   GOOGLE_OAUTH_CLIENT_ID: e.str(),
   GOOGLE_OAUTH_CLIENT_SECRET: e.str(),
+  COOKIE_EXPIRES_IN: e.num({
+    default: 30, // days
+  }),
 });
 
 export default env;

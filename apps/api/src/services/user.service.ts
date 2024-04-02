@@ -41,10 +41,8 @@ export class UserService {
       fullName,
     });
 
-    // create a new user credential
-    let emailTable: MySqlRawQueryResult | undefined;
     if (usersTable && usersTable[0].affectedRows === 1) {
-      emailTable = await database.db?.insert(emailCredentials).values({
+      await database.db?.insert(emailCredentials).values({
         user: usersTable[0].insertId as number,
         email,
         password,

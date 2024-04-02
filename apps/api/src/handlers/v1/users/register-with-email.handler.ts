@@ -1,17 +1,19 @@
+import ct from '@/constants';
 import { database } from '@/db';
 import { UserService, apiResponse, jwt } from '@/services';
-import { cookieHeaders } from '@/utils';
 import { contracts } from '@reg/contracts';
 import { emailCredentials, userSessions, users } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
-type RegisterWithEmail = (typeof contracts.v1.UserContract)['auth-with-email'];
+type RegisterWithEmail =
+  (typeof contracts.v1.UserContract)['register-with-email'];
 type RegisterWithEmailHandler = AppRouteImplementation<RegisterWithEmail>;
 
-export const emailRegistrationHandler: RegisterWithEmailHandler = async ({
+export const registerWithEmailHandler: RegisterWithEmailHandler = async ({
+  headers,
   body: { fullName, email, password },
-  headers: { 'User-Agent': userAgent },
+  res,
 }) => {
   // check if the user is already registered
   const existingUser = await database.db
@@ -34,15 +36,16 @@ export const emailRegistrationHandler: RegisterWithEmailHandler = async ({
 
   const { userId } = insertedUser;
 
+  //? create tokens to login immediately after registration
   // create tokens
-  const tokens = await jwt.generateAuthTokens(userId, email);
+  const tokens = jwt.generateAuthTokens(userId, email);
 
   // insert the refresh token, and save the session
   await database.db?.insert(userSessions).values({
     user: userId,
     token: tokens?.refreshToken as string,
     authType: 'email',
-    userAgent: userAgent ? (userAgent as string) : null,
+    userAgent: headers['user-agent'] ? (headers['user-agent'] as string) : null,
   });
 
   // get the user to send as data in the response
@@ -56,16 +59,17 @@ export const emailRegistrationHandler: RegisterWithEmailHandler = async ({
     return apiResponse.serverError();
   }
 
+  // set the cookies
+  res
+    .cookie('refreshToken', tokens.refreshToken, ct.cookieOptions.auth)
+    .cookie('accessToken', tokens.accessToken, ct.cookieOptions.auth);
+
   // return success
-  return apiResponse.res(
-    201,
-    'User registered successfully!',
-    cookieHeaders(tokens),
-    {
-      user: {
-        ...user[0],
-        email,
-      },
+  return apiResponse.res(201, 'User registered successfully!', {
+    user: {
+      ...user[0],
+      email,
     },
-  );
+    tokens,
+  });
 };
