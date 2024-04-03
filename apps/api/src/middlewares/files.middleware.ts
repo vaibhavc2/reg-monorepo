@@ -1,6 +1,6 @@
 import ct from '@/constants';
-import { cloudinary } from '@/services';
-import { ApiError, asyncHandler } from '@/utils';
+import { apiResponse, cloudinary } from '@/services';
+import { asyncHandler } from '@/utils';
 import { NextFunction, Request, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
@@ -45,15 +45,26 @@ export class FilesMiddleware {
 
       // check if image file is missing
       if (!imageLocalPath) {
-        throw new ApiError(
-          400,
-          `${imgName ? imgName : 'Image'} file upload failed!`,
-        );
+        return res
+          .status(400)
+          .json(
+            apiResponse.error(
+              400,
+              `${imgName ? imgName : 'Image'} file missing!`,
+            ).body,
+          );
       }
 
       // check if image is a valid image file
       if (!ct.mimeTypes.image.includes(req.file?.mimetype as string)) {
-        throw new ApiError(400, `Invalid ${imgName ? imgName : 'Image'} file!`);
+        return res
+          .status(400)
+          .json(
+            apiResponse.error(
+              400,
+              `Invalid ${imgName ? imgName : 'Image'} file!`,
+            ).body,
+          );
       }
 
       // upload image to cloudinary
@@ -61,10 +72,14 @@ export class FilesMiddleware {
 
       // check if image upload failed
       if (!image?.secure_url) {
-        throw new ApiError(
-          400,
-          `${imgName ? imgName : 'Image'} file upload failed!`,
-        );
+        return res
+          .status(400)
+          .json(
+            apiResponse.error(
+              400,
+              `${imgName ? imgName : 'Image'} file upload failed!`,
+            ).body,
+          );
       }
 
       // save image url to request body

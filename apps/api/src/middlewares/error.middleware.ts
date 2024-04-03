@@ -30,7 +30,12 @@ export class ErrorMiddleware {
     res: Response,
     next: NextFunction,
   ) => {
-    if (error instanceof Error || error instanceof ApiError) {
+    if (error instanceof ApiError) {
+      log.error(
+        `⚠️   Error occurred on the route: ${req.path}.` +
+          ct.chalk.error(`\nError: ${error.message}\n`),
+      );
+    } else if (error instanceof Error) {
       log.error(
         ct.chalk.error(
           `⚠️   Error occurred on the route: ${req.path}.\n Error: ${error.message}\n`,

@@ -41,20 +41,25 @@ export class UserService {
       fullName,
     });
 
-    if (usersTable && usersTable[0].affectedRows === 1) {
-      await database.db?.insert(emailCredentials).values({
-        user: usersTable[0].insertId as number,
-        email,
-        password,
-      });
+    if (!usersTable || usersTable[0].affectedRows !== 1) return null;
 
-      // save verification record of the user
-      await database.db?.insert(verifications).values({
-        user: usersTable[0].insertId as number,
-      });
-    } else {
-      return null;
+    const emailTable = await database.db?.insert(emailCredentials).values({
+      user: usersTable[0].insertId as number,
+      email,
+      password,
+    });
+
+    if (!emailTable || emailTable[0].affectedRows === 0) {
+      // delete the user
+      await database.db
+        ?.delete(users)
+        .where(eq(users.id, usersTable[0].insertId));
     }
+
+    // save verification record of the user
+    await database.db?.insert(verifications).values({
+      user: usersTable[0].insertId as number,
+    });
 
     return {
       userId: usersTable[0].insertId,
@@ -81,25 +86,22 @@ export class UserService {
         cover,
       });
 
+      if (!usersTable || usersTable[0].affectedRows !== 1) return null;
+
       // create a new user credential
-      if (usersTable && usersTable[0].affectedRows === 1) {
-        emailTable = await database.db?.insert(emailCredentials).values({
-          user: usersTable[0].insertId as number,
-          email,
-          password,
-          googleAuth: this.googleAuth,
-        });
+      emailTable = await database.db?.insert(emailCredentials).values({
+        user: usersTable[0].insertId as number,
+        email,
+        password,
+        googleAuth: this.googleAuth,
+      });
 
-        // save verification record of the user
-        await database.db?.insert(verifications).values({
-          user: usersTable[0].insertId as number,
-          emailVerified: true,
-        });
-      } else {
-        return null;
-      }
+      // save verification record of the user
+      await database.db?.insert(verifications).values({
+        user: usersTable[0].insertId as number,
+        emailVerified: true,
+      });
 
-      // check if the user credential is created
       if (!emailTable || emailTable[0].affectedRows === 0) {
         // delete the user
         await database.db

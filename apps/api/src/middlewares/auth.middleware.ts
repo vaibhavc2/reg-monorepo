@@ -1,6 +1,6 @@
 import { database } from '@/db';
-import { jwt } from '@/services';
-import { ApiError, asyncHandler } from '@/utils';
+import { apiResponse, jwt } from '@/services';
+import { asyncHandler } from '@/utils';
 import { users } from '@reg/db';
 import { eq } from 'drizzle-orm';
 import { NextFunction, Request, Response } from 'express';
@@ -16,9 +16,10 @@ export class Authentication {
         req.cookies?.accessToken ||
         req.header('Authorization')?.replace('Bearer ', '');
 
-      // if not, throw error
       if (!token) {
-        throw new ApiError(401, 'Unauthorized!');
+        return res
+          .status(401)
+          .json(apiResponse.error(401, 'Unauthorized!').body);
       }
 
       // if yes, verify token
@@ -30,9 +31,12 @@ export class Authentication {
         .from(users)
         .where(eq(users.id, decodedToken.id));
 
-      // if user not found, throw error
       if (!user || !user[0] || user.length !== 1) {
-        throw new ApiError(401, 'Invalid Access Token!');
+        return res
+          .status(401)
+          .json(
+            apiResponse.error(401, 'Invalid Access Token! Unauthorized!').body,
+          );
       }
 
       // if user found, attach user to req object
@@ -49,7 +53,7 @@ export class Authentication {
 
       // check if user is admin
       if (req.user?.role !== 'admin') {
-        throw new ApiError(403, 'Forbidden!');
+        return res.status(403).json(apiResponse.error(403, 'Forbidden!').body);
       }
 
       next();
@@ -63,7 +67,7 @@ export class Authentication {
 
       // check if user is moderator or admin
       if (req.user?.role !== 'moderator' && req.user?.role !== 'admin') {
-        throw new ApiError(403, 'Forbidden!');
+        return res.status(403).json(apiResponse.error(403, 'Forbidden!').body);
       }
 
       next();
