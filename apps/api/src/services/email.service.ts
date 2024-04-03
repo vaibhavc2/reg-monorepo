@@ -9,7 +9,7 @@ class EmailService {
     this.resend = new Resend(env.RESEND_API_KEY);
   }
 
-  public send = async (
+  send = async (
     email: string,
     title: string,
     subject: string,
@@ -32,10 +32,25 @@ class EmailService {
     }
   };
 
-  public sendVerificationEmail = async (email: string, token: string) => {
+  sendVerificationEmail = async (email: string, token: string) => {
     const title = 'Email Verification: Registry App';
     const subject = 'Verify your email';
     const message = `Click the button below to verify your email address.`;
+    // const content = `
+    // <a href="${ct.base_url}${contracts.v1.UserContract['verify-email'].path}/${token}" style="text-decoration: none; color: white; background-color: #4CAF50; padding: 10px 20px; border-radius: 5px;">
+    //   Verify Email
+    // </a>`;
+
+    return this.send(email, title, subject, message, 'content');
+  };
+
+  sendSecurityEmail = async (
+    email: string,
+    token: string,
+    subject: string,
+    message: string,
+  ) => {
+    const title = 'Security Alert:: Verification from Registry App';
     // const content = `
     // <a href="${ct.base_url}${contracts.v1.UserContract['verify-email'].path}/${token}" style="text-decoration: none; color: white; background-color: #4CAF50; padding: 10px 20px; border-radius: 5px;">
     //   Verify Email

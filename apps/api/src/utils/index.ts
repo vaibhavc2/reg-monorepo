@@ -15,6 +15,5 @@ export {
   requiredError,
 } from './error/zod-error-messages.util';
 export { deleteLocalFile } from './other/delete-local-file.util';
-export { jwtCallback } from './other/jwt-callback.util';
 export { log } from './other/logger.util';
 export { shuffleArray } from './other/shuffle-array.util';

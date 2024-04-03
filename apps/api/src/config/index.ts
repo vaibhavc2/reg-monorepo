@@ -35,8 +35,10 @@ const env = e.cleanEnv(process.env, {
   REFRESH_TOKEN_SECRET: e.str(),
   ACCESS_TOKEN_EXPIRY: e.str(),
   REFRESH_TOKEN_EXPIRY: e.str(),
-  EMAIL_TOKEN_SECRET: e.str(),
-  EMAIL_TOKEN_EXPIRY: e.str(),
+  VERIFICATION_TOKEN_SECRET: e.str(),
+  VERIFICATION_TOKEN_EXPIRY: e.str(),
+  SECURITY_TOKEN_SECRET: e.str(),
+  SECURITY_TOKEN_EXPIRY: e.str(),
   RESEND_API_KEY: e.str(),
   EMAIL_FROM: e.str(),
   APP_VERSION: e.str({

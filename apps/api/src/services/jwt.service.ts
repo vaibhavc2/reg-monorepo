@@ -1,5 +1,5 @@
 import env from '@/config';
-import { jwtCallback } from '@/utils';
+import { ApiError } from '@/utils';
 import jt from 'jsonwebtoken';
 
 interface Token {
@@ -10,7 +10,8 @@ interface Token {
 class JWTService {
   private readonly accessToken: Token;
   private readonly refreshToken: Token;
-  private readonly emailToken: Token;
+  private readonly verificationToken: Token;
+  private readonly securityToken: Token;
 
   constructor() {
     this.accessToken = {
@@ -21,13 +22,24 @@ class JWTService {
       secret: env.REFRESH_TOKEN_SECRET,
       expiresIn: env.REFRESH_TOKEN_EXPIRY,
     };
-    this.emailToken = {
-      secret: env.EMAIL_TOKEN_SECRET,
-      expiresIn: env.EMAIL_TOKEN_EXPIRY,
+    this.verificationToken = {
+      secret: env.VERIFICATION_TOKEN_SECRET,
+      expiresIn: env.VERIFICATION_TOKEN_EXPIRY,
+    };
+    this.securityToken = {
+      secret: env.SECURITY_TOKEN_SECRET,
+      expiresIn: env.SECURITY_TOKEN_EXPIRY,
     };
   }
 
-  public generateAccessToken = (userId: number) => {
+  errorCallback = (err: unknown, payload: any) => {
+    if (err) {
+      throw new ApiError(401, 'Invalid Token or Token Expired!');
+    }
+    return payload;
+  };
+
+  generateAccessToken = (userId: number) => {
     const accessToken = jt.sign(
       {
         id: userId,
@@ -40,7 +52,7 @@ class JWTService {
     return accessToken;
   };
 
-  public generateRefreshToken = (userId: number, email: string) => {
+  generateRefreshToken = (userId: number, email: string) => {
     const refreshToken = jt.sign(
       {
         id: userId,
@@ -54,49 +66,75 @@ class JWTService {
     return refreshToken;
   };
 
-  public generateAuthTokens = (userId: number, email: string) => {
+  generateAuthTokens = (userId: number, email: string) => {
     const accessToken = this.generateAccessToken(userId);
     const refreshToken = this.generateRefreshToken(userId, email);
 
     return { accessToken, refreshToken };
   };
 
-  public generateEmailToken = (userId: number) => {
-    const emailToken = jt.sign(
+  generateVerificationToken = (userId: number) => {
+    const verificationToken = jt.sign(
       {
         id: userId,
       },
-      this.emailToken.secret,
+      this.verificationToken.secret,
       {
-        expiresIn: this.emailToken.expiresIn,
+        expiresIn: this.verificationToken.expiresIn,
       },
     );
-    return emailToken;
+    return verificationToken;
   };
 
-  public verifyAccessToken: (token: string) => { id: number } = (
+  generateSecurityToken = (userId: number) => {
+    const securityToken = jt.sign(
+      {
+        id: userId,
+      },
+      this.securityToken.secret,
+      {
+        expiresIn: this.securityToken.expiresIn,
+      },
+    );
+    return securityToken;
+  };
+
+  verifyAccessToken: (token: string) => { id: number } = (token: string) => {
+    return jt.verify(
+      token,
+      this.accessToken.secret,
+      this.errorCallback,
+    ) as unknown as { id: number };
+  };
+
+  verifyRefreshToken: (token: string) => { id: number; email: string } = (
     token: string,
   ) => {
     return jt.verify(
       token,
-      this.accessToken.secret,
-      jwtCallback,
-    ) as unknown as { id: number };
+      this.refreshToken.secret,
+      this.errorCallback,
+    ) as unknown as { id: number; email: string };
   };
 
-  public verifyRefreshToken: (token: string) => { id: number; email: string } =
-    (token: string) => {
-      return jt.verify(
-        token,
-        this.refreshToken.secret,
-        jwtCallback,
-      ) as unknown as { id: number; email: string };
-    };
-
-  public verifyEmailToken: (token: string) => { id: number } = (
+  verifyVerificationToken: (token: string) => { id: number } = (
     token: string,
   ) => {
-    return jt.verify(token, this.emailToken.secret, jwtCallback) as unknown as {
+    return jt.verify(
+      token,
+      this.verificationToken.secret,
+      this.errorCallback,
+    ) as unknown as {
+      id: number;
+    };
+  };
+
+  verifySecurityToken: (token: string) => { id: number } = (token: string) => {
+    return jt.verify(
+      token,
+      this.securityToken.secret,
+      this.errorCallback,
+    ) as unknown as {
       id: number;
     };
   };
