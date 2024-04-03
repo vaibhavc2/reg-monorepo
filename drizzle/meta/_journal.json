@@ -120,6 +120,13 @@
       "when": 1712081972177,
       "tag": "0016_mean_hulk",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "5",
+      "when": 1712164317000,
+      "tag": "0017_sticky_chamber",
+      "breakpoints": true
     }
   ]
 }

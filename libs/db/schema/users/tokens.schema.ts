@@ -12,8 +12,8 @@ import {
 import { db_ct } from '../../constants';
 import { users } from './users.schema';
 
-export const otps = mysqlTable(
-  'otps',
+export const tokens = mysqlTable(
+  'tokens',
   {
     id: bigint('id', { mode: 'number', unsigned: true })
       .primaryKey()
@@ -22,22 +22,20 @@ export const otps = mysqlTable(
     user: int('user')
       .references(() => users.id)
       .notNull(),
-    otpType: mysqlEnum('otp_type', db_ct.otpTypes).notNull(),
     objective: mysqlEnum('objective', db_ct.objectives).notNull(),
-    code: varchar('code', { length: 6 }).notNull(),
-    // TODO: add a check constraint to make sure that the code is 6 digits
-    // TODO: make sure to add a method to admin to delete all or some expired otps (also acc to time-range and attempts)
+    token: varchar('token', { length: 256 }).notNull().unique(),
+    tokenType: mysqlEnum('token_type', ['']).notNull(),
+    // TODO: make sure to add a method to admin to delete all or some expired tokens (also acc to time-range and attempts)
     expiredAt: timestamp('expired_at', { mode: 'date', fsp: 6 }).notNull(), // 5 minutes
     // TODO: make it configurable
     verified: boolean('verified').default(false).notNull(),
-    attempts: int('attempts').default(0).notNull(), // 3 attempts
     createdAt: timestamp('created_at', { mode: 'date', fsp: 6 })
       .default(sql`CURRENT_TIMESTAMP(6)`)
       .notNull(),
   },
-  (otps) => ({
-    userIdx: index('user_idx').on(otps.user),
+  (tokens) => ({
+    userIdx: index('user_idx').on(tokens.user),
   }),
 );
 
-export type IOTP = typeof otps;
+export type IToken = typeof tokens;

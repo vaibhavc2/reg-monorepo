@@ -12,10 +12,10 @@ import { vehiclesOwners } from './persons/vehicles-owners.schema';
 import { vehicles } from './persons/vehicles.schema';
 import { displayNames } from './users/display-names.schema';
 import { emailCredentials } from './users/email-credentials.schema';
-import { otpTypes } from './users/otp-types.schema';
 import { otps } from './users/otps.schema';
 import { phoneDetails } from './users/phone-details.schema';
 import { requests } from './users/requests.schema';
+import { tokens } from './users/tokens.schema';
 import { userSessions } from './users/user-sessions.schema';
 import { userSettings } from './users/user-settings.schema';
 import { usersHistory } from './users/users-history.schema';
@@ -28,8 +28,8 @@ export const schema = {
   displayNames,
   duties,
   emailCredentials,
-  otpTypes,
   otps,
+  tokens,
   persons,
   personsDuties,
   personsHistory,
@@ -53,7 +53,6 @@ export {
   displayNames,
   duties,
   emailCredentials,
-  otpTypes,
   otps,
   persons,
   personsDuties,
@@ -62,6 +61,7 @@ export {
   phoneDetails,
   relations,
   requests,
+  tokens,
   userSessions,
   userSettings,
   users,
@@ -85,10 +85,10 @@ export type { IVehicleOwner } from './persons/vehicles-owners.schema';
 export type { IVehicle } from './persons/vehicles.schema';
 export type { IDisplayName } from './users/display-names.schema';
 export type { IEmailCredential } from './users/email-credentials.schema';
-export type { IOTPType } from './users/otp-types.schema';
 export type { IOTP } from './users/otps.schema';
 export type { IPhoneDetails } from './users/phone-details.schema';
 export type { IRequest } from './users/requests.schema';
+export type { IToken } from './users/tokens.schema';
 export type { IUserSession } from './users/user-sessions.schema';
 export type { IUserSetting } from './users/user-settings.schema';
 export type { IUserHistory } from './users/users-history.schema';
@@ -100,8 +100,8 @@ export const insertSchema = {
   activities: createInsertSchema(activities),
   displayNames: createInsertSchema(displayNames),
   duties: createInsertSchema(duties),
-  otpTypes: createInsertSchema(otpTypes),
   otps: createInsertSchema(otps),
+  tokens: createInsertSchema(tokens),
   persons: createInsertSchema(persons),
   personsDuties: createInsertSchema(personsDuties),
   personsHistory: createInsertSchema(personsHistory),
@@ -125,8 +125,8 @@ export const selectSchema = {
   activities: createSelectSchema(activities),
   displayNames: createSelectSchema(displayNames),
   duties: createSelectSchema(duties),
-  otpTypes: createSelectSchema(otpTypes),
   otps: createSelectSchema(otps),
+  tokens: createSelectSchema(tokens),
   persons: createSelectSchema(persons),
   personsDuties: createSelectSchema(personsDuties),
   personsHistory: createSelectSchema(personsHistory),
