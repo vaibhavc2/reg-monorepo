@@ -99,25 +99,26 @@ class JWTService {
     return securityToken;
   };
 
-  verifyAccessToken: (token: string) => { id: number } = (token: string) => {
-    return jt.verify(
-      token,
-      this.accessToken.secret,
-      this.errorCallback,
-    ) as unknown as { id: number };
-  };
-
-  verifyRefreshToken: (token: string) => { id: number; email: string } = (
+  verifyAccessToken: (token: string) => { id: number } | null = (
     token: string,
   ) => {
     return jt.verify(
       token,
-      this.refreshToken.secret,
+      this.accessToken.secret,
       this.errorCallback,
-    ) as unknown as { id: number; email: string };
+    ) as unknown as { id: number } | null;
   };
 
-  verifyVerificationToken: (token: string) => { id: number } = (
+  verifyRefreshToken: (token: string) => { id: number; email: string } | null =
+    (token: string) => {
+      return jt.verify(
+        token,
+        this.refreshToken.secret,
+        this.errorCallback,
+      ) as unknown as { id: number; email: string } | null;
+    };
+
+  verifyVerificationToken: (token: string) => { id: number } | null = (
     token: string,
   ) => {
     return jt.verify(
@@ -126,17 +127,19 @@ class JWTService {
       this.errorCallback,
     ) as unknown as {
       id: number;
-    };
+    } | null;
   };
 
-  verifySecurityToken: (token: string) => { id: number } = (token: string) => {
+  verifySecurityToken: (token: string) => { id: number } | null = (
+    token: string,
+  ) => {
     return jt.verify(
       token,
       this.securityToken.secret,
       this.errorCallback,
     ) as unknown as {
       id: number;
-    };
+    } | null;
   };
 }
 

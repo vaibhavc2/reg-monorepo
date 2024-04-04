@@ -31,6 +31,14 @@ const userRouter = ct.s.router(contracts.v1.UserContract, {
     middleware: [middlewares.auth.user],
     handler: handlers.v1.users.getUserDetailsHandler,
   },
+  'verify-email': {
+    middleware: [middlewares.auth.user],
+    handler: handlers.v1.users.verifyEmailHandler,
+  },
+  'send-verification-email': {
+    middleware: [middlewares.auth.user],
+    handler: handlers.v1.users.sendVerificationEmailHandler,
+  },
 });
 
 export default userRouter;

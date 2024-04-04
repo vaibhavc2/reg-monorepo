@@ -23,13 +23,13 @@ export class Authentication {
       }
 
       // if yes, verify token
-      const decodedToken = jwt.verifyAccessToken(token);
+      const { id } = jwt.verifyAccessToken(token) ?? {};
 
       // find user in db using the decoded token
       const user = await database.db
         ?.select()
         .from(users)
-        .where(eq(users.id, decodedToken.id));
+        .where(eq(users.id, id as number));
 
       if (!user || !user[0] || user.length !== 1) {
         return res

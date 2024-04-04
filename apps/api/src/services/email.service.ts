@@ -1,5 +1,7 @@
 import env from '@/config';
+import ct from '@/constants';
 import { emailHTML, log, printErrorMessage } from '@/utils';
+import { contracts } from '@reg/contracts';
 import { Resend } from 'resend';
 
 class EmailService {
@@ -24,9 +26,12 @@ class EmailService {
         html: emailHTML(title, message, content),
       });
 
-      log.info(`✅  Email sent to '${email}' successfully!`);
+      log.info(response.data || response.error);
 
-      return response;
+      if (!response.error)
+        log.info(`✅  Email sent to '${email}' successfully!`);
+
+      return response.error?.message ? false : true;
     } catch (error) {
       printErrorMessage(error, 'sendEmail()');
     }
@@ -36,12 +41,14 @@ class EmailService {
     const title = 'Email Verification: Registry App';
     const subject = 'Verify your email';
     const message = `Click the button below to verify your email address.`;
-    // const content = `
-    // <a href="${ct.base_url}${contracts.v1.UserContract['verify-email'].path}/${token}" style="text-decoration: none; color: white; background-color: #4CAF50; padding: 10px 20px; border-radius: 5px;">
-    //   Verify Email
-    // </a>`;
+    const content = `
+    <h1>Confirm your email address</h1>
+    So we can send you important information and updates, we need to check this is the right email address for you. <br>
+    <button href="${ct.base_url}${contracts.v1.UserContract['verify-email'].path}?token=${token}" style="text-decoration: none; color: white; background-color: #4CAF50; padding: 10px 20px; border-radius: 5px;">
+      Verify Email
+    </button>`;
 
-    return this.send(email, title, subject, message, 'content');
+    return await this.send(email, title, subject, message, content);
   };
 
   sendSecurityEmail = async (
@@ -52,11 +59,11 @@ class EmailService {
   ) => {
     const title = 'Security Alert:: Verification from Registry App';
     // const content = `
-    // <a href="${ct.base_url}${contracts.v1.UserContract['verify-email'].path}/${token}" style="text-decoration: none; color: white; background-color: #4CAF50; padding: 10px 20px; border-radius: 5px;">
+    // <a href="${ct.base_url}${contracts.v1.UserContract['verify-email'].path}?token=${token}" style="text-decoration: none; color: white; background-color: #4CAF50; padding: 10px 20px; border-radius: 5px;">
     //   Verify Email
     // </a>`;
 
-    return this.send(email, title, subject, message, 'content');
+    return await this.send(email, title, subject, message, 'content');
   };
 }
 

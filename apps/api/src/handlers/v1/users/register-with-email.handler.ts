@@ -1,6 +1,6 @@
 import ct from '@/constants';
 import { database } from '@/db';
-import { UserService, apiResponse, jwt } from '@/services';
+import { UserService, apiResponse, emailService, jwt } from '@/services';
 import { contracts } from '@reg/contracts';
 import { emailCredentials, userSessions, users } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
@@ -56,6 +56,17 @@ export const registerWithEmailHandler: RegisterWithEmailHandler = async ({
 
   // check if the user is present
   if (!user || user.length === 0) {
+    return apiResponse.serverError();
+  }
+
+  // send the verification email
+  const response = await emailService.sendVerificationEmail(
+    email,
+    jwt.generateVerificationToken(userId),
+  );
+
+  // check if email was sent
+  if (!response) {
     return apiResponse.serverError();
   }
 

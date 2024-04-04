@@ -16,7 +16,7 @@ export const logoutHandler: LogoutHandler = async ({
   res,
 }) => {
   // check if the user is present
-  if (!user) {
+  if (!user || !user.id) {
     return apiResponse.error(401, 'Unauthorized!');
   }
 

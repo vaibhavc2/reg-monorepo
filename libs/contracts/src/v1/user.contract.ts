@@ -2,16 +2,18 @@ import { UserData } from '@reg/types';
 import { contract } from '../../contract';
 import { apiVersionPrefix } from '../../utils';
 
+const ResponseType = contract.type<{
+  status: number;
+  message: string;
+}>();
+
 const UserContract = contract.router(
   {
     'register-with-email': {
       method: 'POST',
       path: '/auth/email/register',
       responses: {
-        400: contract.type<{
-          status: number;
-          message: string;
-        }>(),
+        400: ResponseType,
         201: contract.type<{
           status: number;
           data: {
@@ -19,10 +21,7 @@ const UserContract = contract.router(
           };
           message: string;
         }>(),
-        500: contract.type<{
-          status: number;
-          message: string;
-        }>(),
+        500: ResponseType,
       },
       body: contract.type<{
         fullName: string;
@@ -35,18 +34,9 @@ const UserContract = contract.router(
       method: 'POST',
       path: '/auth/email/login',
       responses: {
-        400: contract.type<{
-          status: number;
-          message: string;
-        }>(),
-        200: contract.type<{
-          status: number;
-          message: string;
-        }>(),
-        500: contract.type<{
-          status: number;
-          message: string;
-        }>(),
+        400: ResponseType,
+        200: ResponseType,
+        500: ResponseType,
       },
       body: contract.type<{
         email: string;
@@ -68,14 +58,8 @@ const UserContract = contract.router(
           };
           message: string;
         }>(),
-        400: contract.type<{
-          status: number;
-          message: string;
-        }>(),
-        500: contract.type<{
-          status: number;
-          message: string;
-        }>(),
+        400: ResponseType,
+        500: ResponseType,
       },
       body: contract.type<{}>(),
       summary: 'Sign up or Log in with Google OAuth.',
@@ -84,18 +68,9 @@ const UserContract = contract.router(
       method: 'POST',
       path: '/auth/logout',
       responses: {
-        200: contract.type<{
-          status: number;
-          message: string;
-        }>(),
-        400: contract.type<{
-          status: number;
-          message: string;
-        }>(),
-        401: contract.type<{
-          status: number;
-          message: string;
-        }>(),
+        200: ResponseType,
+        400: ResponseType,
+        401: ResponseType,
       },
       body: contract.type<{}>(),
       summary: 'Logout the current user.',
@@ -111,53 +86,37 @@ const UserContract = contract.router(
           };
           message: string;
         }>(),
-        401: contract.type<{
-          status: number;
-          message: string;
-        }>(),
+        401: ResponseType,
       },
       summary: 'Get user details.',
     },
-    // 'verify-email': {
-    //   method: 'POST',
-    //   path: '/verify-email',
-    //   responses: {
-    //     400: contract.type<{
-    //       status: number;
-    //       message: string;
-    //     }>(),
-    //     200: contract.type<{
-    //       status: number;
-    //       message: string;
-    //     }>(),
-    //   },
-    //   body: contract.type<{
-    //     token: string;
-    //   }>(),
-    //   summary: 'Verify user email using token.',
-    // },
-    // 'verify-phone': {
-    //   method: 'POST',
-    //   path: '/verify-phone',
-    //   responses: {
-    //     400: contract.type<{
-    //       status: number;
-    //       message: string;
-    //     }>(),
-    //     200: contract.type<{
-    //       status: number;
-    //       message: string;
-    //     }>(),
-    //     500: contract.type<{
-    //       status: number;
-    //       message: string;
-    //     }>(),
-    //   },
-    //   body: contract.type<{
-    //     token: string;
-    //   }>(),
-    //   summary: 'Verify user phone using token.',
-    // },
+    'verify-email': {
+      method: 'POST',
+      path: '/verify-email',
+      query: contract.type<{
+        token: string;
+      }>(),
+      responses: {
+        400: ResponseType,
+        401: ResponseType,
+        500: ResponseType,
+        200: ResponseType,
+      },
+      body: contract.type<{}>(),
+      summary: 'Verify user email using token.',
+    },
+    'send-verification-email': {
+      method: 'POST',
+      path: '/send-verification-email',
+      responses: {
+        200: ResponseType,
+        400: ResponseType,
+        401: ResponseType,
+        500: ResponseType,
+      },
+      body: contract.type<{}>(),
+      summary: 'Send verification email to the user.',
+    },
   },
   {
     strictStatusCodes: true,
