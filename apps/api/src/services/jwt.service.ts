@@ -52,11 +52,15 @@ class JWTService {
     return accessToken;
   };
 
-  generateRefreshToken = (userId: number, email: string) => {
+  generateRefreshToken = (
+    userId: number,
+    { email, phone }: { email?: string; phone?: string } = {},
+  ) => {
     const refreshToken = jt.sign(
       {
         id: userId,
         email,
+        phone,
       },
       this.refreshToken.secret,
       {
@@ -66,9 +70,12 @@ class JWTService {
     return refreshToken;
   };
 
-  generateAuthTokens = (userId: number, email: string) => {
+  generateAuthTokens = (
+    userId: number,
+    { email, phone }: { email?: string; phone?: string } = {},
+  ) => {
     const accessToken = this.generateAccessToken(userId);
-    const refreshToken = this.generateRefreshToken(userId, email);
+    const refreshToken = this.generateRefreshToken(userId, { email, phone });
 
     return { accessToken, refreshToken };
   };

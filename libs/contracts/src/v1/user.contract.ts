@@ -7,18 +7,24 @@ const ResponseType = contract.type<{
   message: string;
 }>();
 
+interface Data {
+  user: UserData;
+  tokens: {
+    accessToken: string;
+    refreshToken: string;
+  };
+}
+
 const UserContract = contract.router(
   {
     'register-with-email': {
       method: 'POST',
-      path: '/auth/email/register',
+      path: '/auth/register/email',
       responses: {
         400: ResponseType,
         201: contract.type<{
           status: number;
-          data: {
-            user: UserData;
-          };
+          data: Data;
           message: string;
         }>(),
         500: ResponseType,
@@ -32,7 +38,7 @@ const UserContract = contract.router(
     },
     'login-with-email': {
       method: 'POST',
-      path: '/auth/email/login',
+      path: '/auth/login/email',
       responses: {
         400: ResponseType,
         200: ResponseType,
@@ -53,9 +59,7 @@ const UserContract = contract.router(
       responses: {
         200: contract.type<{
           status: number;
-          data: {
-            user: UserData;
-          };
+          data: Data;
           message: string;
         }>(),
         400: ResponseType,
@@ -63,6 +67,25 @@ const UserContract = contract.router(
       },
       body: contract.type<{}>(),
       summary: 'Sign up or Log in with Google OAuth.',
+    },
+    'register-with-phone': {
+      method: 'POST',
+      path: '/auth/register/phone',
+      responses: {
+        400: ResponseType,
+        201: contract.type<{
+          status: number;
+          data: Data;
+          message: string;
+        }>(),
+        500: ResponseType,
+      },
+      body: contract.type<{
+        fullName: string;
+        phone: string;
+        password: string;
+      }>(),
+      summary: 'Register a new user using phone and password.',
     },
     logout: {
       method: 'POST',
@@ -92,9 +115,10 @@ const UserContract = contract.router(
     },
     'verify-email': {
       method: 'POST',
-      path: '/verify-email',
+      path: '/verify/email',
       query: contract.type<{
         token: string;
+        login?: string; // 'true' | 'false'
       }>(),
       responses: {
         400: ResponseType,
@@ -107,14 +131,19 @@ const UserContract = contract.router(
     },
     'send-verification-email': {
       method: 'POST',
-      path: '/send-verification-email',
+      path: '/send/verification-email',
+      query: contract.type<{
+        login?: string; // 'true' | 'false'
+      }>(),
       responses: {
         200: ResponseType,
         400: ResponseType,
         401: ResponseType,
         500: ResponseType,
       },
-      body: contract.type<{}>(),
+      body: contract.type<{
+        email?: string;
+      }>(),
       summary: 'Send verification email to the user.',
     },
   },

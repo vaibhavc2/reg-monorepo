@@ -19,9 +19,15 @@ const userRouter = ct.s.router(contracts.v1.UserContract, {
   'login-with-email': {
     middleware: [
       middlewares.files.multer, // for handling form data or file uploads
-      middlewares.validation.zod(validator.zod.emailCredentials),
     ],
     handler: handlers.v1.users.loginWithEmailHandler,
+  },
+  'register-with-phone': {
+    middleware: [
+      middlewares.files.multer, // for handling form data or file uploads
+      middlewares.validation.zod(validator.zod.userDetails),
+    ],
+    handler: handlers.v1.users.registerWithPhoneHandler,
   },
   logout: {
     middleware: [middlewares.auth.user],

@@ -8,6 +8,8 @@ import {
 } from 'drizzle-orm/mysql-core';
 import { users } from './users.schema';
 
+// separate schema for phone details: due to only some users having phone details, but they are unique and not null
+
 export const phoneDetails = mysqlTable(
   'phone_details',
   {

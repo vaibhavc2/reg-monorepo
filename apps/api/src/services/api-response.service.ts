@@ -33,8 +33,8 @@ class ApiResponseService {
     };
   }
 
-  public serverError() {
-    return this.error(500, 'Something went wrong!');
+  public serverError(message?: string) {
+    return this.error(500, message || 'Something went wrong!');
   }
 }
 

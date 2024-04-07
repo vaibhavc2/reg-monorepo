@@ -37,14 +37,18 @@ class EmailService {
     }
   };
 
-  sendVerificationEmail = async (email: string, token: string) => {
+  sendVerificationEmail = async (
+    email: string,
+    token: string,
+    { login = false } = {}, // defaults to false, optional configuration object
+  ) => {
     const title = 'Email Verification: Registry App';
     const subject = 'Verify your email';
     const message = `Click the button below to verify your email address.`;
     const content = `
     <h1>Confirm your email address</h1>
     So we can send you important information and updates, we need to check this is the right email address for you. <br>
-    <button href="${ct.base_url}${contracts.v1.UserContract['verify-email'].path}?token=${token}" style="text-decoration: none; color: white; background-color: #4CAF50; padding: 10px 20px; border-radius: 5px;">
+    <button href="${ct.base_url}${contracts.v1.UserContract['verify-email'].path}?token=${token}&${login ? 'login=true' : null}" style="text-decoration: none; color: white; background-color: #4CAF50; padding: 10px 20px; border-radius: 5px;">
       Verify Email
     </button>`;
 

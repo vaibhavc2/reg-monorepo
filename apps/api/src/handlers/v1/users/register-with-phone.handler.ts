@@ -1,18 +1,19 @@
 import ct from '@/constants';
 import { database } from '@/db';
-import { UserService, apiResponse, emailService, jwt } from '@/services';
+import { apiResponse, jwt } from '@/services';
 import { contracts } from '@reg/contracts';
-import { emailCredentials, userSessions, users } from '@reg/db';
+import { phoneDetails, userSessions, users } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
-type RegisterWithEmail =
-  (typeof contracts.v1.UserContract)['register-with-email'];
-type RegisterWithEmailHandler = AppRouteImplementation<RegisterWithEmail>;
+type RegisterWithPhone =
+  (typeof contracts.v1.UserContract)['register-with-phone'];
+type RegisterWithPhoneHandler = AppRouteImplementation<RegisterWithPhone>;
 
-export const registerWithEmailHandler: RegisterWithEmailHandler = async ({
+export const registerWithPhoneHandler: RegisterWithPhoneHandler = async ({
   headers,
-  body: { fullName, email, password },
+  body: { fullName, phone },
   req: { user: loggedInUser },
   res,
 }) => {
@@ -21,36 +22,45 @@ export const registerWithEmailHandler: RegisterWithEmailHandler = async ({
     return apiResponse.error(400, 'User already logged in!');
   }
 
+  // validate the phone number: only Indian numbers are allowed
+  // input phone number should be in the format: +91XXXXXXXXXX i.e. e164 format
+  if (!isValidPhoneNumber(phone, 'IN')) {
+    return apiResponse.error(400, 'Invalid phone number!');
+  }
+
   // check if the user is already registered
   const existingUser = await database.db
     ?.select()
-    .from(emailCredentials)
-    .where(eq(emailCredentials.email, email));
+    .from(phoneDetails)
+    .where(eq(phoneDetails.phone, phone));
 
   if (existingUser && existingUser.length > 0) {
     return apiResponse.error(400, 'User already exists!');
   }
 
   // insert the user
-  const userService = new UserService({ fullName, email, password });
-  const insertedUser = await userService.insertUser();
+  const userResponse = await database.db?.insert(users).values({ fullName });
 
-  // verify the upserted user
-  if (!insertedUser) {
+  // verify the inserted user
+  if (
+    !userResponse ||
+    userResponse[0].affectedRows ||
+    !userResponse[0].insertId
+  ) {
     return apiResponse.serverError();
   }
 
-  const { userId } = insertedUser;
+  const userId = userResponse[0].insertId;
 
   //? create tokens to login immediately after registration
   // create tokens
-  const tokens = jwt.generateAuthTokens(userId, { email });
+  const tokens = jwt.generateAuthTokens(userId, { phone });
 
   // insert the refresh token, and save the session
   await database.db?.insert(userSessions).values({
     user: userId,
     token: tokens?.refreshToken as string,
-    authType: 'email',
+    authType: 'phone',
     userAgent: headers['user-agent'] ? (headers['user-agent'] as string) : null,
   });
 
@@ -65,17 +75,6 @@ export const registerWithEmailHandler: RegisterWithEmailHandler = async ({
     return apiResponse.serverError();
   }
 
-  // send the verification email
-  const response = await emailService.sendVerificationEmail(
-    email,
-    jwt.generateVerificationToken(userId),
-  );
-
-  // check if email was sent
-  if (!response) {
-    return apiResponse.serverError();
-  }
-
   // set the cookies
   res
     .cookie('refreshToken', tokens.refreshToken, ct.cookieOptions.auth)
@@ -85,7 +84,7 @@ export const registerWithEmailHandler: RegisterWithEmailHandler = async ({
   return apiResponse.res(201, 'User registered successfully!', {
     user: {
       ...user[0],
-      email,
+      phone,
     },
     tokens,
   });

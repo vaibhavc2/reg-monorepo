@@ -53,7 +53,7 @@ export const googleOAuthHandler: GoogleOAuthHandler = async ({
   const { userId } = upsertedUser;
 
   // create tokens
-  const tokens = jwt.generateAuthTokens(userId, email);
+  const tokens = jwt.generateAuthTokens(userId, { email });
 
   // insert the refresh token, and save the session
   await database.db?.insert(userSessions).values({

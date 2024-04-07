@@ -12,11 +12,11 @@ type LoginWithEmailHandler = AppRouteImplementation<LoginWithEmail>;
 export const loginWithEmailHandler: LoginWithEmailHandler = async ({
   headers,
   body: { email, password },
-  req: { user },
+  req: { user: loggedInUser },
   res,
 }) => {
   // check if the user is already logged in
-  if (user) {
+  if (loggedInUser) {
     return apiResponse.error(400, 'User already logged in!');
   }
 
@@ -36,22 +36,22 @@ export const loginWithEmailHandler: LoginWithEmailHandler = async ({
   }
 
   // get the user
-  const myUser = await database.db
+  const user = await database.db
     ?.select()
     .from(users)
     .where(eq(users.id, creds[0].user));
 
   // check if the user is present
-  if (!myUser || myUser.length === 0) {
+  if (!user || user.length === 0) {
     return apiResponse.serverError();
   }
 
   // create tokens
-  const tokens = jwt.generateAuthTokens(myUser[0].id, email);
+  const tokens = jwt.generateAuthTokens(user[0].id, { email });
 
   // insert the refresh token, and save the session
   await database.db?.insert(userSessions).values({
-    user: myUser[0].id,
+    user: user[0].id,
     token: tokens?.refreshToken as string,
     authType: 'email',
     userAgent: headers['user-agent'] ? (headers['user-agent'] as string) : null,
@@ -65,7 +65,7 @@ export const loginWithEmailHandler: LoginWithEmailHandler = async ({
   // return success
   return apiResponse.res(200, 'User logged in successfully!', {
     user: {
-      ...myUser[0],
+      ...user[0],
       email,
     },
     tokens,

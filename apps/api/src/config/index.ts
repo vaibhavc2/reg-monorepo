@@ -49,6 +49,10 @@ const env = e.cleanEnv(process.env, {
   COOKIE_EXPIRES_IN: e.num({
     default: 30, // days
   }),
+  TWILIO_ACCOUNT_SID: e.str(),
+  TWILIO_AUTH_TOKEN: e.str(),
+  TWILIO_SERVICE_SID: e.str(),
+  TWILIO_PHONE_NUMBER: e.str(),
 });
 
 export default env;
