@@ -54,6 +54,20 @@ const userRouter = ct.s.router(contracts.v1.UserContract, {
     ],
     handler: handlers.v1.users.sendVerificationEmailHandler,
   },
+  'send-otp-to-phone': {
+    middleware: [
+      middlewares.auth.user,
+      middlewares.validation.zod(validator.zod.phone),
+    ],
+    handler: handlers.v1.users.sendOTPToPhoneHandler,
+  },
+  'verify-phone-otp': {
+    middleware: [
+      middlewares.auth.user,
+      middlewares.validation.zod(validator.zod.phone),
+    ],
+    handler: handlers.v1.users.verifyPhoneOTPHandler,
+  },
 });
 
 export default userRouter;

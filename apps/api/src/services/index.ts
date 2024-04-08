@@ -5,5 +5,5 @@ export { google } from './google-oauth.service';
 export { jwt } from './jwt.service';
 export { names } from './names.service';
 export { pwd } from './password.service';
-export { twilioService } from './twilio.service';
+export { phoneService } from './phone.service';
 export { UserService } from './user.service';

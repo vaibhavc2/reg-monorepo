@@ -32,15 +32,17 @@ export const verifyEmailHandler: VerifyEmailHandler = async ({
 
     // find the email from the email validations record
     const result = await database.db
-      ?.select({
-        verified: emailValidations.verified,
-        email: emailValidations.email,
-      })
+      ?.select()
       .from(emailValidations)
       .where(eq(emailValidations.email, email));
 
     // check if the email is present
-    if (!result || !result[0] || result[0].email !== email) {
+    if (
+      !result ||
+      !result[0] ||
+      result[0].email !== email ||
+      result[0].disabled
+    ) {
       return apiResponse.error(400, 'Invalid email!');
     }
 
@@ -58,7 +60,7 @@ export const verifyEmailHandler: VerifyEmailHandler = async ({
       .where(eq(emailValidations.email, email));
 
     // check if the update was successful
-    if (!update) {
+    if (!update || !update[0].affectedRows || update[0].affectedRows !== 1) {
       return apiResponse.serverError();
     }
 
@@ -87,7 +89,7 @@ export const verifyEmailHandler: VerifyEmailHandler = async ({
       .where(eq(verifications.user, user.id));
 
     // check if the update was successful
-    if (!result) {
+    if (!result || !result[0].affectedRows || result[0].affectedRows !== 1) {
       return apiResponse.serverError();
     }
 

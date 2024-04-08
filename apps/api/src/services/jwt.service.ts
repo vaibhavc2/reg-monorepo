@@ -12,6 +12,11 @@ type VerificationParams =
   | { userId?: never; email: string }
   | { userId: number; email: string };
 
+type PhoneEmailParams =
+  | { email: string; phone?: never }
+  | { email?: never; phone: string }
+  | { email: string; phone: string };
+
 class JWTService {
   private readonly accessToken: Token;
   private readonly refreshToken: Token;
@@ -75,10 +80,7 @@ class JWTService {
     return refreshToken;
   };
 
-  generateAuthTokens = (
-    userId: number,
-    { email, phone }: { email?: string; phone?: string } = {},
-  ) => {
+  generateAuthTokens = (userId: number, { email, phone }: PhoneEmailParams) => {
     const accessToken = this.generateAccessToken(userId);
     const refreshToken = this.generateRefreshToken(userId, { email, phone });
 

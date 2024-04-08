@@ -2,7 +2,7 @@ import env from '@/config';
 import { ApiError } from '@/utils';
 import twilio from 'twilio';
 
-class TwilioService {
+class PhoneService {
   private client: twilio.Twilio;
 
   constructor() {
@@ -39,20 +39,16 @@ class TwilioService {
   }
 
   async verifyOTP(to: string, code: string) {
-    return (
-      (
-        await this.client.verify.v2
-          .services(env.TWILIO_SERVICE_SID)
-          .verificationChecks.create({
-            to,
-            code,
-          })
-          .catch((error) => {
-            throw new ApiError(500, 'Failed to verify OTP', error);
-          })
-      ).status === 'approved'
-    );
+    return await this.client.verify.v2
+      .services(env.TWILIO_SERVICE_SID)
+      .verificationChecks.create({
+        to,
+        code,
+      })
+      .catch((error) => {
+        throw new ApiError(500, 'Failed to verify OTP', error);
+      });
   }
 }
 
-export const twilioService = new TwilioService();
+export const phoneService = new PhoneService();

@@ -165,6 +165,43 @@ const UserContract = contract.router(
       }>(),
       summary: 'Send verification email to the user.',
     },
+    'verify-phone-otp': {
+      method: 'POST',
+      path: '/verify/phone/otp',
+      query: contract.type<{
+        login?: 'true' | 'false';
+        newUser?: 'true' | 'false';
+      }>(),
+      responses: {
+        400: ResponseType,
+        401: ResponseType,
+        500: ResponseType,
+        200: ResponseType,
+      },
+      body: contract.type<{
+        otp: string;
+        phone: string;
+      }>(),
+      summary: 'Verify user phone using OTP.',
+    },
+    'send-otp-to-phone': {
+      method: 'POST',
+      path: '/send/otp-to-phone',
+      query: contract.type<{
+        login?: 'true' | 'false';
+        newUser?: 'true' | 'false';
+      }>(),
+      responses: {
+        200: ResponseType,
+        400: ResponseType,
+        401: ResponseType,
+        500: ResponseType,
+      },
+      body: contract.type<{
+        phone: string;
+      }>(),
+      summary: 'Send OTP to the user phone.',
+    },
   },
   {
     strictStatusCodes: true,
