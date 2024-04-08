@@ -6,6 +6,7 @@ import { registerWithEmailHandler } from './register-with-email.handler';
 import { registerWithPhoneHandler } from './register-with-phone.handler';
 import { sendOTPToPhoneHandler } from './send-otp-to-phone.handler';
 import { sendVerificationEmailHandler } from './send-verification-email.handler';
+import { updateNameHandler } from './update-name.handler';
 import { validateHandler } from './validate.handler';
 import { verifyEmailHandler } from './verify-email.handler';
 import { verifyPhoneOTPHandler } from './verify-phone-otp.handler';
@@ -22,4 +23,5 @@ export const usersHandlers = {
   validateHandler,
   sendOTPToPhoneHandler,
   verifyPhoneOTPHandler,
+  updateNameHandler,
 };

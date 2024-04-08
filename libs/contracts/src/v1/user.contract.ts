@@ -202,6 +202,20 @@ const UserContract = contract.router(
       }>(),
       summary: 'Send OTP to the user phone.',
     },
+    'update-name': {
+      method: 'PUT',
+      path: '/update/name',
+      responses: {
+        200: ResponseType,
+        400: ResponseType,
+        401: ResponseType,
+        500: ResponseType,
+      },
+      body: contract.type<{
+        fullName: string;
+      }>(),
+      summary: 'Update name of the user.',
+    },
   },
   {
     strictStatusCodes: true,

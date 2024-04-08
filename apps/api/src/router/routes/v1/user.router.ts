@@ -68,6 +68,13 @@ const userRouter = ct.s.router(contracts.v1.UserContract, {
     ],
     handler: handlers.v1.users.verifyPhoneOTPHandler,
   },
+  'update-name': {
+    middleware: [
+      middlewares.auth.user,
+      middlewares.validation.zod(validator.zod.fullName),
+    ],
+    handler: handlers.v1.users.updateNameHandler,
+  },
 });
 
 export default userRouter;
