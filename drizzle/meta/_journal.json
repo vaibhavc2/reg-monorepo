@@ -127,6 +127,13 @@
       "when": 1712164317000,
       "tag": "0017_sticky_chamber",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "5",
+      "when": 1712577620526,
+      "tag": "0018_productive_kid_colt",
+      "breakpoints": true
     }
   ]
 }

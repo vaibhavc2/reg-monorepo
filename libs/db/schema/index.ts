@@ -21,6 +21,8 @@ import { userSettings } from './users/user-settings.schema';
 import { usersHistory } from './users/users-history.schema';
 import { users } from './users/users.schema';
 import { verifications } from './users/verifications.schema';
+import { emailValidations } from './validations/email-validations.schema';
+import { phoneValidations } from './validations/phone-validations.schema';
 
 // export schemas
 export const schema = {
@@ -45,6 +47,8 @@ export const schema = {
   vehiclesOwners,
   vehiclesTypes,
   verifications,
+  emailValidations,
+  phoneValidations,
 };
 
 // export schemas separately
@@ -53,12 +57,14 @@ export {
   displayNames,
   duties,
   emailCredentials,
+  emailValidations,
   otps,
   persons,
   personsDuties,
   personsHistory,
   personsRelations,
   phoneDetails,
+  phoneValidations,
   relations,
   requests,
   tokens,
@@ -94,6 +100,8 @@ export type { IUserSetting } from './users/user-settings.schema';
 export type { IUserHistory } from './users/users-history.schema';
 export type { IUser } from './users/users.schema';
 export type { IVerification } from './users/verifications.schema';
+export type { IEmailValidation } from './validations/email-validations.schema';
+export type { IPhoneValidation } from './validations/phone-validations.schema';
 
 // Insert schemas
 export const insertSchema = {
@@ -118,6 +126,8 @@ export const insertSchema = {
   vehiclesTypes: createInsertSchema(vehiclesTypes),
   verifications: createInsertSchema(verifications),
   phoneDetails: createInsertSchema(phoneDetails),
+  emailValidations: createInsertSchema(emailValidations),
+  phoneValidations: createInsertSchema(phoneValidations),
 };
 
 // Select schemas
@@ -143,4 +153,6 @@ export const selectSchema = {
   vehiclesTypes: createSelectSchema(vehiclesTypes),
   verifications: createSelectSchema(verifications),
   phoneDetails: createSelectSchema(phoneDetails),
+  emailValidations: createSelectSchema(emailValidations),
+  phoneValidations: createSelectSchema(phoneValidations),
 };
