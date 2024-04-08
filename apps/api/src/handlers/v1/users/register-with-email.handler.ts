@@ -2,7 +2,12 @@ import ct from '@/constants';
 import { database } from '@/db';
 import { UserService, apiResponse, emailService, jwt, names } from '@/services';
 import { contracts } from '@reg/contracts';
-import { emailCredentials, userSessions, users } from '@reg/db';
+import {
+  emailCredentials,
+  emailValidations,
+  userSessions,
+  users,
+} from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
@@ -29,6 +34,21 @@ export const registerWithEmailHandler: RegisterWithEmailHandler = async ({
 
   if (existingUser && existingUser.length > 0) {
     return apiResponse.error(400, 'User already exists!');
+  }
+
+  // check if the email is verified earlier
+  const emailValidation = await database.db
+    ?.select()
+    .from(emailValidations)
+    .where(eq(emailValidations.email, email));
+
+  if (
+    !emailValidation ||
+    emailValidation.length === 0 ||
+    !emailValidation[0].verified ||
+    emailValidation[0].disabled
+  ) {
+    return apiResponse.error(403, 'Verify email first!');
   }
 
   const fullName = names.generateUniqueName();
@@ -70,7 +90,7 @@ export const registerWithEmailHandler: RegisterWithEmailHandler = async ({
   // send the verification email
   const response = await emailService.sendVerificationEmail(
     email,
-    jwt.generateVerificationToken(userId),
+    jwt.generateVerificationToken({ userId }),
   );
 
   // check if email was sent

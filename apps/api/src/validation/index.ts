@@ -4,13 +4,17 @@ import * as z from 'zod';
 class Validation {
   public readonly zod: {
     fullName: z.ZodObject<any, any, any>;
-    emailCredentials: z.ZodObject<any, any, any>;
+    email: z.ZodObject<any, any, any>;
+    phone: z.ZodObject<any, any, any>;
+    password: z.ZodObject<any, any, any>;
   };
 
   constructor() {
     this.zod = {
       fullName: this.fullName,
-      emailCredentials: this.emailCredentials,
+      email: this.email,
+      phone: this.phone,
+      password: this.password,
     };
   }
 
@@ -26,17 +30,35 @@ class Validation {
     }),
   });
 
-  private emailCredentials = z.object({
+  private email = z.object({
     body: z.object({
-      email: z
-        .string({ required_error: requiredError('Email') })
-        .email({ message: 'Invalid Email' }),
+      email: z.string({ required_error: requiredError('Email') }).email({
+        message: 'Invalid Email! Must be in the format: abc@email.com',
+      }),
+    }),
+  });
+
+  private password = z.object({
+    body: z.object({
       password: z
         .string({ required_error: requiredError('Password') })
         .min(6, { message: minStringError('Password', 6) })
         .max(30, { message: largeStringError('Password', 30) })
         .regex(/^(?=.*\d)(?=.*\W).*$/, {
           message: 'Password must contain at least a digit, and a symbol.',
+        }),
+    }),
+  });
+
+  private phone = z.object({
+    // validation for phone number: e164 format, only Indian numbers are allowed
+    body: z.object({
+      phone: z
+        .string({ required_error: requiredError('Phone Number') })
+        .min(13, { message: minStringError('Phone Number', 13) })
+        .max(20, { message: largeStringError('Phone Number', 20) })
+        .regex(/^\+91\d{10}$/, {
+          message: 'Invalid Phone Number! Must be in the format: +91XXXXXXXXXX',
         }),
     }),
   });

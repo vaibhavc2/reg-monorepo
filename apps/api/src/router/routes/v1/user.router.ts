@@ -11,19 +11,23 @@ const userRouter = ct.s.router(contracts.v1.UserContract, {
   'register-with-email': {
     middleware: [
       middlewares.files.multer, // for handling form data or file uploads
-      middlewares.validation.zod(validator.zod.emailCredentials),
+      middlewares.validation.zod(validator.zod.email),
+      middlewares.validation.zod(validator.zod.password),
     ],
     handler: handlers.v1.users.registerWithEmailHandler,
   },
   'login-with-email': {
     middleware: [
       middlewares.files.multer, // for handling form data or file uploads
+      middlewares.validation.zod(validator.zod.email),
+      middlewares.validation.zod(validator.zod.password),
     ],
     handler: handlers.v1.users.loginWithEmailHandler,
   },
   'register-with-phone': {
     middleware: [
       middlewares.files.multer, // for handling form data or file uploads
+      middlewares.validation.zod(validator.zod.phone),
     ],
     handler: handlers.v1.users.registerWithPhoneHandler,
   },
@@ -37,11 +41,17 @@ const userRouter = ct.s.router(contracts.v1.UserContract, {
   },
   validate: handlers.v1.users.validateHandler,
   'verify-email': {
-    middleware: [middlewares.auth.user],
+    middleware: [
+      middlewares.auth.user,
+      middlewares.validation.zod(validator.zod.email),
+    ],
     handler: handlers.v1.users.verifyEmailHandler,
   },
   'send-verification-email': {
-    middleware: [middlewares.auth.user],
+    middleware: [
+      middlewares.auth.user,
+      middlewares.validation.zod(validator.zod.email),
+    ],
     handler: handlers.v1.users.sendVerificationEmailHandler,
   },
 });

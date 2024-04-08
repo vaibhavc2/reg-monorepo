@@ -22,6 +22,7 @@ const UserContract = contract.router(
       path: '/auth/register/email',
       responses: {
         400: ResponseType,
+        403: ResponseType,
         201: contract.type<{
           status: number;
           data: Data;
@@ -62,6 +63,7 @@ const UserContract = contract.router(
       responses: {
         200: ResponseType,
         400: ResponseType,
+        403: ResponseType,
       },
       summary: 'Check if the user is valid.',
     },
@@ -88,6 +90,7 @@ const UserContract = contract.router(
       path: '/auth/register/phone',
       responses: {
         400: ResponseType,
+        403: ResponseType,
         201: contract.type<{
           status: number;
           data: Data;
@@ -132,7 +135,8 @@ const UserContract = contract.router(
       path: '/verify/email',
       query: contract.type<{
         token: string;
-        login?: string; // 'true' | 'false'
+        login?: 'true' | 'false';
+        newUser?: 'true' | 'false';
       }>(),
       responses: {
         400: ResponseType,
@@ -147,7 +151,8 @@ const UserContract = contract.router(
       method: 'POST',
       path: '/send/verification-email',
       query: contract.type<{
-        login?: string; // 'true' | 'false'
+        login?: 'true' | 'false';
+        newUser?: 'true' | 'false';
       }>(),
       responses: {
         200: ResponseType,

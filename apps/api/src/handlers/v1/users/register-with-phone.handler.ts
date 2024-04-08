@@ -2,7 +2,7 @@ import ct from '@/constants';
 import { database } from '@/db';
 import { apiResponse, jwt, names } from '@/services';
 import { contracts } from '@reg/contracts';
-import { phoneDetails, userSessions, users } from '@reg/db';
+import { phoneDetails, phoneValidations, userSessions, users } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 import { isValidPhoneNumber } from 'libphonenumber-js';
@@ -36,6 +36,21 @@ export const registerWithPhoneHandler: RegisterWithPhoneHandler = async ({
 
   if (existingUser && existingUser.length > 0) {
     return apiResponse.error(400, 'User already exists!');
+  }
+
+  // check if the phone is verified earlier
+  const phoneValidation = await database.db
+    ?.select()
+    .from(phoneValidations)
+    .where(eq(phoneValidations.phone, phone));
+
+  if (
+    !phoneValidation ||
+    phoneValidation.length === 0 ||
+    !phoneValidation[0].verified ||
+    phoneValidation[0].disabled
+  ) {
+    return apiResponse.error(403, 'Verify phone first!');
   }
 
   const fullName = names.generateUniqueName();

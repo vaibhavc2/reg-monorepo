@@ -7,6 +7,11 @@ interface Token {
   expiresIn: string;
 }
 
+type VerificationParams =
+  | { userId: number; email?: never }
+  | { userId?: never; email: string }
+  | { userId: number; email: string };
+
 class JWTService {
   private readonly accessToken: Token;
   private readonly refreshToken: Token;
@@ -80,10 +85,11 @@ class JWTService {
     return { accessToken, refreshToken };
   };
 
-  generateVerificationToken = (userId: number) => {
+  generateVerificationToken = ({ userId, email }: VerificationParams) => {
     const verificationToken = jt.sign(
       {
         id: userId,
+        email,
       },
       this.verificationToken.secret,
       {
@@ -125,16 +131,12 @@ class JWTService {
       ) as unknown as { id: number; email: string } | null;
     };
 
-  verifyVerificationToken: (token: string) => { id: number } | null = (
-    token: string,
-  ) => {
+  verifyVerificationToken = (token: string) => {
     return jt.verify(
       token,
       this.verificationToken.secret,
       this.errorCallback,
-    ) as unknown as {
-      id: number;
-    } | null;
+    ) as unknown as { id?: number; email?: string } | null;
   };
 
   verifySecurityToken: (token: string) => { id: number } | null = (
