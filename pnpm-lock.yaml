@@ -132,6 +132,9 @@ importers:
       twilio:
         specifier: ^5.0.3
         version: 5.0.3
+      unique-names-generator:
+        specifier: ^4.7.1
+        version: 4.7.1
       uuid:
         specifier: ^9.0.1
         version: 9.0.1
@@ -11301,6 +11304,11 @@ packages:
     dependencies:
       qs: 6.11.0
     dev: true
+
+  /unique-names-generator@4.7.1:
+    resolution: {integrity: sha512-lMx9dX+KRmG8sq6gulYYpKWZc9RlGsgBR6aoO8Qsm3qvkSJ+3rAymr+TnV8EDMrIrwuFJ4kruzMWM/OpYzPoow==}
+    engines: {node: '>=8'}
+    dev: false
 
   /universalify@2.0.1:
     resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}

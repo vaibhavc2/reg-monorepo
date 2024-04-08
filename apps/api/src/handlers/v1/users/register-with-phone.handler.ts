@@ -1,6 +1,6 @@
 import ct from '@/constants';
 import { database } from '@/db';
-import { apiResponse, jwt } from '@/services';
+import { apiResponse, jwt, names } from '@/services';
 import { contracts } from '@reg/contracts';
 import { phoneDetails, userSessions, users } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
@@ -13,7 +13,7 @@ type RegisterWithPhoneHandler = AppRouteImplementation<RegisterWithPhone>;
 
 export const registerWithPhoneHandler: RegisterWithPhoneHandler = async ({
   headers,
-  body: { fullName, phone },
+  body: { phone },
   req: { user: loggedInUser },
   res,
 }) => {
@@ -37,6 +37,8 @@ export const registerWithPhoneHandler: RegisterWithPhoneHandler = async ({
   if (existingUser && existingUser.length > 0) {
     return apiResponse.error(400, 'User already exists!');
   }
+
+  const fullName = names.generateUniqueName();
 
   // insert the user
   const userResponse = await database.db?.insert(users).values({ fullName });

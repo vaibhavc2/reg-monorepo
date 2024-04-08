@@ -41,6 +41,7 @@
     "resend": "^3.2.0",
     "semver": "^7.6.0",
     "twilio": "^5.0.3",
+    "unique-names-generator": "^4.7.1",
     "uuid": "^9.0.1",
     "winston": "^3.11.0",
     "ws": "^8.16.0",

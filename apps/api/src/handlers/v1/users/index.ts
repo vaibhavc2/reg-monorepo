@@ -5,6 +5,7 @@ import { logoutHandler } from './logout.handler';
 import { registerWithEmailHandler } from './register-with-email.handler';
 import { registerWithPhoneHandler } from './register-with-phone.handler';
 import { sendVerificationEmailHandler } from './send-verification-email.handler';
+import { validateHandler } from './validate.handler';
 import { verifyEmailHandler } from './verify-email.handler';
 
 export const usersHandlers = {
@@ -16,4 +17,5 @@ export const usersHandlers = {
   verifyEmailHandler,
   sendVerificationEmailHandler,
   registerWithPhoneHandler,
+  validateHandler,
 };

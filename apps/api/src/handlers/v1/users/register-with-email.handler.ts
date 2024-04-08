@@ -1,6 +1,6 @@
 import ct from '@/constants';
 import { database } from '@/db';
-import { UserService, apiResponse, emailService, jwt } from '@/services';
+import { UserService, apiResponse, emailService, jwt, names } from '@/services';
 import { contracts } from '@reg/contracts';
 import { emailCredentials, userSessions, users } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
@@ -12,7 +12,7 @@ type RegisterWithEmailHandler = AppRouteImplementation<RegisterWithEmail>;
 
 export const registerWithEmailHandler: RegisterWithEmailHandler = async ({
   headers,
-  body: { fullName, email, password },
+  body: { email, password },
   req: { user: loggedInUser },
   res,
 }) => {
@@ -30,6 +30,8 @@ export const registerWithEmailHandler: RegisterWithEmailHandler = async ({
   if (existingUser && existingUser.length > 0) {
     return apiResponse.error(400, 'User already exists!');
   }
+
+  const fullName = names.generateUniqueName();
 
   // insert the user
   const userService = new UserService({ fullName, email, password });

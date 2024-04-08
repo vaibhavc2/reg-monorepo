@@ -30,7 +30,6 @@ const UserContract = contract.router(
         500: ResponseType,
       },
       body: contract.type<{
-        fullName: string;
         email: string;
         password: string;
       }>(),
@@ -49,6 +48,22 @@ const UserContract = contract.router(
         password: string;
       }>(),
       summary: 'Login a new user using email and password.',
+    },
+    validate: {
+      method: 'GET',
+      path: '/validate/:credential',
+      query: contract.type<{
+        email?: string;
+        phone?: string;
+      }>(),
+      pathParams: contract.type<{
+        credential: 'email' | 'phone';
+      }>(),
+      responses: {
+        200: ResponseType,
+        400: ResponseType,
+      },
+      summary: 'Check if the user is valid.',
     },
     'google-oauth': {
       method: 'POST',
@@ -81,7 +96,6 @@ const UserContract = contract.router(
         500: ResponseType,
       },
       body: contract.type<{
-        fullName: string;
         phone: string;
         password: string;
       }>(),

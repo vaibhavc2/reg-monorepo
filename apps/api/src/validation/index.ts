@@ -3,18 +3,18 @@ import * as z from 'zod';
 
 class Validation {
   public readonly zod: {
-    userDetails: z.ZodObject<any, any, any>;
+    fullName: z.ZodObject<any, any, any>;
     emailCredentials: z.ZodObject<any, any, any>;
   };
 
   constructor() {
     this.zod = {
-      userDetails: this.userDetails,
+      fullName: this.fullName,
       emailCredentials: this.emailCredentials,
     };
   }
 
-  private userDetails = z.object({
+  private fullName = z.object({
     body: z.object({
       fullName: z
         .string({ required_error: requiredError('Full Name') })
