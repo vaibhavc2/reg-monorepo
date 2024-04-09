@@ -35,10 +35,6 @@ const userRouter = ct.s.router(contracts.v1.UserContract, {
     middleware: [middlewares.auth.user],
     handler: handlers.v1.users.logoutHandler,
   },
-  'get-user-details': {
-    middleware: [middlewares.auth.user],
-    handler: handlers.v1.users.getUserDetailsHandler,
-  },
   validate: handlers.v1.users.validateHandler,
   'verify-email': {
     middleware: [
@@ -67,6 +63,14 @@ const userRouter = ct.s.router(contracts.v1.UserContract, {
       middlewares.validation.zod(validator.zod.phone),
     ],
     handler: handlers.v1.users.verifyPhoneOTPHandler,
+  },
+  'get-user-details': {
+    middleware: [middlewares.auth.user],
+    handler: handlers.v1.users.getUserDetailsHandler,
+  },
+  'get-user-sessions': {
+    middleware: [middlewares.auth.user],
+    handler: handlers.v1.users.getUserSessionsHandler,
   },
   'update-name': {
     middleware: [

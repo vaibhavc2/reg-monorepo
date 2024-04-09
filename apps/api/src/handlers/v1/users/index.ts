@@ -1,4 +1,5 @@
 import { getUserDetailsHandler } from './get-user-details.handler';
+import { getUserSessionsHandler } from './get-user-sessions.handler';
 import { googleOAuthHandler } from './google-oauth.handler';
 import { loginWithEmailHandler } from './login-with-email.handler';
 import { logoutHandler } from './logout.handler';
@@ -24,4 +25,5 @@ export const usersHandlers = {
   sendOTPToPhoneHandler,
   verifyPhoneOTPHandler,
   updateNameHandler,
+  getUserSessionsHandler,
 };

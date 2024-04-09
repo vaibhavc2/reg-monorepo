@@ -1,4 +1,6 @@
+import { insertSchema } from '@reg/db';
 import { UserData } from '@reg/types';
+import * as z from 'zod';
 import { contract } from '../../contract';
 import { apiVersionPrefix } from '../../utils';
 
@@ -115,21 +117,6 @@ const UserContract = contract.router(
       body: contract.type<{}>(),
       summary: 'Logout the current user.',
     },
-    'get-user-details': {
-      method: 'GET',
-      path: '/me',
-      responses: {
-        200: contract.type<{
-          status: number;
-          data: {
-            user: UserData;
-          };
-          message: string;
-        }>(),
-        401: ResponseType,
-      },
-      summary: 'Get user details.',
-    },
     'verify-email': {
       method: 'POST',
       path: '/verify/email',
@@ -201,6 +188,36 @@ const UserContract = contract.router(
         phone: string;
       }>(),
       summary: 'Send OTP to the user phone.',
+    },
+    'get-user-details': {
+      method: 'GET',
+      path: '/me',
+      responses: {
+        200: contract.type<{
+          status: number;
+          data: {
+            user: UserData;
+          };
+          message: string;
+        }>(),
+        401: ResponseType,
+      },
+      summary: 'Get user details.',
+    },
+    'get-user-sessions': {
+      method: 'GET',
+      path: '/me/sessions',
+      responses: {
+        200: contract.type<{
+          status: number;
+          data: {
+            sessions: z.infer<typeof insertSchema.userSessions>[];
+          };
+          message: string;
+        }>(),
+        401: ResponseType,
+      },
+      summary: 'Get user sessions.',
     },
     'update-name': {
       method: 'PUT',
