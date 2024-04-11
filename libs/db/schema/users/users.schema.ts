@@ -1,6 +1,5 @@
 import { sql } from 'drizzle-orm';
 import {
-  boolean,
   index,
   int,
   mysqlEnum,
@@ -17,8 +16,8 @@ export const users = mysqlTable(
     fullName: varchar('full_name', { length: 256 }).notNull(),
     avatar: varchar('avatar', { length: 256 }),
     cover: varchar('cover', { length: 256 }),
-    role: mysqlEnum('role', db_ct.userRoles).default('user').notNull(),
-    disabled: boolean('disabled').default(false).notNull(),
+    role: mysqlEnum('role', db_ct.userRole).default('user').notNull(),
+    status: mysqlEnum('status', db_ct.userStatus).default('active').notNull(),
     createdAt: timestamp('created_at', { mode: 'date', fsp: 6 })
       .default(sql`CURRENT_TIMESTAMP(6)`)
       .notNull(),

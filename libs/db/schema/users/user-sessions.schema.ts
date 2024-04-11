@@ -22,7 +22,7 @@ export const userSessions = mysqlTable(
     user: int('user')
       .references(() => users.id)
       .notNull(),
-    authType: mysqlEnum('auth_type', db_ct.authTypes)
+    authType: mysqlEnum('auth_type', db_ct.authType)
       .default('google')
       .notNull(),
     token: varchar('token', { length: 256 }).notNull().unique(),

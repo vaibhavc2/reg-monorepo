@@ -22,8 +22,8 @@ export const otps = mysqlTable(
     user: int('user')
       .references(() => users.id)
       .notNull(),
-    otpType: mysqlEnum('otp_type', db_ct.otpTypes).notNull(),
-    objective: mysqlEnum('objective', db_ct.objectives).notNull(),
+    otpType: mysqlEnum('otp_type', db_ct.otpType).notNull(),
+    objective: mysqlEnum('objective', db_ct.objective).notNull(),
     code: varchar('code', { length: 6 }).notNull(),
     // TODO: add a check constraint to make sure that the code is 6 digits
     // TODO: make sure to add a method to admin to delete all or some expired otps (also acc to time-range and attempts)

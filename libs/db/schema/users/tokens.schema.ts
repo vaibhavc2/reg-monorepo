@@ -22,7 +22,7 @@ export const tokens = mysqlTable(
     user: int('user')
       .references(() => users.id)
       .notNull(),
-    objective: mysqlEnum('objective', db_ct.objectives).notNull(),
+    objective: mysqlEnum('objective', db_ct.objective).notNull(),
     token: varchar('token', { length: 256 }).notNull().unique(),
     tokenType: mysqlEnum('token_type', ['']).notNull(),
     // TODO: make sure to add a method to admin to delete all or some expired tokens (also acc to time-range and attempts)

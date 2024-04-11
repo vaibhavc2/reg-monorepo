@@ -134,6 +134,20 @@
       "when": 1712577620526,
       "tag": "0018_productive_kid_colt",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "5",
+      "when": 1712856363712,
+      "tag": "0019_melted_chronomancer",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "5",
+      "when": 1712856663547,
+      "tag": "0020_outstanding_grandmaster",
+      "breakpoints": true
     }
   ]
 }
