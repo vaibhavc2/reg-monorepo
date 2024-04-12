@@ -1,1 +1,0 @@
-ALTER TABLE `user_credentials` MODIFY COLUMN `salt` varchar(256);

@@ -1,1 +1,0 @@
-ALTER TABLE `user_sessions` ADD `updated_at` timestamp(6) DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6) NOT NULL;
