@@ -2,6 +2,7 @@ import { database } from '@/db';
 import { emailCredentials, users, verifications } from '@reg/db';
 import { eq } from 'drizzle-orm';
 import { MySqlRawQueryResult } from 'drizzle-orm/mysql2';
+import { pwd } from './password.service';
 
 export class UserService {
   private readonly details: {
@@ -43,10 +44,12 @@ export class UserService {
 
     if (!usersTable || usersTable[0].affectedRows !== 1) return null;
 
+    const _password = (await pwd.hash(password as string)) as string;
+
     const emailTable = await database.db?.insert(emailCredentials).values({
       user: usersTable[0].insertId as number,
       email,
-      password,
+      password: _password,
     });
 
     if (!emailTable || emailTable[0].affectedRows === 0) {
@@ -88,11 +91,13 @@ export class UserService {
 
       if (!usersTable || usersTable[0].affectedRows !== 1) return null;
 
+      const _password = (await pwd.hash(password as string)) as string;
+
       // create a new user credential
       emailTable = await database.db?.insert(emailCredentials).values({
         user: usersTable[0].insertId as number,
         email,
-        password,
+        password: _password,
         googleAuth: this.googleAuth,
       });
 

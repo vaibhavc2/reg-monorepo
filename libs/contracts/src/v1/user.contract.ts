@@ -223,7 +223,13 @@ const UserContract = contract.router(
       method: 'PUT',
       path: '/update/name',
       responses: {
-        200: ResponseType,
+        200: contract.type<{
+          status: number;
+          data: {
+            user: z.infer<typeof insertSchema.users>;
+          };
+          message: string;
+        }>(),
         400: ResponseType,
         401: ResponseType,
         500: ResponseType,
@@ -232,6 +238,27 @@ const UserContract = contract.router(
         fullName: string;
       }>(),
       summary: 'Update name of the user.',
+    },
+    'update-password': {
+      method: 'PUT',
+      path: '/update/password',
+      responses: {
+        200: contract.type<{
+          status: number;
+          data: {
+            userId: number;
+          };
+          message: string;
+        }>(),
+        400: ResponseType,
+        401: ResponseType,
+        500: ResponseType,
+      },
+      body: contract.type<{
+        password: string;
+        oldPassword: string;
+      }>(),
+      summary: 'Update password of the user.',
     },
     'generate-invitation-link': {
       method: 'POST',

@@ -1,4 +1,4 @@
-import { printErrorMessage } from '@/utils';
+import { ApiError, printErrorMessage } from '@/utils';
 import * as argon2 from 'argon2';
 
 class passwordService {
@@ -6,6 +6,7 @@ class passwordService {
 
   constructor() {
     // this.secret = Buffer.from(env.SECRET_KEY);
+    // secret key is not required for argon2, rather it decreases the security!
   }
 
   public hash = async (password: string) => {
@@ -16,6 +17,7 @@ class passwordService {
       })
       .catch((error) => {
         printErrorMessage(error, 'passwordService: hash()');
+        throw new ApiError(500);
       });
   };
 
@@ -27,6 +29,7 @@ class passwordService {
       })
       .catch((error) => {
         printErrorMessage(error, 'passwordService: verify()');
+        throw new ApiError(500);
       });
   };
 }

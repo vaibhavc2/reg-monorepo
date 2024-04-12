@@ -67,6 +67,13 @@ const userRouter = ct.s.router(contracts.v1.UserContract, {
     ],
     handler: handlers.v1.users.updateNameHandler,
   },
+  'update-password': {
+    middleware: [
+      middlewares.auth.user,
+      middlewares.validation.zod(validator.zod.password),
+    ],
+    handler: handlers.v1.users.updatePasswordHandler,
+  },
   'generate-invitation-link': {
     middleware: [
       middlewares.auth.user,
