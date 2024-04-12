@@ -7,15 +7,62 @@ interface Token {
   expiresIn: string;
 }
 
-type VerificationParams =
+type UserEmailParams =
+  | { userId?: number; email?: string }
   | { userId: number; email?: never }
   | { userId?: never; email: string }
   | { userId: number; email: string };
 
 type PhoneEmailParams =
+  | { email?: string; phone?: string }
   | { email: string; phone?: never }
   | { email?: never; phone: string }
   | { email: string; phone: string };
+
+type UserPhoneParams =
+  | { userId?: number; phone?: string }
+  | { userId: number; phone?: never }
+  | { userId?: never; phone: string }
+  | { userId: number; phone: string };
+
+type VerificationParams =
+  | {
+      userId?: number;
+      email?: string;
+      phone?: string;
+    }
+  | {
+      userId: number;
+      email?: string;
+      phone?: string;
+    }
+  | {
+      userId: number;
+      email: string;
+      phone?: never;
+    }
+  | {
+      userId: number;
+      email?: never;
+      phone: string;
+    }
+  | {
+      userId?: never;
+      email: string;
+      phone: string;
+    }
+  | {
+      userId?: never;
+      email: string;
+      phone?: never;
+    }
+  | ({
+      userId: number;
+      email: string;
+      phone: string;
+    } & PhoneEmailParams &
+      UserEmailParams &
+      UserPhoneParams);
 
 class JWTService {
   private readonly accessToken: Token;
@@ -42,7 +89,7 @@ class JWTService {
     };
   }
 
-  errorCallback = (err: unknown, payload: any) => {
+  private errorCallback = (err: unknown, payload: any) => {
     if (err) {
       throw new ApiError(401, 'Invalid Token or Token Expired!');
     }
@@ -87,11 +134,16 @@ class JWTService {
     return { accessToken, refreshToken };
   };
 
-  generateVerificationToken = ({ userId, email }: VerificationParams) => {
+  generateVerificationToken = ({
+    userId,
+    email,
+    phone,
+  }: VerificationParams) => {
     const verificationToken = jt.sign(
       {
         id: userId,
         email,
+        phone,
       },
       this.verificationToken.secret,
       {
@@ -138,7 +190,7 @@ class JWTService {
       token,
       this.verificationToken.secret,
       this.errorCallback,
-    ) as unknown as { id?: number; email?: string } | null;
+    ) as unknown as { id?: number; email?: string; phone?: string } | null;
   };
 
   verifySecurityToken: (token: string) => { id: number } | null = (
@@ -151,6 +203,15 @@ class JWTService {
     ) as unknown as {
       id: number;
     } | null;
+  };
+
+  disableToken = (token: string) => {
+    return jt.verify(token, this.accessToken.secret, (err, payload) => {
+      if (err) {
+        throw new ApiError(401, 'Invalid Token or Token Expired!');
+      }
+      return payload;
+    });
   };
 }
 

@@ -10,7 +10,7 @@ class Names {
   private config: Config;
   constructor() {
     this.config = {
-      dictionaries: [adjectives, starWars, colors],
+      dictionaries: [adjectives, colors, starWars],
       length: 2,
       separator: ' ',
     };
@@ -20,7 +20,7 @@ class Names {
     return email.split('@')[0];
   }
 
-  public generateUniqueName(): string {
+  public generateRandomName(): string {
     return uniqueNamesGenerator(this.config);
   }
 }

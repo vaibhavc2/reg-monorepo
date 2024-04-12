@@ -53,7 +53,7 @@ export const registerWithPhoneHandler: RegisterWithPhoneHandler = async ({
     return apiResponse.error(403, 'Verify phone first!');
   }
 
-  const fullName = names.generateUniqueName();
+  const fullName = names.generateRandomName();
 
   // insert the user
   const userResponse = await database.db?.insert(users).values({ fullName });

@@ -37,31 +37,19 @@ const userRouter = ct.s.router(contracts.v1.UserContract, {
   },
   validate: handlers.v1.users.validateHandler,
   'verify-email': {
-    middleware: [
-      middlewares.auth.user,
-      middlewares.validation.zod(validator.zod.email),
-    ],
+    middleware: [middlewares.validation.zod(validator.zod.email)],
     handler: handlers.v1.users.verifyEmailHandler,
   },
   'send-verification-email': {
-    middleware: [
-      middlewares.auth.user,
-      middlewares.validation.zod(validator.zod.email),
-    ],
+    middleware: [middlewares.validation.zod(validator.zod.email)],
     handler: handlers.v1.users.sendVerificationEmailHandler,
   },
   'send-otp-to-phone': {
-    middleware: [
-      middlewares.auth.user,
-      middlewares.validation.zod(validator.zod.phone),
-    ],
+    middleware: [middlewares.validation.zod(validator.zod.phone)],
     handler: handlers.v1.users.sendOTPToPhoneHandler,
   },
   'verify-phone-otp': {
-    middleware: [
-      middlewares.auth.user,
-      middlewares.validation.zod(validator.zod.phone),
-    ],
+    middleware: [middlewares.validation.zod(validator.zod.phone)],
     handler: handlers.v1.users.verifyPhoneOTPHandler,
   },
   'get-user-details': {
@@ -79,6 +67,16 @@ const userRouter = ct.s.router(contracts.v1.UserContract, {
     ],
     handler: handlers.v1.users.updateNameHandler,
   },
+  'generate-invitation-link': {
+    middleware: [
+      middlewares.auth.user,
+      middlewares.validation.zod(validator.zod.role),
+      middlewares.validation.zod(validator.zod.fullName),
+      middlewares.validation.zod(validator.zod.phone),
+    ],
+    handler: handlers.v1.users.generateInvitationLinkHandler,
+  },
+  'verify-invitation-link': handlers.v1.users.verifyInvitationLinkHandler,
 });
 
 export default userRouter;

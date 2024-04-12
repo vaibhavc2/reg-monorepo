@@ -28,7 +28,7 @@ const ct = {
     warning: chalk.bold.yellow,
     highlight: chalk.bold.blue,
   },
-  base_url: `${env.isDev ? 'http' : 'https'}://${env.HOST}:${env.isDev ? env.PORT : ''}`,
+  base_url: `${env.isDev ? 'http' : 'https'}://${env.HOST}${env.isDev ? ':' + env.PORT : ''}`,
   oauth: {
     google: {
       url: 'https://www.googleapis.com/oauth2/v1/userinfo',

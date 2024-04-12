@@ -233,6 +233,50 @@ const UserContract = contract.router(
       }>(),
       summary: 'Update name of the user.',
     },
+    'generate-invitation-link': {
+      method: 'POST',
+      path: '/generate-invitation-link',
+      responses: {
+        200: contract.type<{
+          status: number;
+          data: {
+            user: z.infer<typeof insertSchema.users>;
+            invitationLink: string;
+          };
+          message: string;
+        }>(),
+        400: ResponseType,
+        401: ResponseType,
+        403: ResponseType,
+        500: ResponseType,
+      },
+      body: contract.type<{
+        fullName: string;
+        phone: string;
+        role: 'admin' | 'moderator' | 'user';
+      }>(),
+      summary: 'Generate invitation link to invite a user.',
+    },
+    'verify-invitation-link': {
+      method: 'POST',
+      path: '/verify/invitation-link/',
+      query: contract.type<{
+        token: string;
+      }>(),
+      responses: {
+        200: contract.type<{
+          status: number;
+          data: Data;
+          message: string;
+        }>(),
+        400: ResponseType,
+        401: ResponseType,
+        403: ResponseType,
+        500: ResponseType,
+      },
+      body: contract.type<{}>(),
+      summary: 'Verify invitation link to invite a user.',
+    },
   },
   {
     strictStatusCodes: true,

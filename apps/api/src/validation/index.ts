@@ -7,6 +7,7 @@ class Validation {
     email: z.ZodObject<any, any, any>;
     phone: z.ZodObject<any, any, any>;
     password: z.ZodObject<any, any, any>;
+    role: z.ZodObject<any, any, any>;
   };
 
   constructor() {
@@ -15,6 +16,7 @@ class Validation {
       email: this.email,
       phone: this.phone,
       password: this.password,
+      role: this.role,
     };
   }
 
@@ -59,6 +61,18 @@ class Validation {
         .max(20, { message: largeStringError('Phone Number', 20) })
         .regex(/^\+91\d{10}$/, {
           message: 'Invalid Phone Number! Must be in the format: +91XXXXXXXXXX',
+        }),
+    }),
+  });
+
+  private role = z.object({
+    body: z.object({
+      role: z
+        .string({ required_error: requiredError('Role') })
+        .min(4, { message: minStringError('Role', 4) })
+        .max(9, { message: largeStringError('Role', 9) })
+        .regex(/^(admin|moderator|user)$/, {
+          message: 'Invalid Role! Must be one of: admin, moderator, user',
         }),
     }),
   });

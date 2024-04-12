@@ -51,7 +51,7 @@ export const registerWithEmailHandler: RegisterWithEmailHandler = async ({
     return apiResponse.error(403, 'Verify email first!');
   }
 
-  const fullName = names.generateUniqueName();
+  const fullName = names.generateRandomName();
 
   // insert the user
   const userService = new UserService({ fullName, email, password });

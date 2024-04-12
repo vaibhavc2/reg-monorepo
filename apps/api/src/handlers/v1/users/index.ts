@@ -1,3 +1,4 @@
+import { generateInvitationLinkHandler } from './generate-invitation-link.handler';
 import { getUserDetailsHandler } from './get-user-details.handler';
 import { getUserSessionsHandler } from './get-user-sessions.handler';
 import { googleOAuthHandler } from './google-oauth.handler';
@@ -10,6 +11,7 @@ import { sendVerificationEmailHandler } from './send-verification-email.handler'
 import { updateNameHandler } from './update-name.handler';
 import { validateHandler } from './validate.handler';
 import { verifyEmailHandler } from './verify-email.handler';
+import { verifyInvitationLinkHandler } from './verify-invitation-link.handler';
 import { verifyPhoneOTPHandler } from './verify-phone-otp.handler';
 
 export const usersHandlers = {
@@ -26,4 +28,6 @@ export const usersHandlers = {
   verifyPhoneOTPHandler,
   updateNameHandler,
   getUserSessionsHandler,
+  generateInvitationLinkHandler,
+  verifyInvitationLinkHandler,
 };
