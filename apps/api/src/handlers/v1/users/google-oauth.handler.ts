@@ -1,8 +1,8 @@
 import ct from '@/constants';
 import { database } from '@/db';
-import { UserService, apiResponse, google, jwt } from '@/services';
+import { apiResponse, google, jwt } from '@/services';
 import { contracts } from '@reg/contracts';
-import { userSessions, users } from '@reg/db';
+import { emailCredentials, userSessions, users, verifications } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
@@ -30,59 +30,88 @@ export const googleOAuthHandler: GoogleOAuthHandler = async ({
     return apiResponse.error(400, 'Invalid user!');
   }
 
-  const { email, name, picture } = userInfo;
+  const { email, name: fullName, picture: avatar } = userInfo;
 
-  // use user service to upsert the user
-  const userService = new UserService(
-    {
-      fullName: name,
-      email,
-      avatar: picture,
-    },
-    true,
-  );
+  const { user, tokens } =
+    (await database.db?.transaction(async (tx) => {
+      if (!email) return null;
 
-  // upsert the user
-  const upsertedUser = await userService.upsertGoogleUser();
+      // check if the user is already registered
+      const existingUser = (
+        await tx
+          .select()
+          .from(emailCredentials)
+          .where(eq(emailCredentials.email, email))
+      )?.[0];
 
-  // verify the upsreted user
-  if (!upsertedUser) {
-    return apiResponse.serverError();
-  }
+      let userId: number | null = null;
 
-  const { userId } = upsertedUser;
+      if (!existingUser) {
+        // insert the user
+        const userResult = (
+          await tx.insert(users).values({
+            fullName,
+            avatar,
+          })
+        )?.[0];
 
-  // create tokens
-  const tokens = jwt.generateAuthTokens(userId, { email });
+        // insert the email credentials
+        await tx.insert(emailCredentials).values({
+          user: userResult.insertId as number,
+          email,
+          googleAuth: true,
+        });
 
-  // insert the refresh token, and save the session
-  await database.db?.insert(userSessions).values({
-    user: userId,
-    token: tokens?.refreshToken as string,
-    authType: 'google',
-    userAgent: headers['user-agent'] ? (headers['user-agent'] as string) : null,
-  });
+        // save verification record of the user
+        await tx.insert(verifications).values({
+          user: userResult.insertId as number,
+          emailVerified: true,
+        });
 
-  // get the user and email credential to send as data in the response
-  const user = await database.db
-    ?.select()
-    .from(users)
-    .where(eq(users.id, userId));
+        userId = userResult.insertId as number;
+      } else {
+        // update the user
+        await tx
+          .update(users)
+          .set({ fullName, avatar })
+          .where(eq(users.id, existingUser.user));
 
-  // check if the user is present
-  if (!user || user.length === 0) {
-    return apiResponse.serverError();
-  }
+        userId = existingUser.user;
+      }
+
+      // create tokens
+      const tokens = jwt.generateAuthTokens(userId, { email });
+
+      // insert the refresh token, and save the session
+      await database.db?.insert(userSessions).values({
+        user: userId,
+        token: tokens?.refreshToken as string,
+        authType: 'google',
+        userAgent: headers['user-agent']
+          ? (headers['user-agent'] as string)
+          : null,
+      });
+
+      // get the user and email credential to send as data in the response
+      const user = (
+        await database.db?.select().from(users).where(eq(users.id, userId))
+      )?.[0];
+
+      return {
+        user,
+        tokens,
+      };
+    }, ct.dbTransactionConfig)) ?? {};
 
   // set the cookies
   res
-    .cookie('refreshToken', tokens.refreshToken, ct.cookieOptions.auth)
-    .cookie('accessToken', tokens.accessToken, ct.cookieOptions.auth);
+    .cookie('refreshToken', tokens?.refreshToken, ct.cookieOptions.auth)
+    .cookie('accessToken', tokens?.accessToken, ct.cookieOptions.auth);
 
   // return success
   return apiResponse.res(200, 'User authenticated successfully!', {
     user: {
-      ...user[0],
+      ...user,
       email,
     },
   });

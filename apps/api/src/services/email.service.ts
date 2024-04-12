@@ -31,7 +31,7 @@ class EmailService {
       if (!response.error)
         log.info(`✅  Email sent to '${email}' successfully!`);
 
-      return response.error?.message ? false : true;
+      return response.error && !response.data ? false : true;
     } catch (error) {
       printErrorMessage(error, 'sendEmail()');
     }

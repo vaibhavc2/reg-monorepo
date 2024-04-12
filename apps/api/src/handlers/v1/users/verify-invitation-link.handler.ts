@@ -29,7 +29,7 @@ export const verifyInvitationLinkHandler: VerifyInvitationLinkHandler = async ({
   }
 
   // check if the user is already verified
-  const user = (
+  const existingUser = (
     await database.db
       ?.select()
       .from(users)
@@ -37,59 +37,59 @@ export const verifyInvitationLinkHandler: VerifyInvitationLinkHandler = async ({
   )?.[0];
 
   // check if the user is present
-  if (!user) {
+  if (!existingUser) {
     return apiResponse.error(400, 'Invalid Token!');
   }
 
   // check if the user is already verified
-  if (user.status === 'active') {
+  if (existingUser.status === 'active') {
     return apiResponse.error(400, 'User already verified!');
   }
 
-  // add the phone details
-  const phoneResponse = await database.db?.insert(phoneDetails).values({
-    user: id,
-    phone,
-  });
+  // start db transaction
+  const { user, tokens } =
+    (await database.db?.transaction(async (tx) => {
+      // add the phone details
+      await tx.insert(phoneDetails).values({
+        user: id,
+        phone,
+      });
 
-  // check if the phone was added
-  if (!phoneResponse?.[0]?.insertId) {
-    return apiResponse.error(500, 'Failed to verify invitation link!');
-  }
-  // update the user status to 'active'
-  const userResponse = await database.db
-    ?.update(users)
-    .set({
-      status: 'active',
-    })
-    .where(eq(users.id, Number(id)));
+      // update the user status to 'active'
+      await tx
+        .update(users)
+        .set({
+          status: 'active',
+        })
+        .where(eq(users.id, Number(id)));
 
-  // check if the user was updated
-  if (!userResponse?.[0]?.affectedRows || userResponse[0].affectedRows !== 1) {
-    // delete the phone credentials
-    await database.db?.delete(phoneDetails).where(eq(phoneDetails.user, id));
+      // generate the access token and refresh token
+      const tokens = jwt.generateAuthTokens(id, {
+        phone,
+      });
 
-    return apiResponse.error(500, 'Failed to verify invitation link!');
-  }
+      // insert the refresh token, and save the session
+      await tx.insert(userSessions).values({
+        user: id,
+        token: tokens?.refreshToken,
+        authType: 'phone',
+        userAgent: headers['user-agent']
+          ? (headers['user-agent'] as string)
+          : null,
+      });
 
-  // login the user
-  // gemerate the access token and refresh token
-  const { accessToken, refreshToken } = jwt.generateAuthTokens(id, {
-    phone,
-  });
+      const user = await tx.select().from(users).where(eq(users.id, id));
 
-  // insert the refresh token, and save the session
-  await database.db?.insert(userSessions).values({
-    user: id,
-    token: refreshToken,
-    authType: 'phone',
-    userAgent: headers['user-agent'] ? (headers['user-agent'] as string) : null,
-  });
+      return {
+        user,
+        tokens,
+      };
+    }, ct.dbTransactionConfig)) ?? {};
 
   // set the cookies
   res
-    .cookie('refreshToken', refreshToken, ct.cookieOptions.auth)
-    .cookie('accessToken', accessToken, ct.cookieOptions.auth);
+    .cookie('refreshToken', tokens?.refreshToken, ct.cookieOptions.auth)
+    .cookie('accessToken', tokens?.accessToken, ct.cookieOptions.auth);
 
   return apiResponse.res(
     200,
@@ -99,10 +99,7 @@ export const verifyInvitationLinkHandler: VerifyInvitationLinkHandler = async ({
         ...user,
         phone,
       },
-      tokens: {
-        accessToken,
-        refreshToken,
-      },
+      tokens,
     },
   );
 };

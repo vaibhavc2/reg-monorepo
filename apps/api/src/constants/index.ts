@@ -2,6 +2,7 @@ import env from '@/config';
 import { db_ct } from '@reg/db';
 import { initServer } from '@ts-rest/express';
 import chalk from 'chalk';
+import { MySqlTransactionConfig } from 'drizzle-orm/mysql-core';
 import * as path from 'path';
 
 const ct = {
@@ -53,6 +54,11 @@ const ct = {
     //   sameSite: 'Strict',
     // },
   },
+  dbTransactionConfig: {
+    isolationLevel: 'read committed', // 'read uncommitted', 'read committed', 'repeatable read', 'serializable'
+    accessMode: 'read write', // 'read only', 'read write'
+    withConsistentSnapshot: true, // true, false
+  } as MySqlTransactionConfig,
 };
 
 export default ct;

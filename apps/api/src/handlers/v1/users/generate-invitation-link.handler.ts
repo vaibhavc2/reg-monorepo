@@ -2,8 +2,10 @@ import ct from '@/constants';
 import { database } from '@/db';
 import { apiResponse, jwt, names } from '@/services';
 import { contracts } from '@reg/contracts';
-import { users } from '@reg/db';
+import { phoneDetails, users } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
+import { eq } from 'drizzle-orm';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
 type GenerateInvitationLink =
   (typeof contracts.v1.UserContract)['generate-invitation-link'];
@@ -27,6 +29,24 @@ export const generateInvitationLinkHandler: GenerateInvitationLinkHandler =
       return apiResponse.error(403, 'Forbidden!');
     } else if (user.role === 'moderator' && role === 'admin') {
       return apiResponse.error(403, 'Forbidden!');
+    }
+
+    // validate the phone number: only Indian numbers are allowed
+    // input phone number should be in the format: +91XXXXXXXXXX i.e. e164 format
+    if (!isValidPhoneNumber(phone, 'IN')) {
+      return apiResponse.error(400, 'Invalid phone number!');
+    }
+
+    // check if phone is already registered
+    const phoneRecord = (
+      await database.db
+        ?.select()
+        .from(phoneDetails)
+        .where(eq(phoneDetails.phone, phone))
+    )?.[0];
+
+    if (phoneRecord) {
+      return apiResponse.error(400, 'User with same Phone number exists!');
     }
 
     // insert a user for the invitation link to work

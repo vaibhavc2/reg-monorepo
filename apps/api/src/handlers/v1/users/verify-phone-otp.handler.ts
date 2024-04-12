@@ -81,89 +81,85 @@ export const verifyPhoneOTPHandler: VerifyPhoneOTPHandler = async ({
     }
 
     // get user phone
-    const creds = await database.db
-      ?.select({
-        phone: phoneDetails.phone,
-      })
-      .from(phoneDetails)
-      .where(eq(phoneDetails.user, user.id));
+    const creds = (
+      await database.db
+        ?.select({
+          phone: phoneDetails.phone,
+        })
+        .from(phoneDetails)
+        .where(eq(phoneDetails.user, user.id))
+    )?.[0];
 
     // check if phone is present
-    if (
-      !creds ||
-      creds.length === 0 ||
-      !creds[0].phone ||
-      creds[0].phone !== phone
-    ) {
+    if (!creds || !creds.phone || creds.phone !== phone) {
       return apiResponse.error(400, 'Invalid phone!');
     }
 
     // verify the otp
-    const response = await phoneService.verifyOTP(creds[0].phone, otp);
+    const response = await phoneService.verifyOTP(creds.phone, otp);
 
     // check if otp was verified
     if (response.status !== 'approved') {
       return apiResponse.serverError();
     }
 
-    // update the user's phone verification status
-    const result = await database.db
-      ?.update(verifications)
-      .set({
-        phoneVerified: true,
-      })
-      .where(eq(verifications.user, user.id));
+    const userId = user.id as number;
 
-    // check if the update was successful
-    if (!result || !result[0].affectedRows || result[0].affectedRows !== 1) {
-      return apiResponse.serverError();
-    }
+    // start db transaction
+    const { message, tokens } =
+      (await database.db?.transaction(async (tx) => {
+        // update the user's phone verification status
+        await tx
+          .update(verifications)
+          .set({
+            phoneVerified: true,
+          })
+          .where(eq(verifications.user, userId));
 
-    // check if the user wants to login
-    if (!login) {
-      // return success
-      return apiResponse.res(200, 'OTP verified successfully!');
-    }
+        // check if the user wants to login
+        if (!login) return { message: 'OTP verified successfully!' };
 
-    // login the user
-    // get the user phone
-    const phoneRes = await database.db
-      ?.select({
-        phone: phoneDetails.phone,
-      })
-      .from(phoneDetails)
-      .where(eq(phoneDetails.user, user.id));
+        // login the user
+        // get the user phone
+        const phoneRecord = (
+          await tx
+            .select({
+              phone: phoneDetails.phone,
+            })
+            .from(phoneDetails)
+            .where(eq(phoneDetails.user, userId))
+        )?.[0];
 
-    // check if the phone is present
-    if (!phoneRes || !phoneRes[0]) {
-      return apiResponse.error(400, 'Invalid user!');
-    }
+        // create tokens
+        const tokens = jwt.generateAuthTokens(userId, {
+          phone: phoneRecord?.phone,
+        });
 
-    // create tokens
-    const tokens = jwt.generateAuthTokens(user.id, {
-      phone: phoneRes[0]?.phone,
-    });
+        // insert the refresh token, and save the session
+        await tx.insert(userSessions).values({
+          user: userId,
+          token: tokens?.refreshToken as string,
+          authType: 'phone',
+          userAgent: headers['user-agent']
+            ? (headers['user-agent'] as string)
+            : null,
+        });
 
-    // insert the refresh token, and save the session
-    await database.db?.insert(userSessions).values({
-      user: user.id,
-      token: tokens?.refreshToken as string,
-      authType: 'phone',
-      userAgent: headers['user-agent']
-        ? (headers['user-agent'] as string)
-        : null,
-    });
+        return { tokens };
+      })) ?? {};
+
+    if (message) return apiResponse.res(200, message);
 
     // set the cookies
     res
-      .cookie('refreshToken', tokens.refreshToken, ct.cookieOptions.auth)
-      .cookie('accessToken', tokens.accessToken, ct.cookieOptions.auth);
+      .cookie('refreshToken', tokens?.refreshToken, ct.cookieOptions.auth)
+      .cookie('accessToken', tokens?.accessToken, ct.cookieOptions.auth);
 
     // return success
     return apiResponse.res(200, 'User logged in successfully!', {
       user: {
         ...user,
-        phone: phoneRes[0]?.phone,
+        phone,
       },
       tokens,
     });

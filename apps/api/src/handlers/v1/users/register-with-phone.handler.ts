@@ -29,78 +29,89 @@ export const registerWithPhoneHandler: RegisterWithPhoneHandler = async ({
   }
 
   // check if the user is already registered
-  const existingUser = await database.db
-    ?.select()
-    .from(phoneDetails)
-    .where(eq(phoneDetails.phone, phone));
+  const existingUser = (
+    await database.db
+      ?.select()
+      .from(phoneDetails)
+      .where(eq(phoneDetails.phone, phone))
+  )?.[0];
 
-  if (existingUser && existingUser.length > 0) {
+  if (existingUser) {
     return apiResponse.error(400, 'User already exists!');
   }
 
   // check if the phone is verified earlier
-  const phoneValidation = await database.db
-    ?.select()
-    .from(phoneValidations)
-    .where(eq(phoneValidations.phone, phone));
+  const phoneValidation = (
+    await database.db
+      ?.select()
+      .from(phoneValidations)
+      .where(eq(phoneValidations.phone, phone))
+  )?.[0];
 
   if (
     !phoneValidation ||
-    phoneValidation.length === 0 ||
-    !phoneValidation[0].verified ||
-    phoneValidation[0].disabled
+    !phoneValidation.verified ||
+    phoneValidation.disabled
   ) {
     return apiResponse.error(403, 'Verify phone first!');
   }
 
   const fullName = names.generateRandomName();
 
-  // insert the user
-  const userResponse = await database.db?.insert(users).values({ fullName });
+  //  db transaction
+  const { userId, tokens } =
+    (await database.db?.transaction(async (tx) => {
+      // insert the user
+      const user = (await database.db?.insert(users).values({ fullName }))?.[0];
 
-  // verify the inserted user
-  if (
-    !userResponse ||
-    userResponse[0].affectedRows ||
-    !userResponse[0].insertId
-  ) {
-    return apiResponse.serverError();
-  }
+      // create tokens
+      const tokens = jwt.generateAuthTokens(user?.insertId as number, {
+        phone,
+      });
 
-  const userId = userResponse[0].insertId;
+      // insert the phone details
+      await tx
+        .insert(phoneDetails)
+        .values({ user: user?.insertId as number, phone });
 
-  //? create tokens to login immediately after registration
-  // create tokens
-  const tokens = jwt.generateAuthTokens(userId, { phone });
+      // insert the refresh token, and save the session
+      await tx.insert(userSessions).values({
+        user: user?.insertId as number,
+        token: tokens?.refreshToken as string,
+        authType: 'phone',
+        userAgent: headers['user-agent']
+          ? (headers['user-agent'] as string)
+          : null,
+      });
 
-  // insert the refresh token, and save the session
-  await database.db?.insert(userSessions).values({
-    user: userId,
-    token: tokens?.refreshToken as string,
-    authType: 'phone',
-    userAgent: headers['user-agent'] ? (headers['user-agent'] as string) : null,
-  });
+      return {
+        userId: user?.insertId as number,
+        tokens,
+      };
+    })) ?? {};
 
   // get the user to send as data in the response
-  let user = await database.db
-    ?.select()
-    .from(users)
-    .where(eq(users.id, userId));
+  const user = (
+    await database.db
+      ?.select()
+      .from(users)
+      .where(eq(users.id, userId as number))
+  )?.[0];
 
   // check if the user is present
-  if (!user || user.length === 0) {
+  if (!user) {
     return apiResponse.serverError();
   }
 
   // set the cookies
   res
-    .cookie('refreshToken', tokens.refreshToken, ct.cookieOptions.auth)
-    .cookie('accessToken', tokens.accessToken, ct.cookieOptions.auth);
+    .cookie('refreshToken', tokens?.refreshToken, ct.cookieOptions.auth)
+    .cookie('accessToken', tokens?.accessToken, ct.cookieOptions.auth);
 
   // return success
   return apiResponse.res(201, 'User registered successfully!', {
     user: {
-      ...user[0],
+      ...user,
       phone,
     },
     tokens,

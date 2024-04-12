@@ -72,70 +72,72 @@ export const verifyEmailHandler: VerifyEmailHandler = async ({
       return apiResponse.error(401, 'Unauthorized!');
     }
 
+    const userId = user.id as number;
+
     // verify the token
     const { id } = jwt.verifyVerificationToken(token) ?? {};
 
     // verify the user id
-    if (id !== user.id) {
+    if (id !== userId) {
       return apiResponse.error(400, 'Invalid token!');
     }
 
-    // update the user's email verification status
-    const result = await database.db
-      ?.update(verifications)
-      .set({
-        emailVerified: true,
-      })
-      .where(eq(verifications.user, user.id));
+    // start db transaction
+    const { message, tokens, email } =
+      (await database.db?.transaction(async (tx) => {
+        // update the user's email verification status
+        await tx
+          .update(verifications)
+          .set({
+            emailVerified: true,
+          })
+          .where(eq(verifications.user, userId));
 
-    // check if the update was successful
-    if (!result || !result[0].affectedRows || result[0].affectedRows !== 1) {
-      return apiResponse.serverError();
-    }
+        // check if the user wants to login
+        if (login !== 'true') {
+          // return success
+          return { message: 'Success! Email verified!' };
+        }
 
-    // check if the user wants to login
-    if (login !== 'true') {
-      // return success
-      return apiResponse.res(200, 'Success! Email verified!');
-    }
+        // login the user
+        // get the user email
+        const creds = (
+          await tx
+            .select({
+              email: emailCredentials.email,
+            })
+            .from(emailCredentials)
+            .where(eq(emailCredentials.user, userId))
+        )?.[0];
 
-    // login the user
-    // get the user email
-    const creds = await database.db
-      ?.select({
-        email: emailCredentials.email,
-      })
-      .from(emailCredentials)
-      .where(eq(emailCredentials.user, user.id));
+        // create tokens
+        const tokens = jwt.generateAuthTokens(userId, { email: creds?.email });
 
-    // check if the email is present
-    if (!creds || !creds[0]) {
-      return apiResponse.error(400, 'Invalid user!');
-    }
+        // insert the refresh token, and save the session
+        await tx.insert(userSessions).values({
+          user: userId,
+          token: tokens?.refreshToken as string,
+          authType: 'email',
+          userAgent: headers['user-agent']
+            ? (headers['user-agent'] as string)
+            : null,
+        });
 
-    // create tokens
-    const tokens = jwt.generateAuthTokens(user.id, { email: creds[0]?.email });
+        return { tokens, email: creds?.email };
+      }, ct.dbTransactionConfig)) ?? {};
 
-    // insert the refresh token, and save the session
-    await database.db?.insert(userSessions).values({
-      user: user.id,
-      token: tokens?.refreshToken as string,
-      authType: 'email',
-      userAgent: headers['user-agent']
-        ? (headers['user-agent'] as string)
-        : null,
-    });
+    if (message) return apiResponse.res(200, message);
 
     // set the cookies
     res
-      .cookie('refreshToken', tokens.refreshToken, ct.cookieOptions.auth)
-      .cookie('accessToken', tokens.accessToken, ct.cookieOptions.auth);
+      .cookie('refreshToken', tokens?.refreshToken, ct.cookieOptions.auth)
+      .cookie('accessToken', tokens?.accessToken, ct.cookieOptions.auth);
 
     // return success
     return apiResponse.res(200, 'User logged in successfully!', {
       user: {
         ...user,
-        email: creds[0]?.email,
+        email,
       },
       tokens,
     });
