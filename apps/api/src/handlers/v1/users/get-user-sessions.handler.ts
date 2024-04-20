@@ -5,7 +5,7 @@ import { userSessions } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
-type GetUserSessions = (typeof contracts.v1.UserContract)['get-user-sessions'];
+type GetUserSessions = (typeof contracts.v1.UsersContract)['get-user-sessions'];
 type GetUserSessionsHandler = AppRouteImplementation<GetUserSessions>;
 
 export const getUserSessionsHandler: GetUserSessionsHandler = async ({
@@ -13,7 +13,7 @@ export const getUserSessionsHandler: GetUserSessionsHandler = async ({
   req: { user },
   // query: { current, page, limit }
 }) => {
-  if (!user || !user.id || !headers.authorization) {
+  if (!user || !headers.authorization) {
     return apiResponse.error(401, 'Unauthorized!');
   }
 

@@ -5,7 +5,7 @@ import { phoneDetails, phoneValidations } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
-type SendOTPToPhone = (typeof contracts.v1.UserContract)['send-otp-to-phone'];
+type SendOTPToPhone = (typeof contracts.v1.UsersContract)['send-otp-to-phone'];
 type SendOTPToPhoneHandler = AppRouteImplementation<SendOTPToPhone>;
 
 export const sendOTPToPhoneHandler: SendOTPToPhoneHandler = async ({
@@ -41,7 +41,7 @@ export const sendOTPToPhoneHandler: SendOTPToPhoneHandler = async ({
   } else {
     if (!login) {
       // check if the user is present
-      if (!user || !user.id) {
+      if (!user) {
         return apiResponse.error(401, 'Unauthorized!');
       }
 

@@ -8,7 +8,7 @@ import { eq } from 'drizzle-orm';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 
 type RegisterWithPhone =
-  (typeof contracts.v1.UserContract)['register-with-phone'];
+  (typeof contracts.v1.UsersContract)['register-with-phone'];
 type RegisterWithPhoneHandler = AppRouteImplementation<RegisterWithPhone>;
 
 export const registerWithPhoneHandler: RegisterWithPhoneHandler = async ({

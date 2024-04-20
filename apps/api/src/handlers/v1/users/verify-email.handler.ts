@@ -11,7 +11,7 @@ import {
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
-type VerifyEmail = (typeof contracts.v1.UserContract)['verify-email'];
+type VerifyEmail = (typeof contracts.v1.UsersContract)['verify-email'];
 type VerifyEmailHandler = AppRouteImplementation<VerifyEmail>;
 
 export const verifyEmailHandler: VerifyEmailHandler = async ({
@@ -68,7 +68,7 @@ export const verifyEmailHandler: VerifyEmailHandler = async ({
     return apiResponse.res(200, 'Email verified successfully!');
   } else {
     // check if the user is present
-    if (!user || !user.id) {
+    if (!user) {
       return apiResponse.error(401, 'Unauthorized!');
     }
 

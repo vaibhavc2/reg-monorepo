@@ -11,7 +11,7 @@ import {
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
-type VerifyPhoneOTP = (typeof contracts.v1.UserContract)['verify-phone-otp'];
+type VerifyPhoneOTP = (typeof contracts.v1.UsersContract)['verify-phone-otp'];
 type VerifyPhoneOTPHandler = AppRouteImplementation<VerifyPhoneOTP>;
 
 export const verifyPhoneOTPHandler: VerifyPhoneOTPHandler = async ({
@@ -76,7 +76,7 @@ export const verifyPhoneOTPHandler: VerifyPhoneOTPHandler = async ({
     return apiResponse.res(200, 'OTP verified successfully!');
   } else {
     // check if the user is present
-    if (!user || !user.id) {
+    if (!user) {
       return apiResponse.error(401, 'Unauthorized!');
     }
 

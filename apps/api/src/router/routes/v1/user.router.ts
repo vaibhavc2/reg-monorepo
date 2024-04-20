@@ -4,7 +4,7 @@ import middlewares from '@/middlewares';
 import { validator } from '@/validation';
 import { contracts } from '@reg/contracts';
 
-const userRouter = ct.s.router(contracts.v1.UserContract, {
+const userRouter = ct.s.router(contracts.v1.UsersContract, {
   'google-oauth': {
     handler: handlers.v1.users.googleOAuthHandler,
   },
@@ -32,7 +32,7 @@ const userRouter = ct.s.router(contracts.v1.UserContract, {
     handler: handlers.v1.users.registerWithPhoneHandler,
   },
   logout: {
-    middleware: [middlewares.auth.user],
+    middleware: [middlewares.auth.user()],
     handler: handlers.v1.users.logoutHandler,
   },
   validate: handlers.v1.users.validateHandler,
@@ -53,30 +53,30 @@ const userRouter = ct.s.router(contracts.v1.UserContract, {
     handler: handlers.v1.users.verifyPhoneOTPHandler,
   },
   'get-user-details': {
-    middleware: [middlewares.auth.user],
+    middleware: [middlewares.auth.user()],
     handler: handlers.v1.users.getUserDetailsHandler,
   },
   'get-user-sessions': {
-    middleware: [middlewares.auth.user],
+    middleware: [middlewares.auth.user()],
     handler: handlers.v1.users.getUserSessionsHandler,
   },
   'update-name': {
     middleware: [
-      middlewares.auth.user,
+      middlewares.auth.user(),
       middlewares.validation.zod(validator.zod.fullName),
     ],
     handler: handlers.v1.users.updateNameHandler,
   },
   'update-password': {
     middleware: [
-      middlewares.auth.user,
+      middlewares.auth.user(),
       middlewares.validation.zod(validator.zod.password),
     ],
     handler: handlers.v1.users.updatePasswordHandler,
   },
   'generate-invitation-link': {
     middleware: [
-      middlewares.auth.user,
+      middlewares.auth.user(),
       middlewares.validation.zod(validator.zod.role),
       middlewares.validation.zod(validator.zod.fullName),
       middlewares.validation.zod(validator.zod.phone),

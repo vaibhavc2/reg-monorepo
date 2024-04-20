@@ -6,3 +6,4 @@ export { jwt } from './jwt.service';
 export { names } from './names.service';
 export { pwd } from './password.service';
 export { phoneService } from './phone.service';
+export { queries } from './queries.service';

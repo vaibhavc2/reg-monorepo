@@ -4,6 +4,7 @@ import { users } from '../users/users.schema';
 import { persons } from './persons.schema';
 import { vehicles } from './vehicles.schema';
 
+// here, vehicleOwners means all the persons that bring a particular vehicle to the organization
 export const vehiclesOwners = mysqlTable(
   'vehicles_owners',
   {

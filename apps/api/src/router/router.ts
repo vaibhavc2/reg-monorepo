@@ -27,7 +27,7 @@ export class Router {
 
     // user router
     createExpressEndpoints(
-      contracts.v1.UserContract,
+      contracts.v1.UsersContract,
       routes.v1.userRouter,
       this.app,
     );

@@ -1,11 +1,11 @@
 import { database } from '@/db';
-import { apiResponse } from '@/services';
+import { apiResponse, queries } from '@/services';
 import { contracts } from '@reg/contracts';
 import { users } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
-type UpdateName = (typeof contracts.v1.UserContract)['update-name'];
+type UpdateName = (typeof contracts.v1.UsersContract)['update-name'];
 type UpdateNameHandler = AppRouteImplementation<UpdateName>;
 
 export const updateNameHandler: UpdateNameHandler = async ({
@@ -13,7 +13,7 @@ export const updateNameHandler: UpdateNameHandler = async ({
   body: { fullName },
 }) => {
   // check if user is present
-  if (!user || !user.id) {
+  if (!user) {
     return apiResponse.error(401, 'Unauthorized!');
   }
 
@@ -41,17 +41,14 @@ export const updateNameHandler: UpdateNameHandler = async ({
   }
 
   // get the updated user record
-  const updatedUser = await database.db
-    ?.select()
-    .from(users)
-    .where(eq(users.id, update[0].insertId));
+  const updatedUser = await queries.users.getUser(user.id);
 
   // check if updated user record was found
-  if (!updatedUser || !updatedUser[0]) {
+  if (!updatedUser) {
     return apiResponse.serverError();
   }
 
   return apiResponse.res(200, 'Name updated successfully!', {
-    user: updatedUser[0],
+    user: updatedUser,
   });
 };

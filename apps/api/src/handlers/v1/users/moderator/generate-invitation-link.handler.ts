@@ -8,13 +8,13 @@ import { eq } from 'drizzle-orm';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 
 type GenerateInvitationLink =
-  (typeof contracts.v1.UserContract)['generate-invitation-link'];
+  (typeof contracts.v1.UsersContract)['generate-invitation-link'];
 type GenerateInvitationLinkHandler =
   AppRouteImplementation<GenerateInvitationLink>;
 
 export const generateInvitationLinkHandler: GenerateInvitationLinkHandler =
   async ({ req: { user }, body: { fullName, phone, role } }) => {
-    if (!user || !user.id) {
+    if (!user) {
       return apiResponse.error(401, 'Unauthorized!');
     }
 
@@ -24,10 +24,11 @@ export const generateInvitationLinkHandler: GenerateInvitationLinkHandler =
     }
 
     // check user.role to validate if the user is an admin or moderator
-    // user can only generate invitation link for a user, moderator can generate invitation link for a user or a moderator and admin can generate invitation link for a user, moderator or an admin
-    if (user.role === 'user' && role !== 'user') {
-      return apiResponse.error(403, 'Forbidden!');
-    } else if (user.role === 'moderator' && role === 'admin') {
+    // a moderator can generate invitation link for a user or a moderator and admin can generate invitation link for a user, moderator or an admin
+    if (
+      user.role === 'user' ||
+      (user.role === 'moderator' && role === 'admin')
+    ) {
       return apiResponse.error(403, 'Forbidden!');
     }
 
@@ -52,27 +53,32 @@ export const generateInvitationLinkHandler: GenerateInvitationLinkHandler =
     // insert a user for the invitation link to work
     // user can be inserted with the role provided in the params
     // user can be inserted with the status as 'pending'
-    const userResponse = await database.db?.insert(users).values({
-      fullName: fullName || names.generateRandomName(),
-      role,
-      status: 'pending',
-    });
+    const newUser = (
+      await database.db?.insert(users).values({
+        fullName: fullName || names.generateRandomName(),
+        role,
+        status: 'pending',
+      })
+    )?.[0];
 
-    if (!userResponse?.[0]?.insertId) {
+    if (!newUser?.insertId) {
       return apiResponse.error(500, 'Failed to generate invitation link!');
     }
 
     // generate verification token
     const token = jwt.generateVerificationToken({
-      userId: userResponse[0].insertId,
+      userId: newUser.insertId,
       phone,
     });
 
     // generate the invitation link
-    const invitationLink = `${ct.base_url}${contracts.v1.UserContract['verify-invitation-link'].path}/${role}/?token=${token}`;
+    const invitationLink = `${ct.base_url}${contracts.v1.UsersContract['verify-invitation-link'].path}/${role}/?token=${token}`;
 
     return apiResponse.res(200, 'Invitation link generated successfully!', {
-      user: userResponse[0],
+      user: {
+        ...newUser,
+        phone,
+      },
       invitationLink,
     });
   };

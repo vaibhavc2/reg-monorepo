@@ -6,7 +6,7 @@ import { emailCredentials, users } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
-type UpdatePassword = (typeof contracts.v1.UserContract)['update-password'];
+type UpdatePassword = (typeof contracts.v1.UsersContract)['update-password'];
 type UpdatePasswordHandler = AppRouteImplementation<UpdatePassword>;
 
 export const updatePasswordHandler: UpdatePasswordHandler = async ({
@@ -14,7 +14,7 @@ export const updatePasswordHandler: UpdatePasswordHandler = async ({
   body: { password, oldPassword },
 }) => {
   // check if user is present
-  if (!user || !user.id) {
+  if (!user) {
     return apiResponse.error(401, 'Unauthorized!');
   }
 

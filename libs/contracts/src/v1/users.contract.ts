@@ -1,6 +1,5 @@
-import { insertSchema } from '@reg/db';
+import { SelectUser, SelectUserSession } from '@reg/db';
 import { UserData } from '@reg/types';
-import * as z from 'zod';
 import { contract } from '../../contract';
 import { apiVersionPrefix } from '../../utils';
 
@@ -17,7 +16,15 @@ interface Data {
   };
 }
 
-const UserContract = contract.router(
+type DataWithoutPhone = {
+  user: Omit<UserData, 'phone'>;
+  tokens: {
+    accessToken: string;
+    refreshToken: string;
+  };
+};
+
+const UsersContract = contract.router(
   {
     'register-with-email': {
       method: 'POST',
@@ -42,9 +49,13 @@ const UserContract = contract.router(
       method: 'POST',
       path: '/auth/login/email',
       responses: {
+        401: ResponseType,
         400: ResponseType,
-        200: ResponseType,
-        500: ResponseType,
+        200: contract.type<{
+          status: number;
+          data: DataWithoutPhone;
+          message: string;
+        }>(),
       },
       body: contract.type<{
         email: string;
@@ -211,7 +222,7 @@ const UserContract = contract.router(
         200: contract.type<{
           status: number;
           data: {
-            sessions: z.infer<typeof insertSchema.userSessions>[];
+            sessions: SelectUserSession;
           };
           message: string;
         }>(),
@@ -226,7 +237,7 @@ const UserContract = contract.router(
         200: contract.type<{
           status: number;
           data: {
-            user: z.infer<typeof insertSchema.users>;
+            user: SelectUser;
           };
           message: string;
         }>(),
@@ -267,7 +278,7 @@ const UserContract = contract.router(
         200: contract.type<{
           status: number;
           data: {
-            user: z.infer<typeof insertSchema.users>;
+            user: UserData;
             invitationLink: string;
           };
           message: string;
@@ -286,7 +297,7 @@ const UserContract = contract.router(
     },
     'verify-invitation-link': {
       method: 'POST',
-      path: '/verify/invitation-link/',
+      path: '/verify/invitation-link',
       query: contract.type<{
         token: string;
       }>(),
@@ -315,4 +326,4 @@ const UserContract = contract.router(
   },
 );
 
-export default UserContract;
+export default UsersContract;

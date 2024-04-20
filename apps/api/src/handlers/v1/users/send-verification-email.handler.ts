@@ -6,7 +6,7 @@ import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
 type SendVerificationEmail =
-  (typeof contracts.v1.UserContract)['send-verification-email'];
+  (typeof contracts.v1.UsersContract)['send-verification-email'];
 type SendVerificationEmailHandler =
   AppRouteImplementation<SendVerificationEmail>;
 
@@ -37,7 +37,7 @@ export const sendVerificationEmailHandler: SendVerificationEmailHandler =
     } else {
       if (!login) {
         // check if the user is present
-        if (!user || !user.id) {
+        if (!user) {
           return apiResponse.error(401, 'Unauthorized!');
         }
 

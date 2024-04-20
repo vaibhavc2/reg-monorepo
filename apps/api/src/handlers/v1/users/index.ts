@@ -1,9 +1,9 @@
-import { generateInvitationLinkHandler } from './generate-invitation-link.handler';
 import { getUserDetailsHandler } from './get-user-details.handler';
 import { getUserSessionsHandler } from './get-user-sessions.handler';
 import { googleOAuthHandler } from './google-oauth.handler';
 import { loginWithEmailHandler } from './login-with-email.handler';
 import { logoutHandler } from './logout.handler';
+import { generateInvitationLinkHandler } from './moderator/generate-invitation-link.handler';
 import { registerWithEmailHandler } from './register-with-email.handler';
 import { registerWithPhoneHandler } from './register-with-phone.handler';
 import { sendOTPToPhoneHandler } from './send-otp-to-phone.handler';

@@ -40,23 +40,23 @@
   "author": "Vaibhav Chopra",
   "license": "ISC",
   "devDependencies": {
-    "@commitlint/cli": "^19.0.2",
-    "@commitlint/config-conventional": "^19.0.0",
+    "@commitlint/cli": "^19.2.2",
+    "@commitlint/config-conventional": "^19.2.2",
     "@nx/eslint": "18.0.5",
     "@nx/next": "18.0.5",
     "commitizen": "^4.3.0",
     "drizzle-kit": "^0.20.14",
     "eslint": "~8.48.0",
-    "husky": "^8.0.0",
+    "husky": "^8.0.3",
     "lint-staged": "^15.2.2",
     "nx": "18.0.5",
     "prettier": "^3.2.5",
-    "typescript": "^5"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
-    "drizzle-orm": "^0.30.2",
+    "drizzle-orm": "^0.30.8",
     "drizzle-zod": "^0.5.1",
-    "mysql2": "^3.9.2",
+    "mysql2": "^3.9.4",
     "next": "14.0.4",
     "react": "18.2.0",
     "react-dom": "18.2.0"

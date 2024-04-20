@@ -1,12 +1,11 @@
 import ct from '@/constants';
 import { database } from '@/db';
-import { apiResponse, jwt } from '@/services';
+import { apiResponse, jwt, pwd, queries } from '@/services';
 import { contracts } from '@reg/contracts';
-import { emailCredentials, userSessions, users } from '@reg/db';
+import { userSessions } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
-import { and, eq } from 'drizzle-orm';
 
-type LoginWithEmail = (typeof contracts.v1.UserContract)['login-with-email'];
+type LoginWithEmail = (typeof contracts.v1.UsersContract)['login-with-email'];
 type LoginWithEmailHandler = AppRouteImplementation<LoginWithEmail>;
 
 export const loginWithEmailHandler: LoginWithEmailHandler = async ({
@@ -21,37 +20,19 @@ export const loginWithEmailHandler: LoginWithEmailHandler = async ({
   }
 
   // verify the credentials
-  const creds = await database.db
-    ?.select()
-    .from(emailCredentials)
-    .where(
-      and(
-        eq(emailCredentials.email, email),
-        eq(emailCredentials.password, password),
-      ),
-    );
+  const user = await queries.users.getDetailsWithPassword(email, password);
 
-  if (!creds || !creds[0] || creds.length !== 1) {
-    return apiResponse.error(400, 'Invalid credentials!');
-  }
-
-  // get the user
-  const user = await database.db
-    ?.select()
-    .from(users)
-    .where(eq(users.id, creds[0].user));
-
-  // check if the user is present
-  if (!user || user.length === 0) {
-    return apiResponse.serverError();
+  // check if user is present and password is correct
+  if (!user || !(await pwd.verify(user.password as string, password))) {
+    return apiResponse.error(401, 'Invalid email or password!');
   }
 
   // create tokens
-  const tokens = jwt.generateAuthTokens(user[0].id, { email });
+  const tokens = jwt.generateAuthTokens(user.id, { email: user.email });
 
   // insert the refresh token, and save the session
   await database.db?.insert(userSessions).values({
-    user: user[0].id,
+    user: user.id,
     token: tokens?.refreshToken as string,
     authType: 'email',
     userAgent: headers['user-agent'] ? (headers['user-agent'] as string) : null,
@@ -62,11 +43,13 @@ export const loginWithEmailHandler: LoginWithEmailHandler = async ({
     .cookie('refreshToken', tokens.refreshToken, ct.cookieOptions.auth)
     .cookie('accessToken', tokens.accessToken, ct.cookieOptions.auth);
 
+  // remove the password from the user object
+  const { password: _, ...userWithoutPassword } = user;
+
   // return success
   return apiResponse.res(200, 'User logged in successfully!', {
     user: {
-      ...user[0],
-      email,
+      ...userWithoutPassword,
     },
     tokens,
   });

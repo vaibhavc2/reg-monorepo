@@ -5,7 +5,7 @@ import { userSessions } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
 import { and, eq } from 'drizzle-orm';
 
-type Logout = (typeof contracts.v1.UserContract)['logout'];
+type Logout = (typeof contracts.v1.UsersContract)['logout'];
 type LogoutHandler = AppRouteImplementation<Logout>;
 
 export const logoutHandler: LogoutHandler = async ({
@@ -16,7 +16,7 @@ export const logoutHandler: LogoutHandler = async ({
   res,
 }) => {
   // check if the user is present
-  if (!user || !user.id) {
+  if (!user) {
     return apiResponse.error(401, 'Unauthorized!');
   }
 

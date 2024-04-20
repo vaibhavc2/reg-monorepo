@@ -13,12 +13,12 @@
   "author": "Vaibhav Chopra",
   "license": "ISC",
   "devDependencies": {
-    "typescript": "^5"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "@reg/db": "workspace:^",
     "@reg/types": "workspace:^",
-    "@ts-rest/core": "^3.33.0",
+    "@ts-rest/core": "^3.44.0",
     "zod": "^3.22.4"
   }
 }

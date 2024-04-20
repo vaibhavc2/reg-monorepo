@@ -1,15 +1,12 @@
-import { database } from '@/db';
-import { apiResponse, jwt } from '@/services';
+import { apiResponse, jwt, queries } from '@/services';
 import { asyncHandler } from '@/utils';
-import { users } from '@reg/db';
-import { eq } from 'drizzle-orm';
 import { NextFunction, Request, Response } from 'express';
 
 export class Authentication {
   constructor() {}
 
-  public user = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+  public user = ({ verified }: { verified: boolean } = { verified: false }) =>
+    asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
       // this checks if user is authenticated
       // check if token exists
       const token: string | undefined =
@@ -25,13 +22,7 @@ export class Authentication {
       // if yes, verify token
       const { id } = jwt.verifyAccessToken(token) ?? {};
 
-      // find user in db using the decoded token
-      const user = await database.db
-        ?.select()
-        .from(users)
-        .where(eq(users.id, id as number));
-
-      if (!user || !user[0] || user.length !== 1) {
+      if (!id) {
         return res
           .status(401)
           .json(
@@ -39,17 +30,34 @@ export class Authentication {
           );
       }
 
+      // find user in db using the decoded token
+      const user = await queries.users.getDetails(id);
+
+      if (!user) {
+        return res
+          .status(401)
+          .json(
+            apiResponse.error(401, 'Invalid Access Token! Unauthorized!').body,
+          );
+      }
+
+      // check if user is verified
+      if (verified && user.status !== 'active') {
+        return res
+          .status(401)
+          .json(apiResponse.error(401, 'Unverified! Verify first!').body);
+      }
+
       // if user found, attach user to req object
-      req.user = user[0];
+      req.user = user;
 
       next();
-    },
-  );
+    });
 
   public admin = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
       // authenticate user
-      await this.user(req, res, next);
+      await this.user()(req, res, next);
 
       // check if user is admin
       if (req.user?.role !== 'admin') {
@@ -63,7 +71,7 @@ export class Authentication {
   public moderator = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
       // authenticate user
-      await this.user(req, res, next);
+      await this.user()(req, res, next);
 
       // check if user is moderator or admin
       if (req.user?.role !== 'moderator' && req.user?.role !== 'admin') {

@@ -1,15 +1,30 @@
-import { insertSchema } from '@reg/db';
-import * as z from 'zod';
+import {
+  type SelectEmailCredential,
+  type SelectPhoneDetail,
+  type SelectUser,
+} from '@reg/db';
 
-const user = insertSchema.users;
+type EmailDetail = Pick<SelectEmailCredential, 'email'>;
+type PhoneDetail = Pick<SelectPhoneDetail, 'phone'>;
+type PasswordDetail = Pick<SelectEmailCredential, 'password'>;
 
-// const userData = insertSchema.users.merge(
-//   insertSchema.emailCredentials.pick({ email: true }),
-// );
-const userData = insertSchema.users;
+// user data types
+export type UserData = SelectUser & EmailDetail & PhoneDetail;
+export type UserWithPhone = SelectUser & PhoneDetail;
+export type UserWithEmail = SelectUser & EmailDetail;
 
-export type User = z.infer<typeof user>;
-export type UserData = z.infer<typeof userData> & {
-  email?: string;
-  phone?: string;
+// query types
+export type QueryUserData = SelectUser & {
+  emailCredentials: EmailDetail;
+  phoneDetails: PhoneDetail;
 };
+export type QueryUserWithPhone = SelectUser & {
+  phoneDetails: PhoneDetail;
+};
+export type QueryUserWithEmail = SelectUser & {
+  emailCredentials: EmailDetail;
+};
+export type QueryUserWithPassword = EmailDetail &
+  PasswordDetail & {
+    user: SelectUser;
+  };

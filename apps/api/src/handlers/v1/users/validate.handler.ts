@@ -10,7 +10,7 @@ import {
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
-type Validate = (typeof contracts.v1.UserContract)['validate'];
+type Validate = (typeof contracts.v1.UsersContract)['validate'];
 type ValidateHandler = AppRouteImplementation<Validate>;
 
 // check if the email or phone is verified, not already registered, before proceeding to register
