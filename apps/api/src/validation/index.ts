@@ -3,6 +3,7 @@ import * as z from 'zod';
 
 class Validation {
   public readonly zod: {
+    userId: z.ZodObject<any, any, any>;
     fullName: z.ZodObject<any, any, any>;
     email: z.ZodObject<any, any, any>;
     phone: z.ZodObject<any, any, any>;
@@ -12,6 +13,7 @@ class Validation {
 
   constructor() {
     this.zod = {
+      userId: this.userId,
       fullName: this.fullName,
       email: this.email,
       phone: this.phone,
@@ -19,6 +21,14 @@ class Validation {
       role: this.role,
     };
   }
+
+  private userId = z.object({
+    body: z.object({
+      userId: z.number({ required_error: requiredError('User ID') }).int({
+        message: 'Invalid User ID! Must be a valid integer value',
+      }),
+    }),
+  });
 
   private fullName = z.object({
     body: z.object({

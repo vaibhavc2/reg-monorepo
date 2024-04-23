@@ -120,12 +120,16 @@ const UsersContract = contract.router(
     logout: {
       method: 'POST',
       path: '/auth/logout',
+      query: contract.type<{
+        all?: 'true' | 'false';
+      }>(),
       responses: {
         200: ResponseType,
-        400: ResponseType,
         401: ResponseType,
       },
-      body: contract.type<{}>(),
+      body: contract.type<{
+        sessionIds?: number[];
+      }>(),
       summary: 'Logout the current user.',
     },
     'verify-email': {
@@ -271,6 +275,27 @@ const UsersContract = contract.router(
       }>(),
       summary: 'Update password of the user.',
     },
+    'verify-invitation-link': {
+      method: 'POST',
+      path: '/verify/invitation-link',
+      query: contract.type<{
+        token: string;
+      }>(),
+      responses: {
+        200: contract.type<{
+          status: number;
+          data: Data;
+          message: string;
+        }>(),
+        400: ResponseType,
+        401: ResponseType,
+        403: ResponseType,
+        500: ResponseType,
+      },
+      body: contract.type<{}>(),
+      summary: 'Verify invitation link to invite a user.',
+    },
+    // !Protected routes: moderator
     'generate-invitation-link': {
       method: 'POST',
       path: '/generate-invitation-link',
@@ -295,16 +320,19 @@ const UsersContract = contract.router(
       }>(),
       summary: 'Generate invitation link to invite a user.',
     },
-    'verify-invitation-link': {
+    'grant-or-revoke-access': {
       method: 'POST',
-      path: '/verify/invitation-link',
+      path: '/access',
       query: contract.type<{
-        token: string;
+        grant?: 'true' | 'false';
+        revoke?: 'true' | 'false';
       }>(),
       responses: {
         200: contract.type<{
           status: number;
-          data: Data;
+          data: {
+            user: UserData;
+          };
           message: string;
         }>(),
         400: ResponseType,
@@ -312,8 +340,10 @@ const UsersContract = contract.router(
         403: ResponseType,
         500: ResponseType,
       },
-      body: contract.type<{}>(),
-      summary: 'Verify invitation link to invite a user.',
+      body: contract.type<{
+        userId: number;
+      }>(),
+      summary: 'Grant access to a user.',
     },
   },
   {

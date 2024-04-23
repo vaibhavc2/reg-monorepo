@@ -4,6 +4,7 @@ import { googleOAuthHandler } from './google-oauth.handler';
 import { loginWithEmailHandler } from './login-with-email.handler';
 import { logoutHandler } from './logout.handler';
 import { generateInvitationLinkHandler } from './moderator/generate-invitation-link.handler';
+import { grantOrRevokeAccessHandler } from './moderator/grant-or-revoke-access.handler';
 import { registerWithEmailHandler } from './register-with-email.handler';
 import { registerWithPhoneHandler } from './register-with-phone.handler';
 import { sendOTPToPhoneHandler } from './send-otp-to-phone.handler';
@@ -32,4 +33,5 @@ export const usersHandlers = {
   generateInvitationLinkHandler,
   verifyInvitationLinkHandler,
   updatePasswordHandler,
+  grantOrRevokeAccessHandler,
 };

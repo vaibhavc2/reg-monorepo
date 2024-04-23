@@ -72,13 +72,11 @@ export const verifyEmailHandler: VerifyEmailHandler = async ({
       return apiResponse.error(401, 'Unauthorized!');
     }
 
-    const userId = user.id as number;
-
     // verify the token
     const { id } = jwt.verifyVerificationToken(token) ?? {};
 
     // verify the user id
-    if (id !== userId) {
+    if (id !== user.id) {
       return apiResponse.error(400, 'Invalid token!');
     }
 
@@ -91,7 +89,7 @@ export const verifyEmailHandler: VerifyEmailHandler = async ({
           .set({
             emailVerified: true,
           })
-          .where(eq(verifications.user, userId));
+          .where(eq(verifications.user, user.id));
 
         // check if the user wants to login
         if (login !== 'true') {
@@ -107,15 +105,15 @@ export const verifyEmailHandler: VerifyEmailHandler = async ({
               email: emailCredentials.email,
             })
             .from(emailCredentials)
-            .where(eq(emailCredentials.user, userId))
+            .where(eq(emailCredentials.user, user.id))
         )?.[0];
 
         // create tokens
-        const tokens = jwt.generateAuthTokens(userId, { email: creds?.email });
+        const tokens = jwt.generateAuthTokens(user.id, { email: creds?.email });
 
         // insert the refresh token, and save the session
         await tx.insert(userSessions).values({
-          user: userId,
+          user: user.id,
           token: tokens?.refreshToken as string,
           authType: 'email',
           userAgent: headers['user-agent']

@@ -6,5 +6,6 @@ export const db_ct = {
   otpType: ['email', 'phone'] as IEnum,
   objective: ['reset', 'change', 'verify', 'security'] as IEnum,
   userStatus: ['active', 'pending', 'disabled'] as IEnum,
+  activityType: ['users', 'persons'] as IEnum,
   // deviceType: ['android', 'iphone', 'desktop', 'other'] as IEnum,
 };

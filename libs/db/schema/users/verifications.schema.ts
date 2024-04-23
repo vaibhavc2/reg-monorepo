@@ -17,7 +17,7 @@ export const verifications = mysqlTable(
       .references(() => users.id)
       .notNull()
       .unique(),
-    status: boolean('status').default(false).notNull(),
+    status: boolean('status').default(false).notNull(), // status: true means access granted
     emailVerified: boolean('email_verified').default(false).notNull(),
     phoneVerified: boolean('phone_verified').default(false).notNull(),
     verifiedBy: int('verified_by').references(() => users.id),

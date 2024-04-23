@@ -103,7 +103,7 @@ export const verifyPhoneOTPHandler: VerifyPhoneOTPHandler = async ({
       return apiResponse.serverError();
     }
 
-    const userId = user.id as number;
+    const userId = user.id;
 
     // start db transaction
     const { message, tokens } =

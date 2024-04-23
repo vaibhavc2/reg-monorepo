@@ -14,6 +14,7 @@ import {
   userSessions,
   userSettings,
   users,
+  usersActivities,
   usersHistory,
   vehicles,
   vehiclesOwners,
@@ -31,6 +32,7 @@ export const usersTableRelations = declareRelations(users, ({ one, many }) => ({
   usersHistory: many(usersHistory),
   displayNames: one(displayNames),
   activities: many(activities),
+  usersActivities: many(usersActivities),
   persons: many(persons),
   duties: many(duties),
   vehicles: many(vehicles),
@@ -77,5 +79,12 @@ export const dutiesTableRelations = declareRelations(
   duties,
   ({ one, many }) => ({
     personsDuties: many(personsDuties),
+  }),
+);
+
+export const activitiesTableRelations = declareRelations(
+  activities,
+  ({ one, many }) => ({
+    usersActivities: many(usersActivities),
   }),
 );

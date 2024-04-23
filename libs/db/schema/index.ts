@@ -17,6 +17,7 @@ import { phoneDetails } from './users/phone-details.schema';
 import { requests } from './users/requests.schema';
 import { userSessions } from './users/user-sessions.schema';
 import { userSettings } from './users/user-settings.schema';
+import { usersActivities } from './users/users-activities.schema';
 import { usersHistory } from './users/users-history.schema';
 import { users } from './users/users.schema';
 import { verifications } from './users/verifications.schema';
@@ -49,6 +50,7 @@ export const schema = {
   verifications,
   emailValidations,
   phoneValidations,
+  usersActivities,
 };
 
 // export schemas separately
@@ -69,6 +71,7 @@ export {
   userSessions,
   userSettings,
   users,
+  usersActivities,
   usersHistory,
   vehicles,
   vehiclesOwners,
@@ -89,10 +92,11 @@ export type { IVehicleOwner } from './persons/vehicles-owners.schema';
 export type { IVehicle } from './persons/vehicles.schema';
 export type { IDisplayName } from './users/display-names.schema';
 export type { IEmailCredential } from './users/email-credentials.schema';
-export type { IPhoneDetails } from './users/phone-details.schema';
+export type { IPhoneDetail } from './users/phone-details.schema';
 export type { IRequest } from './users/requests.schema';
 export type { IUserSession } from './users/user-sessions.schema';
 export type { IUserSetting } from './users/user-settings.schema';
+export type { IUserActivity } from './users/users-activities.schema';
 export type { IUserHistory } from './users/users-history.schema';
 export type { IUser } from './users/users.schema';
 export type { IVerification } from './users/verifications.schema';
@@ -122,6 +126,7 @@ export const insertSchema = {
   phoneDetails: createInsertSchema(phoneDetails),
   emailValidations: createInsertSchema(emailValidations),
   phoneValidations: createInsertSchema(phoneValidations),
+  usersActivities: createInsertSchema(usersActivities),
 };
 
 // Select schemas
@@ -147,18 +152,19 @@ export const selectSchema = {
   phoneDetails: createSelectSchema(phoneDetails),
   emailValidations: createSelectSchema(emailValidations),
   phoneValidations: createSelectSchema(phoneValidations),
+  usersActivities: createSelectSchema(usersActivities),
 };
 
 // insert types
 export type InsertActivity = InferInsertModel<typeof activities>;
 export type InsertDuty = InferInsertModel<typeof duties>;
-export type InsertPersonsDuty = InferInsertModel<typeof personsDuties>;
-export type InsertPersonsHistory = InferInsertModel<typeof personsHistory>;
-export type InsertPersonsRelation = InferInsertModel<typeof personsRelations>;
+export type InsertPersonDuty = InferInsertModel<typeof personsDuties>;
+export type InsertPersonHistory = InferInsertModel<typeof personsHistory>;
+export type InsertPersonRelation = InferInsertModel<typeof personsRelations>;
 export type InsertPerson = InferInsertModel<typeof persons>;
 export type InsertRelation = InferInsertModel<typeof relations>;
-export type InsertVehiclesType = InferInsertModel<typeof vehiclesTypes>;
-export type InsertVehiclesOwner = InferInsertModel<typeof vehiclesOwners>;
+export type InsertVehicleType = InferInsertModel<typeof vehiclesTypes>;
+export type InsertVehicleOwner = InferInsertModel<typeof vehiclesOwners>;
 export type InsertVehicle = InferInsertModel<typeof vehicles>;
 export type InsertDisplayName = InferInsertModel<typeof displayNames>;
 export type InsertEmailCredential = InferInsertModel<typeof emailCredentials>;
@@ -166,22 +172,23 @@ export type InsertPhoneDetail = InferInsertModel<typeof phoneDetails>;
 export type InsertRequest = InferInsertModel<typeof requests>;
 export type InsertUserSession = InferInsertModel<typeof userSessions>;
 export type InsertUserSetting = InferInsertModel<typeof userSettings>;
-export type InsertUsersHistory = InferInsertModel<typeof usersHistory>;
+export type InsertUserHistory = InferInsertModel<typeof usersHistory>;
 export type InsertUser = InferInsertModel<typeof users>;
 export type InsertVerification = InferInsertModel<typeof verifications>;
 export type InsertEmailValidation = InferInsertModel<typeof emailValidations>;
 export type InsertPhoneValidation = InferInsertModel<typeof phoneValidations>;
+export type InsertUserActivity = InferInsertModel<typeof usersActivities>;
 
 // select types
 export type SelectActivity = InferSelectModel<typeof activities>;
 export type SelectDuty = InferSelectModel<typeof duties>;
-export type SelectPersonsDuty = InferSelectModel<typeof personsDuties>;
-export type SelectPersonsHistory = InferSelectModel<typeof personsHistory>;
-export type SelectPersonsRelation = InferSelectModel<typeof personsRelations>;
+export type SelectPersonDuty = InferSelectModel<typeof personsDuties>;
+export type SelectPersonHistory = InferSelectModel<typeof personsHistory>;
+export type SelectPersonRelation = InferSelectModel<typeof personsRelations>;
 export type SelectPerson = InferSelectModel<typeof persons>;
 export type SelectRelation = InferSelectModel<typeof relations>;
-export type SelectVehiclesType = InferSelectModel<typeof vehiclesTypes>;
-export type SelectVehiclesOwner = InferSelectModel<typeof vehiclesOwners>;
+export type SelectVehicleType = InferSelectModel<typeof vehiclesTypes>;
+export type SelectVehicleOwner = InferSelectModel<typeof vehiclesOwners>;
 export type SelectVehicle = InferSelectModel<typeof vehicles>;
 export type SelectDisplayName = InferSelectModel<typeof displayNames>;
 export type SelectEmailCredential = InferSelectModel<typeof emailCredentials>;
@@ -189,8 +196,9 @@ export type SelectPhoneDetail = InferSelectModel<typeof phoneDetails>;
 export type SelectRequest = InferSelectModel<typeof requests>;
 export type SelectUserSession = InferSelectModel<typeof userSessions>;
 export type SelectUserSetting = InferSelectModel<typeof userSettings>;
-export type SelectUsersHistory = InferSelectModel<typeof usersHistory>;
+export type SelectUserHistory = InferSelectModel<typeof usersHistory>;
 export type SelectUser = InferSelectModel<typeof users>;
 export type SelectVerification = InferSelectModel<typeof verifications>;
 export type SelectEmailValidation = InferSelectModel<typeof emailValidations>;
 export type SelectPhoneValidation = InferSelectModel<typeof phoneValidations>;
+export type SelectUserActivity = InferSelectModel<typeof usersActivities>;

@@ -31,4 +31,4 @@ export const phoneDetails = mysqlTable(
   }),
 );
 
-export type IPhoneDetails = typeof phoneDetails;
+export type IPhoneDetail = typeof phoneDetails;

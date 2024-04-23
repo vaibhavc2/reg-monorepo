@@ -9,11 +9,11 @@ type GetUserSessions = (typeof contracts.v1.UsersContract)['get-user-sessions'];
 type GetUserSessionsHandler = AppRouteImplementation<GetUserSessions>;
 
 export const getUserSessionsHandler: GetUserSessionsHandler = async ({
-  headers,
-  req: { user },
+  headers: { 'user-agent': userAgent },
+  req: { user, token },
   // query: { current, page, limit }
 }) => {
-  if (!user || !headers.authorization) {
+  if (!user || !token) {
     return apiResponse.error(401, 'Unauthorized!');
   }
 
@@ -22,12 +22,9 @@ export const getUserSessionsHandler: GetUserSessionsHandler = async ({
     await database.db
       ?.select()
       .from(userSessions)
-      .where(eq(userSessions.user, user.id as number))
+      .where(eq(userSessions.user, user.id))
   )?.map((session) => {
-    if (
-      session.userAgent === headers['user-agent'] &&
-      session.token === headers.authorization
-    ) {
+    if (session.userAgent === userAgent && session.token === token) {
       return { ...session, current: true }; // mark the current session
     } else {
       return session;

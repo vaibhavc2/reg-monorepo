@@ -74,16 +74,24 @@ const userRouter = ct.s.router(contracts.v1.UsersContract, {
     ],
     handler: handlers.v1.users.updatePasswordHandler,
   },
+  'verify-invitation-link': handlers.v1.users.verifyInvitationLinkHandler,
+  //! moderator routes
   'generate-invitation-link': {
     middleware: [
-      middlewares.auth.user(),
+      middlewares.auth.moderator,
       middlewares.validation.zod(validator.zod.role),
       middlewares.validation.zod(validator.zod.fullName),
       middlewares.validation.zod(validator.zod.phone),
     ],
     handler: handlers.v1.users.generateInvitationLinkHandler,
   },
-  'verify-invitation-link': handlers.v1.users.verifyInvitationLinkHandler,
+  'grant-or-revoke-access': {
+    middleware: [
+      middlewares.auth.moderator,
+      middlewares.validation.zod(validator.zod.userId),
+    ],
+    handler: handlers.v1.users.grantOrRevokeAccessHandler,
+  },
 });
 
 export default userRouter;

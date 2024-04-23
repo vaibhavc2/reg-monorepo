@@ -3,21 +3,22 @@ import {
   boolean,
   index,
   int,
-  mysqlEnum,
   mysqlTable,
   timestamp,
-  varchar,
 } from 'drizzle-orm/mysql-core';
-import { db_ct } from '../../constants';
+import { activities } from '../../schema/common/activities.schema';
 import { users } from '../../schema/users/users.schema';
 
-export const activities = mysqlTable(
-  'activities',
+export const usersActivities = mysqlTable(
+  'users-activities',
   {
     id: int('id').primaryKey().autoincrement().notNull(),
-    title: varchar('title', { length: 256 }).notNull().unique(),
-    description: varchar('description', { length: 256 }),
-    activityType: mysqlEnum('activity_type', db_ct.activityType).notNull(),
+    user: int('user')
+      .references(() => users.id)
+      .notNull(),
+    activity: int('activity')
+      .references(() => activities.id)
+      .notNull(),
     disabled: boolean('disabled').default(false).notNull(),
     addedBy: int('added_by')
       .references(() => users.id)
@@ -29,12 +30,12 @@ export const activities = mysqlTable(
     updatedAt: timestamp('updated_at', { mode: 'date', fsp: 6 })
       .default(sql`CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6)`)
       .notNull(),
-    // ! make sure only admin can add and update this table
+    // ! make sure only admin or moderator can add and update this table
   },
-  (activities) => ({
-    titleIdx: index('title_idx').on(activities.title),
-    activityTypeIdx: index('activity_type_idx').on(activities.activityType),
+  (usersActivities) => ({
+    userIdx: index('user_activity_idx').on(usersActivities.user),
+    activityIdx: index('activity_user_idx').on(usersActivities.activity),
   }),
 );
 
-export type IActivity = typeof activities;
+export type IUserActivity = typeof usersActivities;

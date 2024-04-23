@@ -5,7 +5,12 @@ import { NextFunction, Request, Response } from 'express';
 export class Authentication {
   constructor() {}
 
-  public user = ({ verified }: { verified: boolean } = { verified: false }) =>
+  public user = (
+    { verified, skipNext }: { verified?: boolean; skipNext?: boolean } = {
+      verified: false,
+      skipNext: false,
+    },
+  ) =>
     asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
       // this checks if user is authenticated
       // check if token exists
@@ -50,14 +55,17 @@ export class Authentication {
 
       // if user found, attach user to req object
       req.user = user;
+      req.token = token;
 
+      if (skipNext) return;
       next();
     });
 
   public admin = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
       // authenticate user
-      await this.user()(req, res, next);
+      // TODO: unverified users can't be admins: implement this in handler function in future
+      await this.user({ verified: true, skipNext: true })(req, res, next);
 
       // check if user is admin
       if (req.user?.role !== 'admin') {
@@ -71,7 +79,8 @@ export class Authentication {
   public moderator = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
       // authenticate user
-      await this.user()(req, res, next);
+      // TODO: unverified users can't be moderators: implement this in handler function in future
+      await this.user({ verified: true, skipNext: true })(req, res, next);
 
       // check if user is moderator or admin
       if (req.user?.role !== 'moderator' && req.user?.role !== 'admin') {
