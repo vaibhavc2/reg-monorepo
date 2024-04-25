@@ -1,12 +1,7 @@
 import { SelectUser, SelectUserSession } from '@reg/db';
 import { UserData } from '@reg/types';
 import { contract } from '../../contract';
-import { apiVersionPrefix } from '../../utils';
-
-const ResponseType = contract.type<{
-  status: number;
-  message: string;
-}>();
+import { ResponseType, apiVersionPrefix } from '../../utils';
 
 interface Data {
   user: UserData;
@@ -24,7 +19,7 @@ type DataWithoutPhone = {
   };
 };
 
-const UsersContract = contract.router(
+const usersContract = contract.router(
   {
     'register-with-email': {
       method: 'POST',
@@ -356,4 +351,4 @@ const UsersContract = contract.router(
   },
 );
 
-export default UsersContract;
+export default usersContract;

@@ -8,7 +8,7 @@ import { eq } from 'drizzle-orm';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 
 type GenerateInvitationLink =
-  (typeof contracts.v1.UsersContract)['generate-invitation-link'];
+  (typeof contracts.v1.users)['generate-invitation-link'];
 type GenerateInvitationLinkHandler =
   AppRouteImplementation<GenerateInvitationLink>;
 
@@ -72,7 +72,7 @@ export const generateInvitationLinkHandler: GenerateInvitationLinkHandler =
     });
 
     // generate the invitation link
-    const invitationLink = `${ct.base_url}${contracts.v1.UsersContract['verify-invitation-link'].path}/${role}/?token=${token}`;
+    const invitationLink = `${ct.base_url}${contracts.v1.users['verify-invitation-link'].path}/${role}/?token=${token}`;
 
     return apiResponse.res(200, 'Invitation link generated successfully!', {
       user: {

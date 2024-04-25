@@ -6,7 +6,7 @@ import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
 type SendVerificationEmail =
-  (typeof contracts.v1.UsersContract)['send-verification-email'];
+  (typeof contracts.v1.users)['send-verification-email'];
 type SendVerificationEmailHandler =
   AppRouteImplementation<SendVerificationEmail>;
 

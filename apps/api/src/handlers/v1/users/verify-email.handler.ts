@@ -11,7 +11,7 @@ import {
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
-type VerifyEmail = (typeof contracts.v1.UsersContract)['verify-email'];
+type VerifyEmail = (typeof contracts.v1.users)['verify-email'];
 type VerifyEmailHandler = AppRouteImplementation<VerifyEmail>;
 
 export const verifyEmailHandler: VerifyEmailHandler = async ({

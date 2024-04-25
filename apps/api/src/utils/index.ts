@@ -14,6 +14,7 @@ export {
   minStringError,
   requiredError,
 } from './error/zod-error-messages.util';
+export { checkAdmin, checkModerator, checkUser } from './other/check-user.util';
 export { deleteLocalFile } from './other/delete-local-file.util';
 export { log } from './other/logger.util';
 export { shuffleArray } from './other/shuffle-array.util';

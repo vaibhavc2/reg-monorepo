@@ -5,7 +5,7 @@ import { users } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
-type UpdateName = (typeof contracts.v1.UsersContract)['update-name'];
+type UpdateName = (typeof contracts.v1.users)['update-name'];
 type UpdateNameHandler = AppRouteImplementation<UpdateName>;
 
 export const updateNameHandler: UpdateNameHandler = async ({

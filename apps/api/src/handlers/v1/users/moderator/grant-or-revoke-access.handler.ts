@@ -7,7 +7,7 @@ import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
 type GrantOrRevokeAccess =
-  (typeof contracts.v1.UsersContract)['grant-or-revoke-access'];
+  (typeof contracts.v1.users)['grant-or-revoke-access'];
 type GrantOrRevokeAccessHandler = AppRouteImplementation<GrantOrRevokeAccess>;
 
 export const grantOrRevokeAccessHandler: GrantOrRevokeAccessHandler = async ({

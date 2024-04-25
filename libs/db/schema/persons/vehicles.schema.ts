@@ -8,7 +8,7 @@ import {
   varchar,
 } from 'drizzle-orm/mysql-core';
 import { users } from '../users/users.schema';
-import { vehiclesTypes } from './vehicle-types.schema';
+import { vehiclesTypes } from './vehicles-types.schema';
 
 export const vehicles = mysqlTable(
   'vehicles',
@@ -17,7 +17,7 @@ export const vehicles = mysqlTable(
     type: int('type')
       .references(() => vehiclesTypes.id)
       .notNull(),
-    regNumber: varchar('reg_number', { length: 20 }).notNull().unique(),
+    regNumber: varchar('reg_number', { length: 20 }), // some vehicles have no registration number, like a bicycle or a cart
     disabled: boolean('disabled').default(false).notNull(),
     addedBy: int('added_by')
       .references(() => users.id)

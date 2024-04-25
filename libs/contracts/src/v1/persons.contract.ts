@@ -1,8 +1,30 @@
 import { contract } from '../../contract';
-import { apiVersionPrefix } from '../../utils';
+import { ResponseType, apiVersionPrefix } from '../../utils';
 
-const PersonsContract = contract.router(
-  {},
+const personsContract = contract.router(
+  {
+    'add-person': {
+      method: 'POST',
+      path: '/',
+      responses: {
+        400: ResponseType,
+        403: ResponseType,
+        201: ResponseType,
+        500: ResponseType,
+      },
+      body: contract.type<{
+        fullName: string;
+        phone: string;
+        age?: number;
+        address?: string;
+        city?: string;
+        state?: string;
+        vehicleType?: number; // id of the vehicle type
+        vehicleNumber?: string;
+      }>(),
+      summary: 'Add a new person.',
+    },
+  },
   {
     strictStatusCodes: true,
     pathPrefix: apiVersionPrefix(1) + '/persons',
@@ -13,4 +35,4 @@ const PersonsContract = contract.router(
   },
 );
 
-export default PersonsContract;
+export default personsContract;

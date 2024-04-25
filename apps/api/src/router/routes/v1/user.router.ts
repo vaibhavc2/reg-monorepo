@@ -4,7 +4,7 @@ import middlewares from '@/middlewares';
 import { validator } from '@/validation';
 import { contracts } from '@reg/contracts';
 
-const userRouter = ct.s.router(contracts.v1.UsersContract, {
+const userRouter = ct.s.router(contracts.v1.users, {
   'google-oauth': {
     handler: handlers.v1.users.googleOAuthHandler,
   },

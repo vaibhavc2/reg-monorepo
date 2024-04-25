@@ -14,16 +14,14 @@ export const persons = mysqlTable(
   'persons',
   {
     id: int('id').primaryKey().autoincrement().notNull(),
-    age: tinyint('age').notNull(),
+    age: tinyint('age'),
     fullName: varchar('full_name', { length: 256 }).notNull(),
-    displayName: varchar('display_name', { length: 20 }),
-    disabled: boolean('disabled').default(false).notNull(),
     phone: varchar('phone', { length: 20 }).notNull().unique(),
-    email: varchar('email', { length: 256 }).unique(),
     address: varchar('address', { length: 256 }),
-    city: varchar('city', { length: 256 }),
-    state: varchar('state', { length: 256 }),
+    city: varchar('city', { length: 256 }).default('Jalandhar').notNull(),
+    state: varchar('state', { length: 256 }).default('Punjab').notNull(),
     // TODO: only admin or moderator can add or update persons
+    disabled: boolean('disabled').default(false).notNull(),
     addedBy: int('added_by')
       .references(() => users.id)
       .notNull(),
@@ -37,11 +35,11 @@ export const persons = mysqlTable(
   },
   (persons) => ({
     nameIdx: index('name_idx').on(persons.fullName),
-    displayNameIdx: index('display_name_idx').on(persons.displayName),
     phoneIdx: index('phone_idx').on(persons.phone),
-    emailIdx: index('email_idx').on(persons.email),
-    city: index('city_idx').on(persons.city),
-    state: index('state_idx').on(persons.state),
+    cityIdx: index('city_idx').on(persons.city),
+    stateIdx: index('state_idx').on(persons.state),
+    addressIdx: index('address_idx').on(persons.address),
+    namePhoneIdx: index('name_phone_idx').on(persons.fullName, persons.phone),
   }),
 );
 

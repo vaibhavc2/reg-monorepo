@@ -5,7 +5,7 @@ import { userSessions } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
-type GetUserSessions = (typeof contracts.v1.UsersContract)['get-user-sessions'];
+type GetUserSessions = (typeof contracts.v1.users)['get-user-sessions'];
 type GetUserSessionsHandler = AppRouteImplementation<GetUserSessions>;
 
 export const getUserSessionsHandler: GetUserSessionsHandler = async ({

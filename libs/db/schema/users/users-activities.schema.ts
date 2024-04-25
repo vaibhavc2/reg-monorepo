@@ -33,8 +33,10 @@ export const usersActivities = mysqlTable(
     // ! make sure only admin or moderator can add and update this table
   },
   (usersActivities) => ({
-    userIdx: index('user_activity_idx').on(usersActivities.user),
-    activityIdx: index('activity_user_idx').on(usersActivities.activity),
+    userActivityIdx: index('user_activity_idx').on(
+      usersActivities.user,
+      usersActivities.activity,
+    ),
   }),
 );
 

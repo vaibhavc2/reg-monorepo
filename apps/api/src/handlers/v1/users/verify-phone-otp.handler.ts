@@ -11,7 +11,7 @@ import {
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
-type VerifyPhoneOTP = (typeof contracts.v1.UsersContract)['verify-phone-otp'];
+type VerifyPhoneOTP = (typeof contracts.v1.users)['verify-phone-otp'];
 type VerifyPhoneOTPHandler = AppRouteImplementation<VerifyPhoneOTP>;
 
 export const verifyPhoneOTPHandler: VerifyPhoneOTPHandler = async ({

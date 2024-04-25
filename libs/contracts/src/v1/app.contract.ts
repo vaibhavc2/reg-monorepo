@@ -1,7 +1,7 @@
 import { contract } from '../../contract';
 import { apiVersionPrefix } from '../../utils';
 
-const AppContract = contract.router(
+const appContract = contract.router(
   {
     health: {
       method: 'GET',
@@ -21,4 +21,4 @@ const AppContract = contract.router(
   },
 );
 
-export default AppContract;
+export default appContract;

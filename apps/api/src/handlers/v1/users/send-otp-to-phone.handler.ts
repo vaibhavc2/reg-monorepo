@@ -5,7 +5,7 @@ import { phoneDetails, phoneValidations } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
-type SendOTPToPhone = (typeof contracts.v1.UsersContract)['send-otp-to-phone'];
+type SendOTPToPhone = (typeof contracts.v1.users)['send-otp-to-phone'];
 type SendOTPToPhoneHandler = AppRouteImplementation<SendOTPToPhone>;
 
 export const sendOTPToPhoneHandler: SendOTPToPhoneHandler = async ({

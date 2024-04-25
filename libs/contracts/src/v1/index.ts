@@ -1,7 +1,9 @@
-import AppContract from './app.contract';
-import UsersContract from './users.contract';
+import appContract from './app.contract';
+import personsContract from './persons.contract';
+import usersContract from './users.contract';
 
 export const v1Contracts = {
-  AppContract,
-  UsersContract,
+  app: appContract,
+  users: usersContract,
+  persons: personsContract,
 };

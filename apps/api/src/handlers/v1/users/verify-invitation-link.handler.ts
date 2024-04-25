@@ -7,7 +7,7 @@ import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
 type VerifyInvitationLink =
-  (typeof contracts.v1.UsersContract)['verify-invitation-link'];
+  (typeof contracts.v1.users)['verify-invitation-link'];
 type VerifyInvitationLinkHandler = AppRouteImplementation<VerifyInvitationLink>;
 
 export const verifyInvitationLinkHandler: VerifyInvitationLinkHandler = async ({

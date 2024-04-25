@@ -5,7 +5,7 @@ import { contracts } from '@reg/contracts';
 import { userSessions } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
 
-type LoginWithEmail = (typeof contracts.v1.UsersContract)['login-with-email'];
+type LoginWithEmail = (typeof contracts.v1.users)['login-with-email'];
 type LoginWithEmailHandler = AppRouteImplementation<LoginWithEmail>;
 
 export const loginWithEmailHandler: LoginWithEmailHandler = async ({

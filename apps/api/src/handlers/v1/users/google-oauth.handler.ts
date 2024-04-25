@@ -6,7 +6,7 @@ import { emailCredentials, userSessions, users, verifications } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
-type GoogleOAuth = (typeof contracts.v1.UsersContract)['google-oauth'];
+type GoogleOAuth = (typeof contracts.v1.users)['google-oauth'];
 type GoogleOAuthHandler = AppRouteImplementation<GoogleOAuth>;
 
 export const googleOAuthHandler: GoogleOAuthHandler = async ({

@@ -48,7 +48,7 @@ class EmailService {
     const content = `
     <h1>Confirm your email address</h1>
     So we can send you important information and updates, we need to check this is the right email address for you. <br>
-    <button href="${ct.base_url}${contracts.v1.UsersContract['verify-email'].path}?token=${token}&${login ? 'login=true' : null}" style="text-decoration: none; color: white; background-color: #4CAF50; padding: 10px 20px; border-radius: 5px;">
+    <button href="${ct.base_url}${contracts.v1.users['verify-email'].path}?token=${token}&${login ? 'login=true' : null}" style="text-decoration: none; color: white; background-color: #4CAF50; padding: 10px 20px; border-radius: 5px;">
       Verify Email
     </button>`;
 
@@ -63,7 +63,7 @@ class EmailService {
   ) => {
     const title = 'Security Alert:: Verification from Registry App';
     // const content = `
-    // <a href="${ct.base_url}${contracts.v1.UsersContract['verify-email'].path}?token=${token}" style="text-decoration: none; color: white; background-color: #4CAF50; padding: 10px 20px; border-radius: 5px;">
+    // <a href="${ct.base_url}${contracts.v1.users['verify-email'].path}?token=${token}" style="text-decoration: none; color: white; background-color: #4CAF50; padding: 10px 20px; border-radius: 5px;">
     //   Verify Email
     // </a>`;
 

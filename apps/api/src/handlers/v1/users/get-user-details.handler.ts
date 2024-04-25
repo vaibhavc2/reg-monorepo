@@ -2,7 +2,7 @@ import { apiResponse } from '@/services';
 import { contracts } from '@reg/contracts';
 import { AppRouteImplementation } from '@ts-rest/express';
 
-type GetUserDetails = (typeof contracts.v1.UsersContract)['get-user-details'];
+type GetUserDetails = (typeof contracts.v1.users)['get-user-details'];
 type GetUserDetailsHandler = AppRouteImplementation<GetUserDetails>;
 
 export const getUserDetailsHandler: GetUserDetailsHandler = async ({

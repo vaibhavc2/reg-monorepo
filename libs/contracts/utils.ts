@@ -1,3 +1,5 @@
+import { contract } from './contract';
+
 export const addPrefixToRoutes = (routes: any, prefix: string) => {
   return Object.keys(routes).reduce((prefixedRoutes: any, key: string) => {
     const route = routes[key];
@@ -9,3 +11,9 @@ export const addPrefixToRoutes = (routes: any, prefix: string) => {
 
 // for using url-path based versioning in the api
 export const apiVersionPrefix = (version: number) => `/api/v${version}`;
+
+// common response type
+export const ResponseType = contract.type<{
+  status: number;
+  message: string;
+}>();

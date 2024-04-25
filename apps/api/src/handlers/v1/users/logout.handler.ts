@@ -5,7 +5,7 @@ import { userSessions } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
 import { and, eq, inArray } from 'drizzle-orm';
 
-type Logout = (typeof contracts.v1.UsersContract)['logout'];
+type Logout = (typeof contracts.v1.users)['logout'];
 type LogoutHandler = AppRouteImplementation<Logout>;
 
 export const logoutHandler: LogoutHandler = async ({

@@ -12,7 +12,7 @@ class GoogleOAuthService {
     this.client = new OAuth2Client(
       env.GOOGLE_OAUTH_CLIENT_ID,
       env.GOOGLE_OAUTH_CLIENT_SECRET,
-      `${ct.base_url}${contracts.v1.UsersContract['google-oauth'].path}`,
+      `${ct.base_url}${contracts.v1.users['google-oauth'].path}`,
     );
   }
 

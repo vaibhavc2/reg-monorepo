@@ -12,8 +12,7 @@ import {
 import { AppRouteImplementation } from '@ts-rest/express';
 import { eq } from 'drizzle-orm';
 
-type RegisterWithEmail =
-  (typeof contracts.v1.UsersContract)['register-with-email'];
+type RegisterWithEmail = (typeof contracts.v1.users)['register-with-email'];
 type RegisterWithEmailHandler = AppRouteImplementation<RegisterWithEmail>;
 
 export const registerWithEmailHandler: RegisterWithEmailHandler = async ({
