@@ -1,5 +1,6 @@
 import { database } from '@/db';
 import { apiResponse, phoneService } from '@/services';
+import { checkUser } from '@/utils';
 import { contracts } from '@reg/contracts';
 import { phoneDetails, phoneValidations } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
@@ -41,8 +42,8 @@ export const sendOTPToPhoneHandler: SendOTPToPhoneHandler = async ({
   } else {
     if (!login) {
       // check if the user is present
-      if (!user) {
-        return apiResponse.error(401, 'Unauthorized!');
+      if (!user || !checkUser(user)) {
+        return apiResponse.error(403, 'Forbidden!');
       }
 
       // get user phone

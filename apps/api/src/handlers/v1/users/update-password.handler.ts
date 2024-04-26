@@ -1,6 +1,7 @@
 import ct from '@/constants';
 import { database } from '@/db';
 import { apiResponse, pwd } from '@/services';
+import { checkUser } from '@/utils';
 import { contracts } from '@reg/contracts';
 import { emailCredentials, users } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
@@ -13,9 +14,9 @@ export const updatePasswordHandler: UpdatePasswordHandler = async ({
   req: { user },
   body: { password, oldPassword },
 }) => {
-  // check if user is present
-  if (!user) {
-    return apiResponse.error(401, 'Unauthorized!');
+  // check if user status is valid
+  if (!user || !checkUser(user)) {
+    return apiResponse.error(403, 'Forbidden!');
   }
 
   // check if passwords are present

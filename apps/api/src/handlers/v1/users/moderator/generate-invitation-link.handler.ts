@@ -1,6 +1,7 @@
 import ct from '@/constants';
 import { database } from '@/db';
 import { apiResponse, jwt, names } from '@/services';
+import { checkModerator } from '@/utils';
 import { contracts } from '@reg/contracts';
 import { phoneDetails, users } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
@@ -14,21 +15,13 @@ type GenerateInvitationLinkHandler =
 
 export const generateInvitationLinkHandler: GenerateInvitationLinkHandler =
   async ({ req: { user }, body: { fullName, phone, role } }) => {
-    if (!user) {
-      return apiResponse.error(401, 'Unauthorized!');
+    // check if user status is valid
+    if (!user || !checkModerator(user)) {
+      return apiResponse.error(403, 'Forbidden!');
     }
 
-    // validate the role
-    if (role !== 'admin' && role !== 'moderator' && role !== 'user') {
-      return apiResponse.error(400, 'Invalid role!');
-    }
-
-    // check user.role to validate if the user is an admin or moderator
     // a moderator can generate invitation link for a user or a moderator and admin can generate invitation link for a user, moderator or an admin
-    if (
-      user.role === 'user' ||
-      (user.role === 'moderator' && role === 'admin')
-    ) {
+    if (user.role === 'moderator' && role === 'admin') {
       return apiResponse.error(403, 'Forbidden!');
     }
 

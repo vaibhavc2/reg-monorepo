@@ -1,5 +1,6 @@
 import { database } from '@/db';
 import { apiResponse } from '@/services';
+import { checkUser } from '@/utils';
 import { contracts } from '@reg/contracts';
 import { userSessions } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
@@ -17,6 +18,11 @@ export const logoutHandler: LogoutHandler = async ({
   // check if the user is present
   if (!user || !token) {
     return apiResponse.error(401, 'Unauthorized!');
+  }
+
+  // check if user status is valid
+  if (!checkUser(user)) {
+    return apiResponse.error(403, 'Forbidden!');
   }
 
   // check if all sessions are to be deleted

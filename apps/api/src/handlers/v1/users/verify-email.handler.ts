@@ -1,6 +1,7 @@
 import ct from '@/constants';
 import { database } from '@/db';
 import { apiResponse, jwt } from '@/services';
+import { checkUser } from '@/utils';
 import { contracts } from '@reg/contracts';
 import {
   emailCredentials,
@@ -68,8 +69,8 @@ export const verifyEmailHandler: VerifyEmailHandler = async ({
     return apiResponse.res(200, 'Email verified successfully!');
   } else {
     // check if the user is present
-    if (!user) {
-      return apiResponse.error(401, 'Unauthorized!');
+    if (!user || !checkUser(user)) {
+      return apiResponse.error(403, 'Forbidden!');
     }
 
     // verify the token

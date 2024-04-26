@@ -45,6 +45,7 @@ const usersContract = contract.router(
       path: '/auth/login/email',
       responses: {
         401: ResponseType,
+        403: ResponseType,
         400: ResponseType,
         200: contract.type<{
           status: number;
@@ -121,6 +122,7 @@ const usersContract = contract.router(
       responses: {
         200: ResponseType,
         401: ResponseType,
+        403: ResponseType,
       },
       body: contract.type<{
         sessionIds?: number[];
@@ -137,7 +139,7 @@ const usersContract = contract.router(
       }>(),
       responses: {
         400: ResponseType,
-        401: ResponseType,
+        403: ResponseType,
         500: ResponseType,
         200: ResponseType,
       },
@@ -154,7 +156,7 @@ const usersContract = contract.router(
       responses: {
         200: ResponseType,
         400: ResponseType,
-        401: ResponseType,
+        403: ResponseType,
         500: ResponseType,
       },
       body: contract.type<{
@@ -171,7 +173,7 @@ const usersContract = contract.router(
       }>(),
       responses: {
         400: ResponseType,
-        401: ResponseType,
+        403: ResponseType,
         500: ResponseType,
         200: ResponseType,
       },
@@ -191,7 +193,7 @@ const usersContract = contract.router(
       responses: {
         200: ResponseType,
         400: ResponseType,
-        401: ResponseType,
+        403: ResponseType,
         500: ResponseType,
       },
       body: contract.type<{
@@ -210,7 +212,7 @@ const usersContract = contract.router(
           };
           message: string;
         }>(),
-        401: ResponseType,
+        403: ResponseType,
       },
       summary: 'Get user details.',
     },
@@ -226,6 +228,7 @@ const usersContract = contract.router(
           message: string;
         }>(),
         401: ResponseType,
+        403: ResponseType,
       },
       summary: 'Get user sessions.',
     },
@@ -241,7 +244,7 @@ const usersContract = contract.router(
           message: string;
         }>(),
         400: ResponseType,
-        401: ResponseType,
+        403: ResponseType,
         500: ResponseType,
       },
       body: contract.type<{
@@ -261,7 +264,7 @@ const usersContract = contract.router(
           message: string;
         }>(),
         400: ResponseType,
-        401: ResponseType,
+        403: ResponseType,
         500: ResponseType,
       },
       body: contract.type<{

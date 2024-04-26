@@ -1,6 +1,7 @@
 import ct from '@/constants';
 import { database } from '@/db';
 import { apiResponse, jwt, phoneService } from '@/services';
+import { checkUser } from '@/utils';
 import { contracts } from '@reg/contracts';
 import {
   phoneDetails,
@@ -76,8 +77,8 @@ export const verifyPhoneOTPHandler: VerifyPhoneOTPHandler = async ({
     return apiResponse.res(200, 'OTP verified successfully!');
   } else {
     // check if the user is present
-    if (!user) {
-      return apiResponse.error(401, 'Unauthorized!');
+    if (!user || !checkUser(user)) {
+      return apiResponse.error(403, 'Forbidden!');
     }
 
     // get user phone

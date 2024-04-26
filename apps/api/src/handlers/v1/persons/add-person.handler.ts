@@ -25,7 +25,7 @@ export const addPersonHandler: AddPersonHandler = async ({
   },
 }) => {
   // check if the user is a moderator or admin
-  if (!checkModerator(user)) {
+  if (!user || !checkModerator(user)) {
     return apiResponse.error(403, 'Forbidden!');
   }
 
@@ -45,7 +45,7 @@ export const addPersonHandler: AddPersonHandler = async ({
         address,
         city,
         state,
-        addedBy: user?.id as number,
+        addedBy: user.id,
       });
 
       const person = (
@@ -72,9 +72,9 @@ export const addPersonHandler: AddPersonHandler = async ({
       const { insertId } =
         (
           await trx.insert(vehicles).values({
-            type: type.id as number,
+            type: type.id,
             regNumber: vehicleNumber,
-            addedBy: user?.id as number,
+            addedBy: user.id,
           })
         )?.[0] ?? {};
 
@@ -84,7 +84,7 @@ export const addPersonHandler: AddPersonHandler = async ({
       await trx.insert(vehiclesOwners).values({
         vehicle: insertId,
         person: person.id,
-        addedBy: user?.id as number,
+        addedBy: user.id,
       });
 
       return {

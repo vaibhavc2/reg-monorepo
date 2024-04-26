@@ -27,6 +27,11 @@ export const loginWithEmailHandler: LoginWithEmailHandler = async ({
     return apiResponse.error(401, 'Invalid email or password!');
   }
 
+  // check if user status is valid
+  if (user?.status === 'disabled') {
+    return apiResponse.error(403, 'Forbidden!');
+  }
+
   // create tokens
   const tokens = jwt.generateAuthTokens(user.id, { email: user.email });
 

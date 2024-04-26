@@ -1,5 +1,6 @@
 import { database } from '@/db';
 import { apiResponse, queries } from '@/services';
+import { checkUser } from '@/utils';
 import { contracts } from '@reg/contracts';
 import { users } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
@@ -12,9 +13,9 @@ export const updateNameHandler: UpdateNameHandler = async ({
   req: { user },
   body: { fullName },
 }) => {
-  // check if user is present
-  if (!user) {
-    return apiResponse.error(401, 'Unauthorized!');
+  // check if user status is valid
+  if (!user || !checkUser(user)) {
+    return apiResponse.error(403, 'Forbidden!');
   }
 
   // check if fullName is present

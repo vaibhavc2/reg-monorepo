@@ -1,6 +1,7 @@
 import ct from '@/constants';
 import { database } from '@/db';
 import { apiResponse, queries } from '@/services';
+import { checkModerator } from '@/utils';
 import { contracts } from '@reg/contracts';
 import { verifications } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';
@@ -15,13 +16,8 @@ export const grantOrRevokeAccessHandler: GrantOrRevokeAccessHandler = async ({
   body: { userId },
   query: { grant: _grant, revoke: _revoke },
 }) => {
-  // check if the user is present
-  if (!mainUser) {
-    return apiResponse.error(401, 'Unauthorized!');
-  }
-
-  // check if the user is an admin or moderator
-  if (mainUser.role !== 'admin' && mainUser.role !== 'moderator') {
+  // check if user status is valid
+  if (!mainUser || !checkModerator(mainUser)) {
     return apiResponse.error(403, 'Forbidden!');
   }
 
