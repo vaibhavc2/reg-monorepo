@@ -1,4 +1,6 @@
 import { UserData } from '@reg/types';
+import { MySql2PreparedQuery } from 'drizzle-orm/mysql2';
+import { PreparedQueryConfig } from 'drizzle-orm/sqlite-proxy';
 // import { TsRestRequest as OriginalTsRestRequest } from '@ts-rest/express';
 
 declare global {
@@ -19,5 +21,15 @@ declare global {
 //     user?: User;
 //   }
 // }
+
+// other types
+export type PreparedQueryType<T> =
+  | MySql2PreparedQuery<
+      PreparedQueryConfig & {
+        execute: T | undefined;
+        iterator: AsyncGenerator<T>;
+      }
+    >
+  | undefined;
 
 export {};

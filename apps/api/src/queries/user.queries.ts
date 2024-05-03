@@ -1,4 +1,5 @@
 import { database } from '@/db';
+import { PreparedQueryType } from '@/types';
 import { SelectUser, emailCredentials, phoneDetails, users } from '@reg/db';
 import {
   QueryUserData,
@@ -7,17 +8,6 @@ import {
   QueryUserWithPhone,
 } from '@reg/types';
 import { eq, sql } from 'drizzle-orm';
-import { MySql2PreparedQuery } from 'drizzle-orm/mysql2';
-import { PreparedQueryConfig } from 'drizzle-orm/sqlite-proxy';
-
-type PreparedQueryType<T> =
-  | MySql2PreparedQuery<
-      PreparedQueryConfig & {
-        execute: T | undefined;
-        iterator: AsyncGenerator<T>;
-      }
-    >
-  | undefined;
 
 class UserQueries {
   private readonly queries: {
@@ -98,7 +88,7 @@ class UserQueries {
   }
 
   async getUser(id: number) {
-    return this.queries.getUser?.execute({ id });
+    return await this.queries.getUser?.execute({ id });
   }
 
   async getDetails(id: number) {
@@ -154,11 +144,4 @@ class UserQueries {
   }
 }
 
-// ... other queries
-
-class Queries {
-  users = new UserQueries();
-  // ... other queries
-}
-
-export const queries = new Queries();
+export const userQueries = new UserQueries();

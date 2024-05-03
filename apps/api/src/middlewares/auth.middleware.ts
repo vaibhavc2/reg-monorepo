@@ -1,4 +1,5 @@
-import { apiResponse, jwt, queries } from '@/services';
+import { queries } from '@/queries';
+import { apiResponse, jwt } from '@/services';
 import { asyncHandler } from '@/utils';
 import { NextFunction, Request, Response } from 'express';
 

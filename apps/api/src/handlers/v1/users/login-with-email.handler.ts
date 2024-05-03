@@ -1,6 +1,7 @@
 import ct from '@/constants';
 import { database } from '@/db';
-import { apiResponse, jwt, pwd, queries } from '@/services';
+import { queries } from '@/queries';
+import { apiResponse, jwt, pwd } from '@/services';
 import { contracts } from '@reg/contracts';
 import { userSessions } from '@reg/db';
 import { AppRouteImplementation } from '@ts-rest/express';

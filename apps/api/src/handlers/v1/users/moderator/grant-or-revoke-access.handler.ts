@@ -1,6 +1,7 @@
 import ct from '@/constants';
 import { database } from '@/db';
-import { apiResponse, queries } from '@/services';
+import { queries } from '@/queries';
+import { apiResponse } from '@/services';
 import { checkModerator } from '@/utils';
 import { contracts } from '@reg/contracts';
 import { verifications } from '@reg/db';

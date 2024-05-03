@@ -1,3 +1,4 @@
+import { SelectVehicleType } from '@reg/db';
 import { contract } from '../../contract';
 import { ResponseType, apiVersionPrefix } from '../../utils';
 
@@ -23,6 +24,19 @@ const personsContract = contract.router(
         vehicleNumber?: string;
       }>(),
       summary: 'Add a new person.',
+    },
+    'get-vehicle-types': {
+      method: 'GET',
+      path: '/vehicle-types',
+      responses: {
+        200: contract.type<{
+          status: number;
+          data: SelectVehicleType[];
+          message: string;
+        }>(),
+        403: ResponseType,
+      },
+      summary: 'Get all vehicle types.',
     },
   },
   {
