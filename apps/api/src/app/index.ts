@@ -39,7 +39,7 @@ export class App {
 
   private setExpressAppVariables() {
     // setting express app variables
-    this.app.set('trust proxy', true);
+    // this.app.set('trust proxy', true);
   }
 
   private useMiddlewares() {

@@ -1,3 +1,3 @@
 import { server } from './server';
 
-(async () => await server.init())();
+async () => await server.init();
