@@ -1,51 +1,23 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "affected": {
-    "defaultBase": "main"
-  },
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["{workspaceRoot}/.next, dist, build"],
-      "defaultConfiguration": "production",
-      "configurations": {
-        "production": {}
-      },
-      "cache": true
-    },
-    "lint": {
-      "cache": true
-    },
-    "tsc": {
+      "outputs": ["{projectRoot}/.next, build, dist"],
       "cache": true
     },
     "dev": {
-      "dependsOn": ["^dev"],
-      "outputs": ["{projectRoot}/.next, build, dist"],
+      "dependsOn": ["^dev"]
+    },
+    "tsc": {
+      "dependsOn": ["^tsc"],
+      "cache": true
+    },
+    "lint": {
+      "dependsOn": ["^lint"],
       "cache": true
     }
   },
-  "plugins": [
-    {
-      "plugin": "@nx/eslint/plugin",
-      "options": {
-        "targetName": "lint"
-      }
-    },
-    {
-      "plugin": "@nx/next/plugin",
-      "options": {
-        "buildTargetName": "build",
-        "devTargetName": "dev",
-        "startTargetName": "start",
-        "serveStaticTargetName": "serve-static"
-      }
-    }
-  ],
-  "nxCloudAccessToken": "ZjMyMTE4MzItYjg3Yi00NmFhLWFiMWQtYWMwODAxMzdhNzc1fHJlYWQtd3JpdGU=",
-  "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals"],
-    "sharedGlobals": [],
-    "production": ["default"]
-  }
+  "defaultBase": "main",
+  "nxCloudAccessToken": "ZjMyMTE4MzItYjg3Yi00NmFhLWFiMWQtYWMwODAxMzdhNzc1fHJlYWQtd3JpdGU="
 }

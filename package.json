@@ -12,9 +12,9 @@
     "tsc": "pnpm exec nx run-many --target=tsc",
     "validate": "pnpm format:write && pnpm tsc && pnpm lint",
     "dev": "pnpm exec nx run-many --target=dev",
-    "dev:api": "pnpm exec nx run-many --target=dev --projects=@reg/api",
-    "dev:web": "pnpm exec nx run-many --target=dev --projects=@reg/web",
-    "prepare": "husky install",
+    "api:dev": "pnpm exec nx run-many --target=dev --projects=@reg/api",
+    "web:dev": "pnpm exec nx run-many --target=dev --projects=@reg/web",
+    "prepare": "husky",
     "cm": "cz",
     "cm:offline": "git add . && cz",
     "cm:all": "git add . && cz && git push",
@@ -40,25 +40,20 @@
   "author": "Vaibhav Chopra",
   "license": "ISC",
   "devDependencies": {
-    "@commitlint/cli": "^19.2.2",
+    "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
-    "@nx/eslint": "18.0.5",
-    "@nx/next": "18.0.5",
     "commitizen": "^4.3.0",
-    "drizzle-kit": "^0.20.14",
-    "eslint": "~8.48.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^15.2.2",
-    "nx": "18.0.5",
-    "prettier": "^3.2.5",
-    "typescript": "^5.4.5"
+    "drizzle-kit": "^0.23.0",
+    "eslint": "~9.8.0",
+    "husky": "^9.1.3",
+    "lint-staged": "^15.2.7",
+    "nx": "19.5.3",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4"
   },
   "dependencies": {
-    "drizzle-orm": "^0.30.8",
+    "drizzle-orm": "^0.32.1",
     "drizzle-zod": "^0.5.1",
-    "mysql2": "^3.9.4",
-    "next": "14.0.4",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "mysql2": "^3.10.3"
   }
 }
